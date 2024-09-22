@@ -11,7 +11,7 @@ fi
 # read in the accession list
 ACCESSION_LIST="$1"
 
-# Check if the file exists
+# Check if file exists
 if [ ! -f "$ACCESSION_LIST" ]; then
     echo "File not found: $ACCESSION_LIST"
     exit 1
@@ -50,21 +50,21 @@ done < "$ACCESSION_LIST"
 #perform fastqc on every extracted .fastq file
 
 base_dir="/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa"
-#output_fastqc="/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/fastqc_results"
+output_fastqc="/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/fastqc_results"
 
-#mkdir "$output_fastqc"
+mkdir "$output_fastqc"
 
-#for dir in "$base_dir"/*/"fastq"/; do
- #   echo "Processing directory: $dir"
+for dir in "$base_dir"/*/"fastq"/; do
+    echo "Processing directory: $dir"
 
     # find all fastq files
-  #  for fastq_file in "$dir"*.fastq; do
-   #     if [ -f "$fastq_file" ]; then
-    #        echo "Running FastQC on $fastq_file"
-     #       fastqc "$fastq_file" --outdir="$output_fastqc"
-      #  fi
-    #done
-#done
+    for fastq_file in "$dir"*.fastq; do
+        if [ -f "$fastq_file" ]; then
+            echo "Running FastQC on $fastq_file"
+            fastqc "$fastq_file" --outdir="$output_fastqc"
+        fi
+    done
+done
 
 ### adapter trimming with fastp ####
 
@@ -79,6 +79,5 @@ for dir in "$base_dir"/*/"fastq"/; do
         fi
     done
 done
-
 
 
