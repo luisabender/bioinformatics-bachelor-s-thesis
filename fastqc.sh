@@ -9,7 +9,7 @@ for dir in "$base_dir"/*/"fastq"/; do
     echo "Processing directory: $dir"
 
     
-    for fastq_file in "$dir"*.fastq_trimmed; do
+    for fastq_file in "$dir"*.fastq-cut; do
         if [ -f "$fastq_file" ]; then
             echo "Running FastQC on $fastq_file"
             fastqc "$fastq_file" --outdir="$output_fastqc"
