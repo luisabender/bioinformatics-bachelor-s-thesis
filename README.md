@@ -3,11 +3,11 @@
 ## Goals for PA
 1. Read in and extract the SRA samples via sratoolkit
 
-<p>Dataset from Paper: A primary cell wall cellulose-dependent defense mechanism against vascular pathogens revealed by time-resolved dual transcriptomics. <br>
+Dataset from Paper: A primary cell wall cellulose-dependent defense mechanism against vascular pathogens revealed by time-resolved dual transcriptomics. <br>
 https://bmcbiol.biomedcentral.com/articles/10.1186/s12915-021-01100-6#Sec13 <br>
 GEO repository: GSE168919, Accession via PRJNA714597<br>
 mRNA-profiles of Arabidopsis thaliana both untreated and infected with pathogen Fusarium oxysporum. <br>
-Downloaded 17 Samples from Day 0 and Day 6 post treatment (untreated and infected) to compare between later. </p>
+Downloaded 17 Samples from Day 0 and Day 6 post treatment (untreated and infected) to compare between later.
 
 2. FASTQC
 Used the package fastqc from conda and stored the results in folder fastqc_results.
