@@ -13,14 +13,14 @@ Downloaded 17 Samples from Day 0 and Day 6 post treatment (untreated and infecte
 
 Used the package fastqc from conda and stored the results in folder fastqc_results.
 
-3. **Adapter trimming** via fastp
+3. **Adapter trimming** via trimmomatic and cutadapt
 
-Performed fastp on the .fastq files. <br>
-Note: couldn't remove any adapters, need to adapt the fastp commands.
+Performed trimmomatic on the .fastq files for basic adapter trimming. Then run cutadapt on the results to eliminate the polyA adapters.<br>
 
-4. **FASTQC** again
+4. **FASTQC** again and **MultiQC report**
 
-Note: fastqc after adapter trimming didn't show any big changes on quality score.
+FastQC showed good results on adapter content.
+MultiQC report is generated and uploaded.
 
 TODO:
 
