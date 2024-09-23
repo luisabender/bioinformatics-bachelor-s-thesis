@@ -2,7 +2,6 @@
 
 ## Goals for PA
 1. Read in and extract the SRA samples via sratoolkit
-
 Dataset from Paper: A primary cell wall cellulose-dependent defense mechanism against vascular pathogens revealed by time-resolved dual transcriptomics. <br>
 https://bmcbiol.biomedcentral.com/articles/10.1186/s12915-021-01100-6#Sec13 <br>
 GEO repository: GSE168919, Accession via PRJNA714597<br>
