@@ -26,8 +26,11 @@ TODO:
 
 5. **Alignment** to an Arabidopsis thaliana genome (TAIR10) with **STAR**
 
-Download STAR package via bioconda. Download whole Arabidopsis thaliana genome. <br>
-Perform STAR Alignment and use HTSeq-count to count the reads per gene for each sample.
+Download STAR package via bioconda. 
+Downloaded whole Arabidopsis thaliana genome in ENSEMBL: TAIR10.dna.toplevel.fa.qz <br>
+Downloaded Arabidopsis GTF annotation file (TAIR11) <br>
+Perform STAR genome indexing and single-end alignment in SLURM. <br>
+Use HTSeq-count or featureCount to count the reads per gene for each sample.
 
 
 6. **Differential gene expression analysis** via DESeq2

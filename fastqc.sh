@@ -16,3 +16,11 @@ for dir in "$base_dir"/*/"fastq"/; do
         fi
     done
 done
+
+# move trimmed fastq files in the right directory
+for dir in "$base_dir"/"samples"/*/"fastq"/; do
+    
+    for fastq_file in "$dir"*.fastq-cut; do
+        mv $fastq_file "/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/sequences"
+    done
+done
