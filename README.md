@@ -26,9 +26,9 @@ TODO:
 
 5. **Alignment** to an Arabidopsis thaliana genome (TAIR10) with **STAR**
 
-Download STAR package via bioconda. 
+Downloaded STAR package via conda. 
 Downloaded whole Arabidopsis thaliana genome in ENSEMBL: TAIR10.dna.toplevel.fa.qz <br>
-Downloaded Arabidopsis GTF annotation file (TAIR11) <br>
+Downloaded Arabidopsis GTF annotation file (TAIR11). <br>
 Perform STAR genome indexing and single-end alignment in SLURM. <br>
 Use HTSeq-count or featureCount to count the reads per gene for each sample.
 

@@ -81,8 +81,7 @@ for dir in "$base_dir"/*/"fastq"/; do
             
             #running cutadapt to remove polyA tails
             if [ -f "$fastq_file-trim" ]; then
-            source $(conda info --base)/etc/profile.d/conda.sh
-            conda activate cutadapt
+            source /dss/dsshome1/0A/ge58rom2/miniconda3/bin/activate bio_env
             echo "Running cutadapt on $fastq_file-trim"
             cutadapt --poly-a -o $fastq_file-cut $fastq_file-trim
             conda deactivate
