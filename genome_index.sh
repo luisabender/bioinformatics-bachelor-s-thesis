@@ -3,7 +3,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=55G
-#SBATCH --time=01:00:00
+#SBATCH --time=06:00:00
 #SBATCH --job-name=STAR_arabidopsis
 
  
@@ -23,7 +23,7 @@ base_dir="/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa"
 
 # generate Genome index
 STAR --runMode genomeGenerate \
-     --genomeDir $base_dir/genome/Arabidospis_thaliana/  \
-     --genomeFastaFiles $base_dir/genome/Arabidopsis_thaliana/Arabidopsis_thaliana.TAIR10.dna.toplevel.fa.gz \
-     --sjdbGTFfile $base_dir/genome/Arabidopsis_thaliana/Araport11_GTF_genes_transposons.current.gtf.gz \
-     --runThreadN $SLURM_CPUS_PER_TASK
+     --genomeDir $base_dir/genome/Arabidopsis_thaliana/  \
+     --genomeFastaFiles $base_dir/genome/Arabidopsis_thaliana/TAIR10_chr_all.fas \
+     --sjdbGTFfile $base_dir/genome/Arabidopsis_thaliana/Araport11_GFF3_genes_transposons.current.gff \
+     --runThreadN $SLURM_CPUS_PER_TASK \

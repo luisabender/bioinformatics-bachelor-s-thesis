@@ -1,0 +1,100 @@
+STAR version=2.7.11b
+STAR compilation time,server,dir=2024-07-03T14:39:20+0000 :/opt/conda/conda-bld/star_1720017372352/work/source
+##### Command Line:
+/dss/dsshome1/0A/ge58rom2/miniconda3/envs/bio_env/bin/STAR-avx2 --genomeDir /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/genome/Arabidopsis_thaliana --readFilesIn /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/sequences/ --runThreadN 8
+##### Initial USER parameters from Command Line:
+###### All USER parameters from Command Line:
+genomeDir                     /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/genome/Arabidopsis_thaliana     ~RE-DEFINED
+readFilesIn                   /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/sequences/        ~RE-DEFINED
+runThreadN                    8     ~RE-DEFINED
+##### Finished reading parameters from all sources
+
+##### Final user re-defined parameters-----------------:
+runThreadN                        8
+genomeDir                         /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/genome/Arabidopsis_thaliana
+readFilesIn                       /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/sequences/   
+
+-------------------------------
+##### Final effective command line:
+/dss/dsshome1/0A/ge58rom2/miniconda3/envs/bio_env/bin/STAR-avx2   --runThreadN 8   --genomeDir /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/genome/Arabidopsis_thaliana   --readFilesIn /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/sequences/   
+----------------------------------------
+
+Number of fastq files for each mate = 1
+ParametersSolo: --soloCellFilterType CellRanger2.2 filtering parameters:  3000 0.99 10
+Finished loading and checking parameters
+Reading genome generation parameters:
+### /dss/dsshome1/0A/ge58rom2/miniconda3/envs/bio_env/bin/STAR-avx2   --runMode genomeGenerate      --runThreadN 8   --genomeDir /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/genome/Arabidopsis_thaliana/   --genomeFastaFiles /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/genome/Arabidopsis_thaliana/TAIR10_chr_all.fas      --sjdbGTFfile /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/genome/Arabidopsis_thaliana/Araport11_GFF3_genes_transposons.current.gff
+### GstrandBit=32
+versionGenome                 2.7.4a     ~RE-DEFINED
+genomeType                    Full     ~RE-DEFINED
+genomeFastaFiles              /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/genome/Arabidopsis_thaliana/TAIR10_chr_all.fas        ~RE-DEFINED
+genomeSAindexNbases           14     ~RE-DEFINED
+genomeChrBinNbits             18     ~RE-DEFINED
+genomeSAsparseD               1     ~RE-DEFINED
+genomeTransformType           None     ~RE-DEFINED
+genomeTransformVCF            -     ~RE-DEFINED
+sjdbOverhang                  100     ~RE-DEFINED
+sjdbFileChrStartEnd           -        ~RE-DEFINED
+sjdbGTFfile                   /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/genome/Arabidopsis_thaliana/Araport11_GFF3_genes_transposons.current.gff     ~RE-DEFINED
+sjdbGTFchrPrefix              -     ~RE-DEFINED
+sjdbGTFfeatureExon            exon     ~RE-DEFINED
+sjdbGTFtagExonParentTranscripttranscript_id     ~RE-DEFINED
+sjdbGTFtagExonParentGene      gene_id     ~RE-DEFINED
+sjdbInsertSave                Basic     ~RE-DEFINED
+genomeFileSizes               120586240   985730026        ~RE-DEFINED
+Genome version is compatible with current STAR
+Number of real (reference) chromosomes= 7
+1	Chr1	30427671	0
+2	Chr2	19698289	30670848
+3	Chr3	23459830	50593792
+4	Chr4	18585056	74186752
+5	Chr5	26975502	92798976
+6	ChrC	154478	119799808
+7	ChrM	367808	120061952
+--sjdbOverhang = 100 taken from the generated genome
+Started loading the genome: Sun Sep 29 18:56:36 2024
+
+Genome: size given as a parameter = 120586240
+SA: size given as a parameter = 985730026
+SAindex: size given as a parameter = 1
+Read from SAindex: pGe.gSAindexNbases=14  nSAi=357913940
+nGenome=120586240;  nSAbyte=985730026
+GstrandBit=32   SA number of indices=238964854
+Shared memory is not used for genomes. Allocated a private copy of the genome.
+Genome file size: 120586240 bytes; state: good=1 eof=0 fail=0 bad=0
+Loading Genome ... done! state: good=1 eof=0 fail=0 bad=0; loaded 120586240 bytes
+SA file size: 985730026 bytes; state: good=1 eof=0 fail=0 bad=0
+Loading SA ... done! state: good=1 eof=0 fail=0 bad=0; loaded 985730026 bytes
+Loading SAindex ... done: 1565873619 bytes
+Finished loading the genome: Sun Sep 29 18:56:38 2024
+
+alignIntronMax=alignMatesGapMax=0, the max intron size will be approximately determined by (2^winBinNbits)*winAnchorDistNbins=589824
+Created thread # 1
+Created thread # 2
+Created thread # 3
+Created thread # 4
+Created thread # 5
+Created thread # 6
+Created thread # 7
+Thread #1 end of input stream, nextChar=-1
+Completed: thread #1
+Completed: thread #2
+Completed: thread #4
+Completed: thread #5
+Completed: thread #3
+Completed: thread #7
+Completed: thread #0
+Joined thread # 1
+Joined thread # 2
+Joined thread # 3
+Joined thread # 4
+Joined thread # 5
+Completed: thread #6
+Joined thread # 6
+Joined thread # 7
+Sep 29 18:56:39 ..... finished mapping
+RAM after mapping:
+VmPeak:	 3970356 kB; VmSize:	 3915080 kB; VmHWM:	 3424748 kB; VmRSS:	 3424748 kB; 
+RAM after freeing genome index memory:
+VmPeak:	 3970356 kB; VmSize:	 1305512 kB; VmHWM:	 3424748 kB; VmRSS:	  815312 kB; 
+ALL DONE!

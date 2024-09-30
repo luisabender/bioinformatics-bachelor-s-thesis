@@ -1,0 +1,10 @@
+@HD	VN:1.4
+@SQ	SN:Chr1	LN:30427671
+@SQ	SN:Chr2	LN:19698289
+@SQ	SN:Chr3	LN:23459830
+@SQ	SN:Chr4	LN:18585056
+@SQ	SN:Chr5	LN:26975502
+@SQ	SN:ChrC	LN:154478
+@SQ	SN:ChrM	LN:367808
+@PG	ID:STAR	PN:STAR	VN:2.7.11b	CL:/dss/dsshome1/0A/ge58rom2/miniconda3/envs/bio_env/bin/STAR-avx2   --runThreadN 8   --genomeDir /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/genome/Arabidopsis_thaliana   --readFilesIn /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/sequences/   
+@CO	user command line: /dss/dsshome1/0A/ge58rom2/miniconda3/envs/bio_env/bin/STAR-avx2 --genomeDir /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/genome/Arabidopsis_thaliana --readFilesIn /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/sequences/ --runThreadN 8

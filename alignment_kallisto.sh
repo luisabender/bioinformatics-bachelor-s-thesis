@@ -5,6 +5,7 @@
 #SBATCH --mem=55G
 #SBATCH --time=06:00:00
 #SBATCH --job-name=STAR_arabidopsis
+#SBATCH --array=1-17%4
 
  
 #make sure you have the folder ~/logs/slurm/ for the next lines.
@@ -18,8 +19,7 @@
 source /dss/dsshome1/0A/ge58rom2/miniconda3/bin/activate bio_env
 
 base_dir="/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa"
+reads=$(cat $base_dir/sequences/sample.paths | head -n $SLURM_ARRAY_TASK_ID | tail -n1)
 
 # single end alignment
-STAR --genomeDir $base_dir/genome/Arabidopsis_thaliana \
-     --readFilesIn $base_dir/sequences/ \
-     --runThreadN $SLURM_CPUS_PER_TASK
+kallisto quant -i $base_dir/genome/Arabidopsis_thaliana_transcript/athaliana.idx -o $base_dir/genome/Arabidopsis_thaliana_transcript --single -l 112 -s 20 $reads

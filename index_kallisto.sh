@@ -8,8 +8,8 @@
 
  
 #make sure you have the folder ~/logs/slurm/ for the next lines.
-#SBATCH -o /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/slurm/%x.%j.%a.out 
-#SBATCH -e /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/slurm/%x.%j.%a.err
+#SBATCH -o /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/slurm_kallisto/%x.%j.%a.out 
+#SBATCH -e /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/slurm_kallisto/%x.%j.%a.err
  
 #This is where you allocate some of cluster specific parameters.
 #SBATCH --clusters=serial
@@ -19,7 +19,4 @@ source /dss/dsshome1/0A/ge58rom2/miniconda3/bin/activate bio_env
 
 base_dir="/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa"
 
-# single end alignment
-STAR --genomeDir $base_dir/genome/Arabidopsis_thaliana \
-     --readFilesIn $base_dir/sequences/ \
-     --runThreadN $SLURM_CPUS_PER_TASK
+kallisto index -i $base_dir/genome/Arabidopsis_thaliana_transcript/athaliana.idx $base_dir/genome/Arabidopsis_thaliana_transcript/Arabidopsis_thaliana.TAIR10.cdna.all.fa
