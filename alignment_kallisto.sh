@@ -5,12 +5,12 @@
 #SBATCH --mem=55G
 #SBATCH --time=06:00:00
 #SBATCH --job-name=kallisto_ara
-#SBATCH --array=1-17%4
+#SBATCH --array=1-32%4
 
  
 #make sure you have the folder ~/logs/slurm/ for the next lines.
-#SBATCH -o /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/slurm_kallisto2/%x.%j.%a.out 
-#SBATCH -e /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/slurm_kallisto2/%x.%j.%a.err
+#SBATCH -o /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/slurm_kallisto/%x.%j.%a.out 
+#SBATCH -e /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/slurm_kallisto/%x.%j.%a.err
  
 #This is where you allocate some of cluster specific parameters.
 #SBATCH --clusters=serial
@@ -28,4 +28,4 @@ outputfile=$base_dir/kallisto_output/$(basename $reads .fastq)
 mkdir -p $( dirname $outputfile)
 
 # single end alignment
-kallisto quant -i $base_dir/genome/Arabidopsis_thaliana_transcript/athaliana.idx -o $outputfile --single -l 112 -s 20 $reads
+kallisto quant -i $base_dir/genome/Arabidopsis_thaliana_transcript/athaliana.idx -o $outputfile --single -l 110 -s 20 $reads

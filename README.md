@@ -20,9 +20,7 @@ Performed trimmomatic on the .fastq files for basic adapter trimming. Then run c
 4. **FASTQC** again and **MultiQC report**
 
 FastQC showed good results on adapter content.
-MultiQC report is generated and uploaded.
-
-TODO:
+MultiQC report on trimmed reads.
 
 5. **Alignment** to an Arabidopsis thaliana genome (TAIR10) with **Kallisto**
 
@@ -32,13 +30,16 @@ Build Kallisto index and run kallisto quantification algorithm in SLURM. <br>
 Output: abundance.h5 file for each of the 17 samples. <br>
 
 Use HTSeq-count or featureCount to count the reads per gene for each sample.
-MultiQC with alignment results.
+MultiQC with Kallisto alignment results.
+
+TODO:
+
+Repeating the preprocessing step with the rest of the samples, altogether 50 samples.
 
 6. **Differential gene expression analysis** with DESeq2
 
 Load the result files in R and make a count and metadata table.<br>
-Analyze the count table, make graphs and slides about the metadata too. <br>
-
+Analyze the count table, make graphs and slides about the metadata too. <br>å
 
 Enrichment analysis with logfoldchange to identify genes which are most upregulated.<br>
 Compare between different samples, infected and control, Day 0 and Day 6.<br>
