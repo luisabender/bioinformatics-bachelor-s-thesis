@@ -96,21 +96,6 @@ abline(h=median(logcounts), col="blue")
 
 
 ```{r}
-# vst with count matrix
-vst_counts <- vst(count_matrix_raw)
-
-# Check distributions of samples using boxplots
-boxplot(vst_counts, 
-        xlab="", 
-        ylab="VST counts",
-        las=2,
-        col=statusCols)
-# Let's add a blue horizontal line that corresponds to the median
-abline(h=median(vst_counts), col="blue")
-```
-
-
-```{r}
 pca_data <- plotPCA(vsd, intgroup = c("treatment", "days_post_treatment"), returnData = TRUE)
 # Plot PCA
 ggplot(pca_data, aes(PC1, PC2, color = treatment)) +
