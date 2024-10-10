@@ -1,7 +1,7 @@
 # Bachelor thesis Luisa
 
 ## Goals for PA
-1. Read in and extract the SRA samples via **sratoolkit**
+1. Read in and extract the SRA samples with **sratoolkit**
 
 Dataset from Paper: A primary cell wall cellulose-dependent defense mechanism against vascular pathogens revealed by time-resolved dual transcriptomics. <br>
 https://bmcbiol.biomedcentral.com/articles/10.1186/s12915-021-01100-6#Sec13 <br>
@@ -13,29 +13,34 @@ Downloaded 17 Samples from Day 0 and Day 6 post treatment (untreated and infecte
 
 Used the package fastqc from conda and stored the results in folder fastqc_results.
 
-3. **Adapter trimming** via trimmomatic and cutadapt
+3. **Adapter trimming** with trimmomatic and cutadapt
 
 Performed trimmomatic on the .fastq files for basic adapter trimming. Then run cutadapt on the results to eliminate the polyA adapters.<br>
 
 4. **FASTQC** again and **MultiQC report**
 
 FastQC showed good results on adapter content.
-MultiQC report is generated and uploaded.
+MultiQC report on trimmed reads.
 
-TODO:
+5. **Alignment** to an Arabidopsis thaliana genome (TAIR10) with **Kallisto**
 
-5. **Alignment** to an Arabidopsis thaliana genome (TAIR10) with **STAR**
+Downloaded Kallisto via conda. 
+Downloaded whole Arabidopsis thaliana transcriptome in TAIR: TAIR10.cdna.all.fa <br>
+Build Kallisto index and run kallisto quantification algorithm in SLURM. <br>
+Output: abundance.h5 file for each of the 17 samples. <br>
 
-Downloaded STAR package via conda. 
-Downloaded whole Arabidopsis thaliana genome in ENSEMBL: TAIR10.dna.toplevel.fa.qz <br>
-Downloaded Arabidopsis GTF annotation file (TAIR11). <br>
-Perform STAR genome indexing and single-end alignment in SLURM. <br>
 Use HTSeq-count or featureCount to count the reads per gene for each sample.
+MultiQC with Kallisto alignment results.
 
+Repeating the preprocessing step with the rest of the samples, altogether 50 samples.
 
-6. **Differential gene expression analysis** via DESeq2
+TODO: 
 
-Load the result files in R and run DESeq.<br>
+6. **Differential gene expression analysis** with DESeq2
+
+Load the result files in R and make a count and metadata table.<br>
+Analyze the count table, make graphs and slides about the metadata too. <br>
+
 Enrichment analysis with logfoldchange to identify genes which are most upregulated.<br>
 Compare between different samples, infected and control, Day 0 and Day 6.<br>
 
