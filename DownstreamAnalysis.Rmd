@@ -65,7 +65,7 @@ pca_data <- merge(pca_data, meta_info, by.x = "Sample", by.y = "Run")
 # mark potential outliers
 outliers <- pca_data[abs(pca_data$PC1) > 200 | abs(pca_data$PC2) > 150, ]
 
-ggplot(pca_data, aes(x = PC1, y = PC2, color = treatment, shape = days_post_treatment)) +
+ggplot(pca_data, aes(x = PC1, y = PC2, color = treatment)) +
     geom_point() +
     stat_ellipse(aes(color = treatment), type = "norm", linetype = 2) +
     stat_ellipse(type = "t") +
