@@ -14,6 +14,7 @@ library(DESeq2)
 library(tidyverse)
 library(dplyr)
 library(ggrepel)
+library(pheatmap)
 ```
 
 ```{r}
@@ -21,7 +22,7 @@ library(ggrepel)
 count_matrix_tpm <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/count_matrix.csv', row.names = 1)
 count_matrix_tpm <- count_matrix[, order(colnames(count_matrix))]
 count_matrix_raw <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/count_matrix_raw.csv', row.names = 1)
-count_matrix_raw <- count_matrix[, order(colnames(count_matrix))]
+count_matrix_raw <- count_matrix_raw[, order(colnames(count_matrix_raw))]
 
 
 sra_runtable <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/SraRunTable.txt', row.names = 1)
@@ -33,7 +34,36 @@ meta_info <- meta_info[rownames(meta_info) != "SRR13824038",]
 meta_info$days_post_treatment <- factor(meta_info$days_post_treatment)
 ```
 
-## Run VST with raw count matrix
+### Counting reads
+
+```{r}
+total_reads_per_sample <- colSums(count_matrix_raw)
+total_reads_per_sample_df <- data.frame(sample = names(total_reads_per_sample), total_counts = total_reads_per_sample)
+
+# merge with metadata
+total_reads_per_sample_meta <- merge(total_reads_per_sample_df, meta_info2, by.x = "sample", by.y = "Sample_ID")
+
+total_reads_per_gene <- rowSums(count_matrix_raw)
+total_reads_per_gene_df <- data.frame(gene = names(total_reads_per_gene), total_counts = total_reads_per_gene)
+sorted_gene_counts <- sort(total_reads_per_gene, decreasing = TRUE)
+top_20_genes <- head(sorted_gene_counts, 20)
+top_20_genes_df <- data.frame(top_20_genes,gene = names(top_20_genes), counts = top_20_genes)
+
+
+# visualize counts
+#heatmap_data <- as.matrix(total_reads_per_sample)
+#pheatmap(heatmap_data, cluster_rows = FALSE, main = "Heatmap of Total Read Counts per Sample")
+ggplot(total_reads_per_sample_meta, aes(sample, total_counts, fill = treatment)) +
+  geom_bar(stat="identity", position=position_dodge(width = 5)) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(top_20_genes_df, aes(gene, counts)) + geom_bar(stat="identity") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+
+### Run VST with raw count matrix
 
 ```{r}
 # create DESeqDataSet
@@ -41,12 +71,17 @@ dds <- DESeqDataSetFromMatrix(countData = round(count_matrix_raw),
                               colData = meta_info, 
                               design = ~ treatment + days_post_treatment)
 
+
 #variance stabilization transformation with DESeqDataSet
-vsd <- vst(dds)
-# PCA with DESeqTransform object
-plotPCA(vsd, "treatment")
+vst <- vst(dds)
+
+# vst with count matrix
+#vst_counts <- varianceStabilizingTransformation(count_matrix_raw, blind = TRUE, fitType = "parametric")
+#getVarianceStabilizedData(object)
+
 ```
-## Run PCA with tpm counts
+
+### Run PCA with tpm counts
 
 ```{r}
 meta_info2 <- meta_info
@@ -100,17 +135,6 @@ ggplot(pca_data, aes(x = PC2, y = PC3, color = days_post_treatment, shape = trea
 
 ```
 
-```{r}
-pca_data <- plotPCA(vsd, intgroup = c("treatment", "days_post_treatment"), returnData = TRUE)
-# Plot PCA
-ggplot(pca_data, aes(PC1, PC2, color = treatment)) +
-    geom_point(size = 3) +
-    xlab(paste0("PC1: ", round(100 * attr(pca_data, "percentVar")[1], 1), "% variance")) +
-    ylab(paste0("PC2: ", round(100 * attr(pca_data, "percentVar")[2], 1), "% variance")) +
-    ggtitle("PCA of Sample Counts")
-
-
-```
 
 ```{r pressure, echo=FALSE}
 # for plots without showing the code
