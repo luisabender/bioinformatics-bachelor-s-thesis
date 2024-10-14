@@ -23,11 +23,12 @@ count_matrix_tpm <- count_matrix[, order(colnames(count_matrix))]
 count_matrix_raw <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/count_matrix_raw.csv', row.names = 1)
 count_matrix_raw <- count_matrix[, order(colnames(count_matrix))]
 
-sra_runtable <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/SraRunTable.txt')
+
+sra_runtable <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/SraRunTable.txt', row.names = 1)
 sra_runtable <- sra_runtable[sra_runtable$treatment == "untreated" | sra_runtable$treatment == "Fusarium oxysporum 5176",]
 
 # meta info with days post treatment, and treatment
-meta_info <- sra_runtable[, -c(2:28,31)]
+meta_info <- sra_runtable[, -c(1:27,30)]
 meta_info <- meta_info[rownames(meta_info) != "SRR13824038",]
 meta_info$days_post_treatment <- factor(meta_info$days_post_treatment)
 ```
@@ -48,6 +49,8 @@ plotPCA(vsd, "treatment")
 ## Run PCA with tpm counts
 
 ```{r}
+meta_info2 <- meta_info
+meta_info2$Sample_ID <- row.names(meta_info2)
 # log transform the tpm counts
 log_count_matrix_tpm <- log2(count_matrix_tpm + 1)
 
@@ -57,13 +60,14 @@ pca_result_tpm <- prcomp(t(log_count_matrix_tpm))
 # Extract the PCA coordinates
 pca_data <- data.frame(Sample = rownames(pca_result_tpm$x),
                        PC1 = pca_result_tpm$x[, 1], 
-                       PC2 = pca_result_tpm$x[, 2])
+                       PC2 = pca_result_tpm$x[, 2], 
+                       PC3 = pca_result_tpm$x[, 3])
 
 # Combine with metadata
-pca_data <- merge(pca_data, meta_info, by.x = "Sample", by.y = "Run")
+pca_data <- merge(pca_data, meta_info2, by.x = "Sample", by.y = "Sample_ID")
 
 # mark potential outliers
-outliers <- pca_data[abs(pca_data$PC1) > 200 | abs(pca_data$PC2) > 150, ]
+outliers <- pca_data[abs(pca_data$PC1) > 250 | abs(pca_data$PC2) > 150, ]
 
 ggplot(pca_data, aes(x = PC1, y = PC2, color = treatment)) +
     geom_point() +
@@ -75,25 +79,26 @@ ggplot(pca_data, aes(x = PC1, y = PC2, color = treatment)) +
     ggtitle("PCA with data ellipses") +
     theme_minimal()
 
+ggplot(pca_data, aes(x = PC1, y = PC2, color = days_post_treatment, shape = treatment)) +
+    geom_point() +
+    stat_ellipse(aes(color = treatment), type = "norm") +
+    geom_text_repel(data = outliers, aes(label = Sample), vjust = -1, hjust = 1.1, color = "black") +
+    xlab(paste0("PC1: ", round(100 * summary(pca_result_tpm)$importance[2, 1], 2), "% variance")) +
+    ylab(paste0("PC2: ", round(100 * summary(pca_result_tpm)$importance[2, 2], 2), "% variance")) +
+    ggtitle("PCA with data ellipses") +
+    theme_minimal()
+
+# include PC3
+ggplot(pca_data, aes(x = PC2, y = PC3, color = days_post_treatment, shape = treatment)) +
+    geom_point() +
+    stat_ellipse(aes(color = treatment), type = "norm") +
+    geom_text_repel(data = outliers, aes(label = Sample), vjust = -1, hjust = 1.1, color = "black") +
+    xlab(paste0("PC2: ", round(100 * summary(pca_result_tpm)$importance[2, 2], 2), "% variance")) +
+    ylab(paste0("PC3: ", round(100 * summary(pca_result_tpm)$importance[2, 3], 2), "% variance")) +
+    ggtitle("PCA with data ellipses") +
+    theme_minimal()
+
 ```
-
-
-```{r}
-# make a colour vector
-statusCols <- str_replace_all(meta_info$treatment, c("Fusarium oxysporum 5176"="red", untreated="orange"))
-
-# Check distributions of samples using boxplots
-boxplot(logcounts,
-        xlab="",
-        ylab="Log2(Counts)",
-        las=2,
-        col=statusCols,
-        main="Log2(Counts)")
-# Let's add a blue horizontal line that corresponds to the median
-
-abline(h=median(logcounts), col="blue")
-```
-
 
 ```{r}
 pca_data <- plotPCA(vsd, intgroup = c("treatment", "days_post_treatment"), returnData = TRUE)
@@ -111,6 +116,5 @@ ggplot(pca_data, aes(PC1, PC2, color = treatment)) +
 # for plots without showing the code
 plot(pressure)
 ```
-
 
 
