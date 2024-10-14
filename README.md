@@ -39,7 +39,7 @@ Load the result files in R and make a count and metadata table.<br>
 Analyze the count table, make graphs and slides about the metadata too. <br>
 PCA with the tpm count matrix to detect potential outliers, check with fastqc result. <br>
 Variance stabilization transformation with raw count matrix. <br>
-DESeq2 vst result. <br>
+DESeq2 with vst result. <br>
 
 
 Functional enrichment analysis with logfoldchange to identify genes which are most upregulated.<br>
