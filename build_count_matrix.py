@@ -13,10 +13,10 @@ for sample in sample_dirs:
     abundance_df = pd.read_csv(tsv_file, sep="\t")
     
     # Extract target ID (1st column) and tpm
-    sample_counts = abundance_df[['target_id', 'tpm']].copy()
+    sample_counts = abundance_df[['target_id', 'est_counts']].copy()
     
     # tpm = name of sample
-    sample_counts.rename(columns={'tpm': sample}, inplace=True)
+    sample_counts.rename(columns={'est_counts': sample}, inplace=True)
     
     if count_matrix.empty:
         count_matrix = sample_counts
@@ -27,4 +27,4 @@ for sample in sample_dirs:
 count_matrix.set_index('target_id', inplace=True)
 
 # save as csv file
-count_matrix.to_csv("count_matrix.csv")
+count_matrix.to_csv("count_matrix_raw.csv")
