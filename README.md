@@ -26,22 +26,23 @@ MultiQC report on trimmed reads.
 
 Downloaded Kallisto via conda. 
 Downloaded whole Arabidopsis thaliana transcriptome in TAIR: TAIR10.cdna.all.fa <br>
-Build Kallisto index and run kallisto quantification algorithm in SLURM. <br>
-Output: abundance.h5 file for each of the 17 samples. <br>
-
-Use HTSeq-count or featureCount to count the reads per gene for each sample.
-MultiQC with Kallisto alignment results.
+Built Kallisto index and run kallisto quantification algorithm in SLURM. <br>
+Output: abundance.tsv file for each of the 17 samples. <br>
+Done MultiQC with Kallisto alignment results.
 
 Repeating the preprocessing step with the rest of the samples, altogether 50 samples.
-
-TODO: 
+Build raw and tpm count matrix to load into R.
 
 6. **Differential gene expression analysis** with DESeq2
 
 Load the result files in R and make a count and metadata table.<br>
 Analyze the count table, make graphs and slides about the metadata too. <br>
+PCA with the tpm count matrix to detect potential outliers, check with fastqc result. <br>
+Variance stabilization transformation with raw count matrix. <br>
+DESeq2 vst result. <br>
 
-Enrichment analysis with logfoldchange to identify genes which are most upregulated.<br>
-Compare between different samples, infected and control, Day 0 and Day 6.<br>
+
+Functional enrichment analysis with logfoldchange to identify genes which are most upregulated.<br>
+
 
 7. **Visualizations**
