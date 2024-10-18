@@ -49,7 +49,7 @@ meta_info <- meta_info[rownames(meta_info) != "SRR13824038",]
 meta_info$days_post_treatment <- factor(meta_info$days_post_treatment)
 ```
 
-### Counting reads
+### Counting reads (not needed)
 
 ```{r}
 get_reads_per_sample <- function(count_matrix, type, metadata){
@@ -112,8 +112,8 @@ ggplot(bottom_20_genes, aes(gene, counts)) + geom_bar(stat="identity") +
 ### Filter low expressed genes with TPM
 
 Result: 
-before filtering: 47928 genes
-after filtering: 19455 genes
+- before filtering: 47928 genes
+- after filtering: 19455 genes
 
 ```{r}
 smallest_tpm <- 0.5
@@ -130,34 +130,38 @@ cts <- count_matrix_raw[keep,]
 
 ##### TODO:
 1. Construct a DESeqDataSet with count table, colData and design formula
-design formula: put the variable of interest at the end of the formula and make sure the control level is the first level.
+
+--> design formula: put the variable of interest at the end of the formula and make sure the control level is the first level.
+
 2. Pre-filtering with TPM counts
 
-Differential expression analysis
+##### Differential expression analysis
 1. Run DESeq and results (build result table with name or contrast)
 2. Log fold change shrinkage
 3. Order result table by p-values
 
-Exploring and exporting results
+##### Exploring and exporting results
 1. MA-plot to show log2 fold changes
 2. Read counts for a single gene (plot counts)
 
-Multi-factor design (maybe make a copy of the Data set to rerun the analysis)
+##### Multi-factor design (maybe make a copy of the Data set to rerun the analysis)
 ~treatment + time + treatment:time
 
-Data transformations and visualization (vst)
-blind = TRUE --> compare samples in a manner wholly unbiased by the information about experimental groups 
-blind = FALSE --> better when expecting that many of genes will have large differences in counts which are explainable by the experimental design
+##### Data transformations and visualization (vst)
+-blind = TRUE --> compare samples in a manner wholly unbiased by the information about experimental groups 
+-blind = FALSE --> better when expecting that many of genes will have large differences in counts which are explainable by the experimental design
 
-Data quality assessment (clustering and visualization) in parallel to the differential expression testing (with vsd)
+##### Data quality assessment (clustering and visualization) in parallel to the differential expression testing (with vsd)
 1. Heatmap of count matrix
 2. Heatmap of the sample-to-sample distances
 3. PCA
 
-Interactions
-plotCounts
-for time-series experiments: 1. use interaction and the 
+##### Interactions
+- plotCounts
+- for time-series experiments: 
+1. use interaction and the 
 2. likelihood ratio test with a reduced model (which does not contain the interaction terms) which will test whether the condition induces a change in gene expression at any time point after the reference level time point (time 0)
+
 
 Later: Gene annotation
 
