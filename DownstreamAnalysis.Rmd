@@ -17,6 +17,15 @@ library(ggrepel)
 library(pheatmap)
 ```
 
+#### What we need:
+1. raw count table for DESeq2
+2. count table with TPM counts to filter out low expressed genes
+3. vst count table for PCA analysis to detect potential outliers
+
+--> before DESeq2 adjust the raw count table with kept genes and samples
+
+### Input data
+
 ```{r}
 # load count matrix and SRA run table for meta-info
 count_matrix_tpm <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/count_matrix.csv', row.names = 1)
@@ -24,12 +33,18 @@ count_matrix_tpm <- count_matrix[, order(colnames(count_matrix))]
 count_matrix_raw <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/count_matrix_raw.csv', row.names = 1)
 count_matrix_raw <- count_matrix_raw[, order(colnames(count_matrix_raw))]
 
+# exclude 4 samples due to low aligment rate 1.2% - 1.6%
 
-sra_runtable <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/SraRunTable.txt', row.names = 1)
+#to_exclude = c("SRR13824039", "SRR13824011", "SRR13823999", "SRR13823997")
+#count_matrix_tpm_new <- count_matrix_tpm %>% select(-all_of(to_exclude))
+#count_matrix_raw_new <- count_matrix_raw %>% select(-all_of(to_exclude))
+
+sra_runtable <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/SraRunTable-2.txt', row.names = 1)
 sra_runtable <- sra_runtable[sra_runtable$treatment == "untreated" | sra_runtable$treatment == "Fusarium oxysporum 5176",]
 
 # meta info with days post treatment, and treatment
-meta_info <- sra_runtable[, -c(1:27,30)]
+#meta_info <- sra_runtable[, -c(1:27,30)]
+meta_info <- sra_runtable
 meta_info <- meta_info[rownames(meta_info) != "SRR13824038",]
 meta_info$days_post_treatment <- factor(meta_info$days_post_treatment)
 ```
@@ -37,104 +52,276 @@ meta_info$days_post_treatment <- factor(meta_info$days_post_treatment)
 ### Counting reads
 
 ```{r}
-total_reads_per_sample <- colSums(count_matrix_raw)
-total_reads_per_sample_df <- data.frame(sample = names(total_reads_per_sample), total_counts = total_reads_per_sample)
+get_reads_per_sample <- function(count_matrix, type, metadata){
+  
+  total_reads_per_sample <- colSums(count_matrix)
+  total_reads_per_sample_df <- data.frame(sample = names(total_reads_per_sample), total_counts = total_reads_per_sample)
 
-# merge with metadata
-total_reads_per_sample_meta <- merge(total_reads_per_sample_df, meta_info2, by.x = "sample", by.y = "Sample_ID")
+  if(type == "df"){
+    return (total_reads_per_sample_df)
+  } else if (type == "meta"){
+    # merge with meta data
+    total_reads_per_sample_meta <- merge(total_reads_per_sample_df, metadata, by.x = "sample", by.y = "Sample_ID")
+    return(total_reads_per_sample_meta)
+  } else {
+    return (total_reads_per_sample)
+  }
+}
 
-total_reads_per_gene <- rowSums(count_matrix_raw)
-total_reads_per_gene_df <- data.frame(gene = names(total_reads_per_gene), total_counts = total_reads_per_gene)
-sorted_gene_counts <- sort(total_reads_per_gene, decreasing = TRUE)
-top_20_genes <- head(sorted_gene_counts, 20)
-top_20_genes_df <- data.frame(top_20_genes,gene = names(top_20_genes), counts = top_20_genes)
+meta_info2 <- meta_info
+meta_info2$Sample_ID <- row.names(meta_info2)
+total_reads_per_sample_meta <- get_reads_per_sample(count_matrix_raw, "meta", meta_info2)
 
+get_top20_genes <- function(count_matrix, top) {
+  
+  # total reads per gene
+  total_reads_per_gene <- rowSums(count_matrix)
+  total_reads_per_gene_df <- data.frame(gene = names(total_reads_per_gene), total_counts = total_reads_per_gene)
+  sorted_gene_counts <- sort(total_reads_per_gene, decreasing = TRUE)
+  if(top == TRUE) {
+    top_20_genes <- head(sorted_gene_counts, 20)
+    top_20_genes_df <- data.frame(top_20_genes,gene = names(top_20_genes), counts = top_20_genes)
+  
+    return (top_20_genes_df)
+    
+  } else {
+    bottom_20_genes <- tail(sorted_gene_counts, 20)
+    bottom_20_genes_df <- data.frame(bottom_20_genes,gene = names(bottom_20_genes), counts = bottom_20_genes)
+    
+    return (bottom_20_genes_df)
+  }
+  
+}
+
+top_20_genes <- get_top20_genes(count_matrix_raw_new, TRUE)
+bottom_20_genes <- get_top20_genes(count_matrix_raw_new, FALSE)
 
 # visualize counts
-#heatmap_data <- as.matrix(total_reads_per_sample)
-#pheatmap(heatmap_data, cluster_rows = FALSE, main = "Heatmap of Total Read Counts per Sample")
 ggplot(total_reads_per_sample_meta, aes(sample, total_counts, fill = treatment)) +
   geom_bar(stat="identity", position=position_dodge(width = 5)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-ggplot(top_20_genes_df, aes(gene, counts)) + geom_bar(stat="identity") +
+ggplot(top_20_genes, aes(gene, counts)) + geom_bar(stat="identity") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(bottom_20_genes, aes(gene, counts)) + geom_bar(stat="identity") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 ```
 
+### Filter low expressed genes with TPM
 
-### Run PCA with tpm counts
+Result: 
+before filtering: 47928 genes
+after filtering: 19455 genes
 
 ```{r}
-meta_info2 <- meta_info
-meta_info2$Sample_ID <- row.names(meta_info2)
-# log transform the tpm counts
-log_count_matrix_tpm <- log2(count_matrix_tpm + 1)
+smallest_tpm <- 0.5
+percentage <- 0.51
+num_samples <- ncol(count_matrix_tpm)
+# genes to keep
+keep <- rowSums(count_matrix_tpm >= smallest_tpm) >= percentage * num_samples
 
-# perform PCA 
-pca_result_tpm <- prcomp(t(log_count_matrix_tpm))
+count_matrix_tpm2 <- count_matrix_tpm[keep,]
+cts <- count_matrix_raw[keep,]
+```
+
+## DESeq2 (with raw counts)
+
+##### TODO:
+1. Construct a DESeqDataSet with count table, colData and design formula
+design formula: put the variable of interest at the end of the formula and make sure the control level is the first level.
+2. Pre-filtering with TPM counts
+
+Differential expression analysis
+1. Run DESeq and results (build result table with name or contrast)
+2. Log fold change shrinkage
+3. Order result table by p-values
+
+Exploring and exporting results
+1. MA-plot to show log2 fold changes
+2. Read counts for a single gene (plot counts)
+
+Multi-factor design (maybe make a copy of the Data set to rerun the analysis)
+~treatment + time + treatment:time
+
+Data transformations and visualization (vst)
+blind = TRUE --> compare samples in a manner wholly unbiased by the information about experimental groups 
+blind = FALSE --> better when expecting that many of genes will have large differences in counts which are explainable by the experimental design
+
+Data quality assessment (clustering and visualization) in parallel to the differential expression testing (with vsd)
+1. Heatmap of count matrix
+2. Heatmap of the sample-to-sample distances
+3. PCA
+
+Interactions
+plotCounts
+for time-series experiments: 1. use interaction and the 
+2. likelihood ratio test with a reduced model (which does not contain the interaction terms) which will test whether the condition induces a change in gene expression at any time point after the reference level time point (time 0)
+
+Later: Gene annotation
+
+```{r}
+# create DESeqDataSet from count matrix
+dds <- DESeqDataSetFromMatrix(countData = round(cts),
+                              colData = meta_info,
+                              design = ~treatment)
+
+```
+
+```{r}
+# DESeq
+dds <- DESeq(dds)
+res <- results(dds)
+
+# log fold change shrinkage
+#resLFC <- lfcShrink(dds, coef="treatment_untreated_vs_Fusarium.oxysporum.5176")
+# order p-values
+resOrdered <- res[order(res$pvalue),]
+
+```
+
+Number of adjusted p-values less than 0.1: 8767
+
+### Exploring results
+
+```{r}
+plotMA(res, ylim=c(-2,2))
+# alternativ shrinkage estimators??
+
+# gene with smallest p-value
+plotCounts(dds, gene=which.min(res$padj), intgroup="treatment")
+```
+
+
+```{r}
+# extract time samples for DESeq2
+meta_info_day4 <- meta_info2[meta_info2$days_post_treatment == 4,]
+samples_day4 <- meta_info_day4$Sample_ID
+count_matrix_day4 <- count_matrix_raw_new %>% select(all_of(samples_day4)) %>% as.matrix()
+```
+
+
+### Run PCA with vst counts
+
+```{r}
+perform_pca <- function(count_matrix){
+  # log transform the tpm counts
+  log_count_matrix <- log2(count_matrix + 1)
+  # perform PCA
+  pca_result <- prcomp(t(log_count_matrix))
+  return (pca_result)
+}
+
+visualize_pca <- function(data, pca_result, mark_outliers, color_days){
+  if(color_days == TRUE){
+    if(mark_outliers == TRUE){
+    ggplot(data, aes(x = PC1, y = PC2, color = days_post_treatment, shape = treatment)) +
+    geom_point() +
+    geom_point(data = outliers, color = "blue") + 
+    stat_ellipse(aes(color = treatment), type = "norm") +
+    stat_ellipse(data = outliers, color = "blue") + 
+    geom_text_repel(data = outliers, aes(label = Sample), vjust = -1, hjust = 1.1, color = "black") +
+    xlab(paste0("PC1: ", round(100 * summary(pca_result)$importance[2, 1], 2), "% variance")) +
+    ylab(paste0("PC2: ", round(100 * summary(pca_result)$importance[2, 2], 2), "% variance")) +
+    ggtitle("PCA with data ellipses") +
+    theme_minimal()
+  } else{
+    ggplot(data, aes(x = PC1, y = PC2, days_post_treatment, shape = treatment)) +
+    geom_point() +
+    stat_ellipse(aes(color = treatment), type = "norm") +
+    xlab(paste0("PC1: ", round(100 * summary(pca_result)$importance[2, 1], 2), "% variance")) +
+    ylab(paste0("PC2: ", round(100 * summary(pca_result)$importance[2, 2], 2), "% variance")) +
+    ggtitle("PCA with data ellipses") +
+    theme_minimal()
+  }
+  } else{
+    if(mark_outliers == TRUE){
+      ggplot(data, aes(x = PC1, y = PC2, color = treatment)) +
+      geom_point() +
+      geom_point(data = outliers, color = "blue") + 
+      stat_ellipse(aes(color = treatment), type = "norm", linetype = 2) +
+      stat_ellipse(type = "t") +
+      stat_ellipse(data = outliers, color = "blue") + 
+      geom_text_repel(data = outliers, aes(label = Sample), vjust = -1, hjust = 1.1, color = "black") +
+      xlab(paste0("PC1: ", round(100 * summary(pca_result)$importance[2, 1], 2), "% variance")) +
+      ylab(paste0("PC2: ", round(100 * summary(pca_result)$importance[2, 2], 2), "% variance")) +
+      ggtitle("PCA with data ellipses") +
+      theme_minimal()
+    } else{
+      ggplot(data, aes(x = PC1, y = PC2, color = treatment)) +
+      geom_point() +
+      stat_ellipse(aes(color = treatment), type = "norm", linetype = 2) +
+      stat_ellipse(type = "t") +
+      xlab(paste0("PC1: ", round(100 * summary(pca_result)$importance[2, 1], 2), "% variance")) +
+      ylab(paste0("PC2: ", round(100 * summary(pca_result)$importance[2, 2], 2), "% variance")) +
+      ggtitle("PCA with data ellipses") +
+      theme_minimal()
+    }
+  }
+}
+```
+
+
+```{r}
+# get vst counts
+# vst with dds??
+count_matrix <- as.matrix(count_matrix_raw)
+vsd <- vst(round(count_matrix), blind = FALSE)
+#meanSdPlot(assay(vsd))
+```
+
+
+```{r}
+pca_result <- perform_pca(as.data.frame(vsd))
 
 # Extract the PCA coordinates
-pca_data <- data.frame(Sample = rownames(pca_result_tpm$x),
-                       PC1 = pca_result_tpm$x[, 1], 
-                       PC2 = pca_result_tpm$x[, 2], 
-                       PC3 = pca_result_tpm$x[, 3])
+pca_data <- data.frame(Sample = rownames(pca_result$x),
+                       PC1 = pca_result$x[, 1], 
+                       PC2 = pca_result$x[, 2], 
+                       PC3 = pca_result$x[, 3], 
+                       PC4 = pca_result$x[, 4])
 
 # Combine with metadata
 pca_data <- merge(pca_data, meta_info2, by.x = "Sample", by.y = "Sample_ID")
 
 # mark potential outliers
-outliers <- pca_data[abs(pca_data$PC1) > 250 | abs(pca_data$PC2) > 150, ]
+outliers <- pca_data[abs(pca_data$PC1) > 180 | abs(pca_data$PC2) > 150, ]
 
-ggplot(pca_data, aes(x = PC1, y = PC2, color = treatment)) +
-    geom_point() +
-    stat_ellipse(aes(color = treatment), type = "norm", linetype = 2) +
-    stat_ellipse(type = "t") +
-    geom_text_repel(data = outliers, aes(label = Sample), vjust = -1, hjust = 1.1, color = "black") +
-    xlab(paste0("PC1: ", round(100 * summary(pca_result_tpm)$importance[2, 1], 2), "% variance")) +
-    ylab(paste0("PC2: ", round(100 * summary(pca_result_tpm)$importance[2, 2], 2), "% variance")) +
-    ggtitle("PCA with data ellipses") +
-    theme_minimal()
+# visualize PC1 - PC2
+visualize_pca(pca_data,mark_outliers = TRUE, color_days = TRUE, pca_result)
+```
 
-ggplot(pca_data, aes(x = PC1, y = PC2, color = days_post_treatment, shape = treatment)) +
-    geom_point() +
-    stat_ellipse(aes(color = treatment), type = "norm") +
-    geom_text_repel(data = outliers, aes(label = Sample), vjust = -1, hjust = 1.1, color = "black") +
-    xlab(paste0("PC1: ", round(100 * summary(pca_result_tpm)$importance[2, 1], 2), "% variance")) +
-    ylab(paste0("PC2: ", round(100 * summary(pca_result_tpm)$importance[2, 2], 2), "% variance")) +
-    ggtitle("PCA with data ellipses") +
-    theme_minimal()
 
+```{r}
 # include PC3
 ggplot(pca_data, aes(x = PC2, y = PC3, color = days_post_treatment, shape = treatment)) +
     geom_point() +
+    geom_point(data = outliers, color = "blue") + # mark outliers
+    stat_ellipse(aes(color = treatment), type = "norm") +
+    stat_ellipse(data = outliers, color = "blue") + 
+    geom_text_repel(data = outliers, aes(label = Sample), vjust = -1, hjust = 1.1, color = "black") +
+    xlab(paste0("PC2: ", round(100 * summary(pca_result)$importance[2, 2], 2), "% variance")) +
+    ylab(paste0("PC3: ", round(100 * summary(pca_result)$importance[2, 3], 2), "% variance")) +
+    ggtitle("PCA with data ellipses") +
+    theme_minimal()
+
+ggplot(pca_data, aes(x = PC3, y = PC4, color = days_post_treatment, shape = treatment)) +
+    geom_point() +
+    geom_point(data = outliers, color = "blue") + # mark outliers
+    stat_ellipse(data = outliers, color = "blue") + 
     stat_ellipse(aes(color = treatment), type = "norm") +
     geom_text_repel(data = outliers, aes(label = Sample), vjust = -1, hjust = 1.1, color = "black") +
-    xlab(paste0("PC2: ", round(100 * summary(pca_result_tpm)$importance[2, 2], 2), "% variance")) +
-    ylab(paste0("PC3: ", round(100 * summary(pca_result_tpm)$importance[2, 3], 2), "% variance")) +
+    xlab(paste0("PC3: ", round(100 * summary(pca_result)$importance[2, 3], 2), "% variance")) +
+    ylab(paste0("PC4: ", round(100 * summary(pca_result)$importance[2, 4], 2), "% variance")) +
     ggtitle("PCA with data ellipses") +
     theme_minimal()
 
 ```
 
 
-### Run VST with raw count matrix
-
-```{r}
-# create DESeqDataSet
-dds <- DESeqDataSetFromMatrix(countData = round(count_matrix_raw), 
-                              colData = meta_info, 
-                              design = ~ treatment + days_post_treatment)
 
 
-#variance stabilization transformation with DESeqDataSet
-vst <- vst(dds)
-
-# vst with count matrix
-#vst_counts <- varianceStabilizingTransformation(count_matrix_raw, blind = TRUE, fitType = "parametric")
-#getVarianceStabilizedData(object)
-
-```
 
 ```{r pressure, echo=FALSE}
 # for plots without showing the code
