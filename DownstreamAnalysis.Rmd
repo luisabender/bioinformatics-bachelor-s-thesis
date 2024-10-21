@@ -15,6 +15,10 @@ library(tidyverse)
 library(dplyr)
 library(ggrepel)
 library(pheatmap)
+library(regionReport)
+library(ggvenn)
+library(VennDiagram)
+library(UpSetR)
 ```
 
 #### What we need:
@@ -29,32 +33,32 @@ library(pheatmap)
 ```{r}
 # load count matrix and SRA run table for meta-info
 count_matrix_tpm <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/count_matrix.csv', row.names = 1)
-count_matrix_tpm <- count_matrix[, order(colnames(count_matrix))]
+count_matrix_tpm <- count_matrix_tpm[, order(colnames(count_matrix_tpm))]
 count_matrix_raw <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/count_matrix_raw.csv', row.names = 1)
 count_matrix_raw <- count_matrix_raw[, order(colnames(count_matrix_raw))]
 
 # exclude 4 samples due to low aligment rate 1.2% - 1.6%
 
-#to_exclude = c("SRR13824039", "SRR13824011", "SRR13823999", "SRR13823997")
-#count_matrix_tpm_new <- count_matrix_tpm %>% select(-all_of(to_exclude))
-#count_matrix_raw_new <- count_matrix_raw %>% select(-all_of(to_exclude))
+to_exclude = c("SRR13824039", "SRR13824011", "SRR13823999", "SRR13823997")
+#count_matrix_tpm <- count_matrix_tpm %>% select(-all_of(to_exclude))
+#count_matrix_raw <- count_matrix_raw %>% select(-all_of(to_exclude))
 
 sra_runtable <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/SraRunTable-2.txt', row.names = 1)
 sra_runtable <- sra_runtable[sra_runtable$treatment == "untreated" | sra_runtable$treatment == "Fusarium oxysporum 5176",]
 
 # meta info with days post treatment, and treatment
-#meta_info <- sra_runtable[, -c(1:27,30)]
 meta_info <- sra_runtable
 meta_info <- meta_info[rownames(meta_info) != "SRR13824038",]
 meta_info$days_post_treatment <- factor(meta_info$days_post_treatment)
+meta_info_short <- meta_info[, -c(1:27,30)]
 ```
 
-### Counting reads (not needed)
+### Counting reads (not)
 
 ```{r}
-get_reads_per_sample <- function(count_matrix, type, metadata){
+get_reads_per_sample <- function(counts, type, metadata){
   
-  total_reads_per_sample <- colSums(count_matrix)
+  total_reads_per_sample <- colSums(counts)
   total_reads_per_sample_df <- data.frame(sample = names(total_reads_per_sample), total_counts = total_reads_per_sample)
 
   if(type == "df"){
@@ -72,10 +76,10 @@ meta_info2 <- meta_info
 meta_info2$Sample_ID <- row.names(meta_info2)
 total_reads_per_sample_meta <- get_reads_per_sample(count_matrix_raw, "meta", meta_info2)
 
-get_top20_genes <- function(count_matrix, top) {
+get_top20_genes <- function(counts, top) {
   
   # total reads per gene
-  total_reads_per_gene <- rowSums(count_matrix)
+  total_reads_per_gene <- rowSums(counts)
   total_reads_per_gene_df <- data.frame(gene = names(total_reads_per_gene), total_counts = total_reads_per_gene)
   sorted_gene_counts <- sort(total_reads_per_gene, decreasing = TRUE)
   if(top == TRUE) {
@@ -93,8 +97,8 @@ get_top20_genes <- function(count_matrix, top) {
   
 }
 
-top_20_genes <- get_top20_genes(count_matrix_raw_new, TRUE)
-bottom_20_genes <- get_top20_genes(count_matrix_raw_new, FALSE)
+top_20_genes <- get_top20_genes(count_matrix_raw, TRUE)
+bottom_20_genes <- get_top20_genes(count_matrix_raw, FALSE)
 
 # visualize counts
 ggplot(total_reads_per_sample_meta, aes(sample, total_counts, fill = treatment)) +
@@ -106,26 +110,7 @@ ggplot(top_20_genes, aes(gene, counts)) + geom_bar(stat="identity") +
 
 ggplot(bottom_20_genes, aes(gene, counts)) + geom_bar(stat="identity") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
 ```
-
-### Filter low expressed genes with TPM
-
-Result: 
-- before filtering: 47928 genes
-- after filtering: 19455 genes
-
-```{r}
-smallest_tpm <- 0.5
-percentage <- 0.51
-num_samples <- ncol(count_matrix_tpm)
-# genes to keep
-keep <- rowSums(count_matrix_tpm >= smallest_tpm) >= percentage * num_samples
-
-count_matrix_tpm2 <- count_matrix_tpm[keep,]
-cts <- count_matrix_raw[keep,]
-```
-
 ## DESeq2 (with raw counts)
 
 ##### TODO:
@@ -157,13 +142,33 @@ cts <- count_matrix_raw[keep,]
 3. PCA
 
 ##### Interactions
-- plotCounts
 - for time-series experiments: 
 1. use interaction and the 
 2. likelihood ratio test with a reduced model (which does not contain the interaction terms) which will test whether the condition induces a change in gene expression at any time point after the reference level time point (time 0)
 
 
-Later: Gene annotation
+Later:
+gene level annotations + 
+pathway
+
+
+### Filter low expressed genes with TPM
+
+Result: 
+- before filtering: 47928 genes
+- after filtering: 19455 genes
+
+```{r}
+smallest_tpm <- 0.5
+percentage <- 0.51
+num_samples <- ncol(count_matrix_tpm)
+# genes to keep
+keep <- rowSums(count_matrix_tpm >= smallest_tpm) >= percentage * num_samples
+
+count_matrix_tpm2 <- count_matrix_tpm[keep,]
+cts <- count_matrix_raw[keep,]
+```
+
 
 ```{r}
 # create DESeqDataSet from count matrix
@@ -171,47 +176,41 @@ dds <- DESeqDataSetFromMatrix(countData = round(cts),
                               colData = meta_info,
                               design = ~treatment)
 
+# drop samples
+dds <- subset(dds, select = !(colnames(dds) %in% to_exclude))
+dds <- estimateSizeFactors(dds)
+dds <- estimateDispersions(dds)
 ```
 
+### Data quality assessment
+
 ```{r}
-# DESeq
-dds <- DESeq(dds)
-res <- results(dds)
-
-# log fold change shrinkage
-#resLFC <- lfcShrink(dds, coef="treatment_untreated_vs_Fusarium.oxysporum.5176")
-# order p-values
-resOrdered <- res[order(res$pvalue),]
-
+# get vst counts
+vsd_dds <- vst(dds, blind = FALSE)
+vsd_dds_mf <- vst(ddsMF, blind = FALSE)
+vsd_dds_int <- vst(ddsInt, blind = FALSE)
 ```
 
-Number of adjusted p-values less than 0.1: 8767
-
-### Exploring results
+Heatmap of count matrix
 
 ```{r}
-plotMA(res, ylim=c(-2,2))
-# alternativ shrinkage estimators??
+select <- order(rowMeans(counts(dds, normalized=TRUE)), decreasing = TRUE)
+pheatmap(assay(vsd_dds)[select,], cluster_rows=FALSE, show_rownames=FALSE, cluster_cols=FALSE, annotation_col=df)
 
-# gene with smallest p-value
-plotCounts(dds, gene=which.min(res$padj), intgroup="treatment")
-```
+# sample-to-sample distances
+sampleDists <- dist(t(assay(vsd_dds)))
+sampleDistMatrix <- as.matrix(sampleDists)
 
-
-```{r}
-# extract time samples for DESeq2
-meta_info_day4 <- meta_info2[meta_info2$days_post_treatment == 4,]
-samples_day4 <- meta_info_day4$Sample_ID
-count_matrix_day4 <- count_matrix_raw_new %>% select(all_of(samples_day4)) %>% as.matrix()
+rownames(sampleDistMatrix) <- paste(vsd_dds$treatment, vsd_dds$days_post_treatment, sep="-")
+colnames(sampleDistMatrix) <- NULL
+pheatmap(sampleDistMatrix, clustering_distance_rows = sampleDists, clustering_distance_cols = sampleDists)
 ```
 
 
-### Run PCA with vst counts
-
 ```{r}
-perform_pca <- function(count_matrix){
+perform_pca <- function(count){
   # log transform the tpm counts
-  log_count_matrix <- log2(count_matrix + 1)
+  log_count_matrix <- log2(count + 1)
   # perform PCA
   pca_result <- prcomp(t(log_count_matrix))
   return (pca_result)
@@ -231,7 +230,7 @@ visualize_pca <- function(data, pca_result, mark_outliers, color_days){
     ggtitle("PCA with data ellipses") +
     theme_minimal()
   } else{
-    ggplot(data, aes(x = PC1, y = PC2, days_post_treatment, shape = treatment)) +
+    ggplot(data, aes(x = PC1, y = PC2, color = days_post_treatment, shape = treatment)) +
     geom_point() +
     stat_ellipse(aes(color = treatment), type = "norm") +
     xlab(paste0("PC1: ", round(100 * summary(pca_result)$importance[2, 1], 2), "% variance")) +
@@ -239,7 +238,8 @@ visualize_pca <- function(data, pca_result, mark_outliers, color_days){
     ggtitle("PCA with data ellipses") +
     theme_minimal()
   }
-  } else{
+  } 
+  else{
     if(mark_outliers == TRUE){
       ggplot(data, aes(x = PC1, y = PC2, color = treatment)) +
       geom_point() +
@@ -268,68 +268,152 @@ visualize_pca <- function(data, pca_result, mark_outliers, color_days){
 
 
 ```{r}
-# get vst counts
-# vst with dds??
-count_matrix <- as.matrix(count_matrix_raw)
-vsd <- vst(round(count_matrix), blind = FALSE)
-#meanSdPlot(assay(vsd))
-```
-
-
-```{r}
-pca_result <- perform_pca(as.data.frame(vsd))
-
+pca_result_dds <- perform_pca(assay(vsd_dds))
+pca_result_mf <- perform_pca(assay(vsd_dds_mf))
+pca_result_int <- perform_pca(assay(vsd_dds_int))
 # Extract the PCA coordinates
-pca_data <- data.frame(Sample = rownames(pca_result$x),
-                       PC1 = pca_result$x[, 1], 
-                       PC2 = pca_result$x[, 2], 
-                       PC3 = pca_result$x[, 3], 
-                       PC4 = pca_result$x[, 4])
+pca_data_dds <- data.frame(Sample = rownames(pca_result_dds$x),
+                       PC1 = pca_result_dds$x[, 1], 
+                       PC2 = pca_result_dds$x[, 2], 
+                       PC3 = pca_result_dds$x[, 3], 
+                       PC4 = pca_result_dds$x[, 4])
+
+pca_data_mf <- data.frame(Sample = rownames(pca_result_mf$x),
+                       PC1 = pca_result_mf$x[, 1], 
+                       PC2 = pca_result_mf$x[, 2], 
+                       PC3 = pca_result_mf$x[, 3], 
+                       PC4 = pca_result_mf$x[, 4])
+
+pca_data_int <- data.frame(Sample = rownames(pca_result_int$x),
+                       PC1 = pca_result_int$x[, 1], 
+                       PC2 = pca_result_int$x[, 2])
 
 # Combine with metadata
-pca_data <- merge(pca_data, meta_info2, by.x = "Sample", by.y = "Sample_ID")
+pca_data_dds <- merge(pca_data_dds, meta_info2, by.x = "Sample", by.y = "Sample_ID")
+pca_data_mf <- merge(pca_data_mf, meta_info2, by.x = "Sample", by.y = "Sample_ID")
+pca_data_int <- merge(pca_data_int, meta_info2, by.x = "Sample", by.y = "Sample_ID")
 
 # mark potential outliers
-outliers <- pca_data[abs(pca_data$PC1) > 180 | abs(pca_data$PC2) > 150, ]
+outliers <- pca_data_mf[abs(pca_data_mf$PC1) > 40 | abs(pca_data_mf$PC2) > 30, ]
 
 # visualize PC1 - PC2
-visualize_pca(pca_data,mark_outliers = TRUE, color_days = TRUE, pca_result)
+visualize_pca(pca_data_dds, mark_outliers = FALSE, color_days = TRUE, pca_result_dds)
+visualize_pca(pca_data_mf, mark_outliers = TRUE, color_days = TRUE, pca_result_mf)
+visualize_pca(pca_data_int, mark_outliers = FALSE, color_days = TRUE, pca_result_int)
+```
+
+
+
+```{r}
+# DESeq ~treatment
+dds <- DESeq(dds)
+res <- results(dds)
+
+# order p-values
+resOrdered <- res[order(res$pvalue),]
+```
+
+Number of adjusted p-values less than 0.1: 8767
+
+```{r}
+# copy of DESeqDataSet to rerun analysis using multi-factor design
+ddsMF <- dds
+
+# change the design
+design(ddsMF) <- formula(~treatment + days_post_treatment)
+ddsMF <- DESeq(ddsMF)
+resMF <- results(ddsMF)
+```
+
+```{r}
+# DESeq with Interaction term
+ddsInt <- dds
+design(ddsInt) <- formula(~treatment + days_post_treatment + treatment:days_post_treatment)
+ddsInt <- DESeq(ddsInt)
+resInt <- results(ddsInt)
+
+res_int_treatment <- results(ddsInt, contrast = c("treatment", "Fusarium oxysporum 5176", "untreated"))
+res_int_time <- results(ddsInt, contrast = c("days_post_treatment", "6", "0"))
 ```
 
 
 ```{r}
-# include PC3
-ggplot(pca_data, aes(x = PC2, y = PC3, color = days_post_treatment, shape = treatment)) +
-    geom_point() +
-    geom_point(data = outliers, color = "blue") + # mark outliers
-    stat_ellipse(aes(color = treatment), type = "norm") +
-    stat_ellipse(data = outliers, color = "blue") + 
-    geom_text_repel(data = outliers, aes(label = Sample), vjust = -1, hjust = 1.1, color = "black") +
-    xlab(paste0("PC2: ", round(100 * summary(pca_result)$importance[2, 2], 2), "% variance")) +
-    ylab(paste0("PC3: ", round(100 * summary(pca_result)$importance[2, 3], 2), "% variance")) +
-    ggtitle("PCA with data ellipses") +
-    theme_minimal()
+# interaction results for time effect in untreated vs treated
+# tests if the time effect is different untreated compared to treated
+res_interaction_day1 <- results(ddsInt, name = "treatmentuntreated.days_post_treatment1")
+res_interaction_day2 <- results(ddsInt, name = "treatmentuntreated.days_post_treatment2")
+res_interaction_day3 <- results(ddsInt, name = "treatmentuntreated.days_post_treatment3")
+res_interaction_day4 <- results(ddsInt, name = "treatmentuntreated.days_post_treatment4")
+res_interaction_day6 <- results(ddsInt, name = "treatmentuntreated.days_post_treatment6")
 
-ggplot(pca_data, aes(x = PC3, y = PC4, color = days_post_treatment, shape = treatment)) +
-    geom_point() +
-    geom_point(data = outliers, color = "blue") + # mark outliers
-    stat_ellipse(data = outliers, color = "blue") + 
-    stat_ellipse(aes(color = treatment), type = "norm") +
-    geom_text_repel(data = outliers, aes(label = Sample), vjust = -1, hjust = 1.1, color = "black") +
-    xlab(paste0("PC3: ", round(100 * summary(pca_result)$importance[2, 3], 2), "% variance")) +
-    ylab(paste0("PC4: ", round(100 * summary(pca_result)$importance[2, 4], 2), "% variance")) +
-    ggtitle("PCA with data ellipses") +
-    theme_minimal()
+# get significant genes out of the results
+sig_genes_day1 <- rownames(res_interaction_day1)[which(res_interaction_day1$padj < 0.05 & abs(res_interaction_day1$log2FoldChange) > 1)]
+sig_genes_day2 <- rownames(res_interaction_day2)[which(res_interaction_day2$padj < 0.05 & abs(res_interaction_day2$log2FoldChange) > 1)]
+sig_genes_day3 <- rownames(res_interaction_day3)[which(res_interaction_day3$padj < 0.05 & abs(res_interaction_day3$log2FoldChange) > 1)]
+sig_genes_day4 <- rownames(res_interaction_day4)[which(res_interaction_day4$padj < 0.05 & abs(res_interaction_day4$log2FoldChange) > 1)]
+sig_genes_day6 <- rownames(res_interaction_day6)[which(res_interaction_day6$padj < 0.05 & abs(res_interaction_day6$log2FoldChange) > 1)]
+```
+
+```{r}
+# create a venn diagram to show intersections
+venn.plot <- venn.diagram(
+  x = list(
+    "Day 1" = sig_genes_day1, 
+    "Day 2" = sig_genes_day2,
+    "Day 3" = sig_genes_day3,
+    "Day 4" = sig_genes_day4,
+    "Day 6" = sig_genes_day6
+  ), 
+  filename = "sig_genes_venn.png",
+  fill = c("red", "blue", "green", "yellow", "orange")
+)
+
+# alternative: upsetR (see https://academic.oup.com/bioinformatics/article/33/18/2938/3884387)
+gene_lists <- list(
+  Day1 = sig_genes_day1, 
+  Day2 = sig_genes_day2,
+  Day3 = sig_genes_day3,
+  Day4 = sig_genes_day4,
+  Day6 = sig_genes_day6
+)
+upset(fromList(gene_lists))
+```
+
+
+### Exploring results
+
+```{r}
+plotMA(res, ylim=c(-5,5), main="treatment")
+plotMA(resMF, ylim=c(-5,5), main="treatment + days_post_treatment")
+plotMA(resInt, ylim=c(-5,5), main="treatment + days_post_treatment + treatment:days_post_treatment")
+
+# p-values
+hist(res$pvalue)
+hist(resMF$pvalue)
+hist(resInt$pvalue)
+```
+
+
+```{r}
+### Nice 2 have ###
+# Likelihood ratio test for interaction effects
+# compare second model (mf) with full interaction model (int)
+dds_lrt <- DESeq(ddsInt, test = "LRT", reduced = ~treatment + days_post_treatment)
+res_lrt <- results(dds_lrt)
+
+
+# get significant genes from lrt
+sig_genes_lrt <- res_lrt[which(res_lrt$padj < 0.05),]
+rownames(sig_genes_int)
+```
+
+
+```{r}
 
 ```
 
 
 
 
-
-```{r pressure, echo=FALSE}
-# for plots without showing the code
-plot(pressure)
-```
 
 
