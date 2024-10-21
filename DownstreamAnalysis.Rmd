@@ -37,12 +37,6 @@ count_matrix_tpm <- count_matrix_tpm[, order(colnames(count_matrix_tpm))]
 count_matrix_raw <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/count_matrix_raw.csv', row.names = 1)
 count_matrix_raw <- count_matrix_raw[, order(colnames(count_matrix_raw))]
 
-# exclude 4 samples due to low aligment rate 1.2% - 1.6%
-
-to_exclude = c("SRR13824039", "SRR13824011", "SRR13823999", "SRR13823997")
-#count_matrix_tpm <- count_matrix_tpm %>% select(-all_of(to_exclude))
-#count_matrix_raw <- count_matrix_raw %>% select(-all_of(to_exclude))
-
 sra_runtable <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/SraRunTable-2.txt', row.names = 1)
 sra_runtable <- sra_runtable[sra_runtable$treatment == "untreated" | sra_runtable$treatment == "Fusarium oxysporum 5176",]
 
@@ -53,7 +47,7 @@ meta_info$days_post_treatment <- factor(meta_info$days_post_treatment)
 meta_info_short <- meta_info[, -c(1:27,30)]
 ```
 
-### Counting reads (not)
+### Counting reads (not needed)
 
 ```{r}
 get_reads_per_sample <- function(counts, type, metadata){
@@ -149,7 +143,7 @@ ggplot(bottom_20_genes, aes(gene, counts)) + geom_bar(stat="identity") +
 
 Later:
 gene level annotations + 
-pathway
+pathway annotations
 
 
 ### Filter low expressed genes with TPM
@@ -176,13 +170,16 @@ dds <- DESeqDataSetFromMatrix(countData = round(cts),
                               colData = meta_info,
                               design = ~treatment)
 
-# drop samples
-dds <- subset(dds, select = !(colnames(dds) %in% to_exclude))
+# drop samples due to low alignment rate 1.2% - 1.6%
+to_drop = c("SRR13824039", "SRR13824011", "SRR13823999", "SRR13823997")
+dds <- subset(dds, select = !(colnames(dds) %in% to_drop))
 dds <- estimateSizeFactors(dds)
 dds <- estimateDispersions(dds)
 ```
 
 ### Data quality assessment
+
+Variance stabilization transformation
 
 ```{r}
 # get vst counts
@@ -271,18 +268,15 @@ visualize_pca <- function(data, pca_result, mark_outliers, color_days){
 pca_result_dds <- perform_pca(assay(vsd_dds))
 pca_result_mf <- perform_pca(assay(vsd_dds_mf))
 pca_result_int <- perform_pca(assay(vsd_dds_int))
+
 # Extract the PCA coordinates
 pca_data_dds <- data.frame(Sample = rownames(pca_result_dds$x),
                        PC1 = pca_result_dds$x[, 1], 
-                       PC2 = pca_result_dds$x[, 2], 
-                       PC3 = pca_result_dds$x[, 3], 
-                       PC4 = pca_result_dds$x[, 4])
+                       PC2 = pca_result_dds$x[, 2])
 
 pca_data_mf <- data.frame(Sample = rownames(pca_result_mf$x),
                        PC1 = pca_result_mf$x[, 1], 
-                       PC2 = pca_result_mf$x[, 2], 
-                       PC3 = pca_result_mf$x[, 3], 
-                       PC4 = pca_result_mf$x[, 4])
+                       PC2 = pca_result_mf$x[, 2])
 
 pca_data_int <- data.frame(Sample = rownames(pca_result_int$x),
                        PC1 = pca_result_int$x[, 1], 
@@ -299,13 +293,13 @@ outliers <- pca_data_mf[abs(pca_data_mf$PC1) > 40 | abs(pca_data_mf$PC2) > 30, ]
 # visualize PC1 - PC2
 visualize_pca(pca_data_dds, mark_outliers = FALSE, color_days = TRUE, pca_result_dds)
 visualize_pca(pca_data_mf, mark_outliers = TRUE, color_days = TRUE, pca_result_mf)
-visualize_pca(pca_data_int, mark_outliers = FALSE, color_days = TRUE, pca_result_int)
+visualize_pca(pca_data_int, mark_outliers = TRUE, color_days = TRUE, pca_result_int)
 ```
 
 
 
 ```{r}
-# DESeq ~treatment
+# DESeq with design ~treatment
 dds <- DESeq(dds)
 res <- results(dds)
 
@@ -318,8 +312,6 @@ Number of adjusted p-values less than 0.1: 8767
 ```{r}
 # copy of DESeqDataSet to rerun analysis using multi-factor design
 ddsMF <- dds
-
-# change the design
 design(ddsMF) <- formula(~treatment + days_post_treatment)
 ddsMF <- DESeq(ddsMF)
 resMF <- results(ddsMF)
@@ -354,31 +346,6 @@ sig_genes_day4 <- rownames(res_interaction_day4)[which(res_interaction_day4$padj
 sig_genes_day6 <- rownames(res_interaction_day6)[which(res_interaction_day6$padj < 0.05 & abs(res_interaction_day6$log2FoldChange) > 1)]
 ```
 
-```{r}
-# create a venn diagram to show intersections
-venn.plot <- venn.diagram(
-  x = list(
-    "Day 1" = sig_genes_day1, 
-    "Day 2" = sig_genes_day2,
-    "Day 3" = sig_genes_day3,
-    "Day 4" = sig_genes_day4,
-    "Day 6" = sig_genes_day6
-  ), 
-  filename = "sig_genes_venn.png",
-  fill = c("red", "blue", "green", "yellow", "orange")
-)
-
-# alternative: upsetR (see https://academic.oup.com/bioinformatics/article/33/18/2938/3884387)
-gene_lists <- list(
-  Day1 = sig_genes_day1, 
-  Day2 = sig_genes_day2,
-  Day3 = sig_genes_day3,
-  Day4 = sig_genes_day4,
-  Day6 = sig_genes_day6
-)
-upset(fromList(gene_lists))
-```
-
 
 ### Exploring results
 
@@ -407,13 +374,65 @@ sig_genes_lrt <- res_lrt[which(res_lrt$padj < 0.05),]
 rownames(sig_genes_int)
 ```
 
+```{r}
+# create a venn diagram to show intersections
+venn.plot <- venn.diagram(
+  x = list(
+    "Day 1" = sig_genes_day1, 
+    "Day 2" = sig_genes_day2,
+    "Day 3" = sig_genes_day3,
+    "Day 4" = sig_genes_day4,
+    "Day 6" = sig_genes_day6
+  ), 
+  filename = "sig_genes_venn.png",
+  fill = c("red", "blue", "green", "yellow", "orange")
+)
+
+# alternative: upsetR (see https://academic.oup.com/bioinformatics/article/33/18/2938/3884387)
+gene_lists <- list(
+  Day1 = sig_genes_day1, 
+  Day2 = sig_genes_day2,
+  Day3 = sig_genes_day3,
+  Day4 = sig_genes_day4,
+  Day6 = sig_genes_day6
+)
+upset(fromList(gene_lists))
+```
+
 
 ```{r}
+# Volcano plots for each timepoint
+plot_volcano <- function(res, timepoint){
+  EnhancedVolcano(res,
+    lab = rownames(res),
+    title = paste("Volcano plot for Day", timepoint),
+    x = 'log2FoldChange',
+    y = 'padj')
+}
 
+plot_volcano(res_interaction_day1,1)
+plot_volcano(res_interaction_day2,2)
+plot_volcano(res_interaction_day3,3)
+plot_volcano(res_interaction_day4,4)
+plot_volcano(res_interaction_day6,6)
 ```
 
 
 
 
+### Gene level annotation
 
+on Linux cluster:
+installed agat with bioconda and created environment "agat".
+
+
+Step 1: Keep the longest isoforms of transcripts within the gff file
+--> agat_sp_keep_longest_isoform.pl -g Araport11_GFF3_genes_transposons.current.gff -o outfile ]
+
+
+Step 2: Extract Protein Sequences from the processed transcripts
+--> agat_sp_extract_sequences.pl -g Araport11_GFF3_longest_transcript.gff -f Arabidopsis_thaliana.TAIR10.cdna.all.fa -p -o Araport11_proteome.fa
+
+
+Step 3: Load the result proteome fasta file in mercator
 
