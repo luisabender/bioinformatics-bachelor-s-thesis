@@ -49,7 +49,10 @@ Following steps have been made in R: <br>
 ![PCA with vst counts and marked outliers.](plots/PCA.png) 
 - DESeq with Interaction term: design: ~treatment + days_post_treatment + treatment:days_post_treatment. <br>
 - Explored the DESeq results and saved the interaction results for time effect in untreated vs treated and the significant genes in each dataset. <br>
-- Created a venn diagram and upset to look for overlaps in significant genes from each day. <br>
+- Created a venn diagram and upset to look for overlaps in significant genes from each day. 
+
+![Venn Diagram with significant genes](plots/sig_genes_venn.png) 
+
 - Loaded Mercator results for Gene level annotations and merged them with the DESeq results. <br>
 - Counted significant genes in each functional category to visualize the counts for each timepoint.  <br>
 - Created a table with the top 30 significant genes for each timepoint and their functional categories. <br>
