@@ -43,20 +43,21 @@ Build raw and tpm count matrix to load into R. (build_count_matrix.py)
 
 DownstreamAnalysis.Rmd
 
-- Loaded count matrices SRA runtable (for metainfo) in R.<br>
-- Dropped Samples with very low alignment rate (1.2%-1.6%). <br>
-- Filtered low expressed genes, where the tpm is at least 0.5 for 51% of the genes. <br>
-- Used variance stabilization transformation on the DESeqDataset and created a heatmap of sample-to-sample distances and PCA to search for potential outliers. <br>
+- Loaded count matrices SRA runtable (for metainfo) in R.
+- Dropped Samples with very low alignment rate (1.2%-1.6%). 
+- Filtered low expressed genes, where the tpm is at least 0.5 for 51% of the genes. 
+- Used variance stabilization transformation on the DESeqDataset and created a heatmap of sample-to-sample distances and PCA to search for potential outliers. 
+
 ![PCA with vst counts and marked outliers.](plots/PCA.png) 
 
-- DESeq with Interaction term: design: ~treatment + days_post_treatment + treatment:days_post_treatment. <br>
-- Explored the DESeq results and saved the interaction results for time effect in untreated vs treated and the significant genes in each dataset. <br>
+- DESeq with Interaction term: design: ~treatment + days_post_treatment + treatment:days_post_treatment. 
+- Explored the DESeq results and saved the interaction results for time effect in untreated vs treated and the significant genes in each dataset. 
 - Created a venn diagram and upset to look for overlaps in significant genes from each day. 
 
 ![Venn Diagram with significant genes](plots/upset_sig_genes.png) 
 
-- Loaded Mercator results for Gene level annotations and merged them with the DESeq results. <br>
-- Counted significant genes in each functional category to visualize the counts for each timepoint.  <br>
+- Loaded Mercator results for Gene level annotations and merged them with the DESeq results. 
+- Counted significant genes in each functional category to visualize the counts for each timepoint.  
 
 ![Barplot with category counts for each day](plots/sig_genes_category.png) 
 
