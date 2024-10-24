@@ -15,10 +15,11 @@ library(tidyverse)
 library(dplyr)
 library(ggrepel)
 library(pheatmap)
-library(regionReport)
 library(ggvenn)
 library(VennDiagram)
 library(UpSetR)
+library(seqinr)
+library(knitr)
 ```
 
 #### What we need:
@@ -417,22 +418,154 @@ plot_volcano(res_interaction_day4,4)
 plot_volcano(res_interaction_day6,6)
 ```
 
-
-
-
 ### Gene level annotation
 
-on Linux cluster:
-installed agat with bioconda and created environment "agat".
+Mercator Results: 
+Run with A. thaliana transcript file: Arabidopsis_thaliana.TAIR10.cdna.all.fa
 
 
-Step 1: Keep the longest isoforms of transcripts within the gff file
---> agat_sp_keep_longest_isoform.pl -g Araport11_GFF3_genes_transposons.current.gff -o outfile ]
+```{r}
+# read mercator result
+mercator_annotations <- read.fasta('/Users/luisabender/Downloads/Job4112.fa')
+mercator_result <- read.delim('/Users/luisabender/Downloads/Job4112.results.txt', sep="\t", header = TRUE, stringsAsFactors = FALSE)
+mercator_result <- as.data.frame(lapply(mercator_result, function(x) {
+    if(is.character(x)) {
+        x <- gsub("^'|'$", "", x)
+    }
+    return(x)
+}))
+mercator_result$CATEGORY <- sapply(strsplit(mercator_result$NAME, ".", fixed=TRUE), `[`, 1)
+```
 
 
-Step 2: Extract Protein Sequences from the processed transcripts
---> agat_sp_extract_sequences.pl -g Araport11_GFF3_longest_transcript.gff -f Arabidopsis_thaliana.TAIR10.cdna.all.fa -p -o Araport11_proteome.fa
+```{r}
+# combine Mercator results with DESeq results
+annotated_deseq_results <- function(res, mercator_annos){
+  
+  # result as dataframe: gene ID as rownames
+  res_df <- as.data.frame(res)
+  res_df$gene_id <- rownames(res_df)
+  mercator_annos$IDENTIFIER <- toupper(mercator_annos$IDENTIFIER)
+  merged_results <- merge(res_df, mercator_annos, by.x="gene_id", by.y = "IDENTIFIER", all.x = TRUE)
+  return(merged_results)
+}
 
 
-Step 3: Load the result proteome fasta file in mercator
+# Count significant genes in each category
+analyze_categories <- function(res_annotated, padj_cutoff=0.05, lfc_cutoff=1) {
+    sig_genes <- res_annotated[abs(res_annotated$log2FoldChange) > lfc_cutoff & 
+                              res_annotated$padj < padj_cutoff, ]
+    
+    category_counts <- table(sig_genes$CATEGORY)
+    category_props <- prop.table(category_counts)
+    
+    return(list(counts=category_counts, proportions=category_props))
+}
+
+# select the Top 30
+get_top_annotated_genes <- function(res_annotated, n=30, createtable) {
+  # sort by p-value and log fold change
+  res_annotated <- res_annotated[order(res_annotated$padj, -abs(res_annotated$log2FoldChange)),]
+  # select top n genes
+  top_n <- head(res_annotated, n)
+  
+  if(createtable==TRUE){
+    result.table <- data.frame(
+      GENE_ID = top_n$gene_id,
+      CATEGORY = top_n$CATEGORY,
+      FUNCTION = top_n$NAME,
+      P_VALUE = top_n$padj,
+      LOG_FOLD_CHANGE = top_n$log2FoldChange
+    )
+    
+    return(result.table)
+  } else {
+    return(top_n)
+  }
+}
+
+add_timepoint <- function(result, timepoint){
+  result <- cbind(
+    result,
+    days_post_treatment = timepoint
+  )
+  return(result)
+}
+```
+
+
+```{r}
+res_day1_annotated <- annotated_deseq_results(res_interaction_day1, mercator_result)
+res_day2_annotated <- annotated_deseq_results(res_interaction_day2, mercator_result)
+res_day3_annotated <- annotated_deseq_results(res_interaction_day3, mercator_result)
+res_day4_annotated <- annotated_deseq_results(res_interaction_day4, mercator_result)
+res_day6_annotated <- annotated_deseq_results(res_interaction_day6, mercator_result)
+
+# list of category counts and proportions
+cat1 <- analyze_categories(res_day1_annotated)
+cat2 <- analyze_categories(res_day2_annotated)
+cat3 <- analyze_categories(res_day3_annotated)
+cat4 <- analyze_categories(res_day4_annotated)
+```
+
+```{r}
+# Get table for each timepoint
+result_day1_top30 <- get_top_annotated_genes(res_day1_annotated, createtable = TRUE) %>% add_timepoint(1)
+result_day2_top30 <- get_top_annotated_genes(res_day2_annotated, createtable = TRUE) %>% add_timepoint(2)
+result_day3_top30 <- get_top_annotated_genes(res_day3_annotated, createtable = TRUE) %>% add_timepoint(3)
+result_day4_top30 <- get_top_annotated_genes(res_day4_annotated, createtable = TRUE) %>% add_timepoint(4)
+result_day6_top30 <- get_top_annotated_genes(res_day6_annotated, createtable = TRUE) %>% add_timepoint(6)
+
+plot_data <- rbind(
+  result_day1_top30,
+  result_day2_top30,
+  result_day3_top30,
+  result_day4_top30,
+  result_day6_top30
+)
+
+plot_category_data <- function(category_results, timepoint) {
+    df <- data.frame(
+        Category = names(category_results$counts),
+        Count = as.numeric(category_results$counts),
+        Proportion = as.numeric(category_results$proportions),
+        Timepoint = timepoint
+    )
+    return(df)
+}
+
+plot_data2 <- rbind(
+    plot_category_data(cat1, "Day1"),
+    plot_category_data(cat2, "Day2"),
+    plot_category_data(cat3, "Day3"),
+    plot_category_data(cat4, "Day4")
+)
+
+ggplot(plot_data2, aes(x=Category, y = Count, fill = Timepoint)) +
+    geom_bar(stat="identity", position="dodge") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle=45, hjust=1)) +
+    labs(title="Distribution of Significant Genes Across Categories",
+         x="Functional Category",
+         y="Number of Significant Genes")
+```
+
+
+```{r}
+ggplot(result_day1_top30, aes(CATEGORY)) + geom_bar() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) + ggtitle("Day 1")
+ggplot(result_day2_top30, aes(CATEGORY)) + geom_bar() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) + ggtitle("Day 2")
+ggplot(result_day3_top30, aes(CATEGORY)) + geom_bar() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) + ggtitle("Day 3")
+ggplot(result_day4_top30, aes(CATEGORY)) + geom_bar() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) + ggtitle("Day 4")
+ggplot(result_day6_top30, aes(CATEGORY)) + geom_bar() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) + ggtitle("Day 6")
+```
+
+
+### Pathway level enrichment
+
+```{r}
+
+```
+
+
+
 
