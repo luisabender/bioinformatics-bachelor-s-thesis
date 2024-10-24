@@ -46,6 +46,7 @@ Loaded count matrices SRA runtable (for metainfo) in R.<br>
 Dropped Samples with very low alignment rate (1.2%-1.6%). <br>
 Filtered low expressed genes, where the tpm is at least 0.5 for 51% of the genes. <br>
 Used variance stabilization transformation on the DESeqDataset and created a heatmap of sample-to-sample distances and PCA to search for potential outliers. <br>
+![PCA with vst counts and marked outliers.](plots/PCA.png)
 DESeq with Interaction term: design: ~treatment + days_post_treatment + treatment:days_post_treatment. <br>
 Explored the DESeq results and saved the interaction results for time effect in untreated vs treated and the significant genes in each dataset. <br>
 Created a venn diagram and upset to look for overlaps in significant genes from each day. <br>
