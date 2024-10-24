@@ -3,6 +3,8 @@
 ## Goals for PA
 1. Read in and extract the SRA samples with **sratoolkit**
 
+Bash-Script: preprocessing.sh
+
 Dataset from Paper: A primary cell wall cellulose-dependent defense mechanism against vascular pathogens revealed by time-resolved dual transcriptomics. <br>
 https://bmcbiol.biomedcentral.com/articles/10.1186/s12915-021-01100-6#Sec13 <br>
 GEO repository: GSE168919, Accession via PRJNA714597<br>
@@ -24,6 +26,8 @@ MultiQC report on trimmed reads.
 
 5. **Alignment** to an Arabidopsis thaliana genome (TAIR10) with **Kallisto**
 
+allignment_kallisto.sh
+
 Downloaded Kallisto via conda. 
 Downloaded whole Arabidopsis thaliana transcriptome in TAIR: TAIR10.cdna.all.fa <br>
 Built Kallisto index and run kallisto quantification algorithm in SLURM. <br>
@@ -31,18 +35,24 @@ Output: abundance.tsv file for each of the 17 samples. <br>
 Done MultiQC with Kallisto alignment results.
 
 Repeating the preprocessing step with the rest of the samples, altogether 50 samples.
-Build raw and tpm count matrix to load into R.
+Build raw and tpm count matrix to load into R. (build_count_matrix.py)
 
 6. **Differential gene expression analysis** with DESeq2
 
-Load the result files in R and make a count and metadata table.<br>
-Analyze the count table, make graphs and slides about the metadata too. <br>
-PCA with the tpm count matrix to detect potential outliers, check with fastqc result. <br>
-Variance stabilization transformation with raw count matrix. <br>
-DESeq2 with vst result. <br>
+DownstreamAnalysis.Rmd
+
+Following steps have been made in R: <br>
+Loaded count matrices SRA runtable (for metainfo) in R.<br>
+Dropped Samples with very low alignment rate (1.2%-1.6%). <br>
+Filtered low expressed genes, where the tpm is at least 0.5 for 51% of the genes. <br>
+Used variance stabilization transformation on the DESeqDataset and created a heatmap of sample-to-sample distances and PCA to search for potential outliers. <br>
+DESeq with Interaction term: design: ~treatment + days_post_treatment + treatment:days_post_treatment. <br>
+Explored the DESeq results and saved the interaction results for time effect in untreated vs treated and the significant genes in each dataset. <br>
+Created a venn diagram and upset to look for overlaps in significant genes from each day. <br>
+Loaded Mercator results for Gene level annotations and merged them with the DESeq results. <br>
+Counted significant genes in each functional category to visualize the counts for each timepoint.  <br>
+Created a table with the top 30 significant genes for each timepoint and their functional categories. <br>
 
 
-Functional enrichment analysis with logfoldchange to identify genes which are most upregulated.<br>
 
-
-7. **Visualizations**
+Next up: Pathway level enrichment
