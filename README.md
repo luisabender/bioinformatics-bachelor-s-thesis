@@ -61,7 +61,7 @@ DownstreamAnalysis.Rmd
 
     | 
 :-------------------------:|:-------------------------:
-![Barplot with category counts for each day](plots/sig_genes_category.png)  |  ![](lots/sig_genes_category_bubble.png)
+![Barplot with category counts for each day](plots/sig_genes_category.png)  |  ![](plots/sig_genes_category_bubble.png)
 
 
 - Created a table with the top 30 significant genes for each timepoint and their functional categories. <br>
