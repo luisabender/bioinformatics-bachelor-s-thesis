@@ -59,8 +59,9 @@ DownstreamAnalysis.Rmd
 - Loaded Mercator results for Gene level annotations and merged them with the DESeq results. 
 - Counted significant genes in each functional category to visualize the counts for each timepoint.  
 
+    | 
 :-------------------------:|:-------------------------:
-![Barplot with category counts for each day](plots/sig_genes_category.png)  |  ![](plots/sig_genes_category_bubble.png)
+![Barplot with category counts for each day](plots/sig_genes_category.png)  |  ![](lots/sig_genes_category_bubble.png)
 
 
 - Created a table with the top 30 significant genes for each timepoint and their functional categories. <br>
