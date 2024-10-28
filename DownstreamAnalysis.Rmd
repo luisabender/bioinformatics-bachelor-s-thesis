@@ -386,7 +386,7 @@ venn.plot <- venn.diagram(
     "Day 4" = sig_genes_day4,
     "Day 6" = sig_genes_day6
   ), 
-  filename = "sig_genes_venn.png",
+  filename = "plots/sig_genes_venn.png",
   fill = c("red", "blue", "green", "yellow", "orange")
 )
 
@@ -601,11 +601,24 @@ write_lines(sig_genes_day6, "sig_genes_day6.txt")
 
 ```{r}
 # load MapMan results (with significant pathways)
-
 mapman_day1 <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/Mercator_bin_enrichment_day1.tsv', sep = "\t")
 mapman_day2 <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/Mercator_bin_enrichment_day2.tsv', sep = "\t")
 mapman_day3 <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/Mercator_bin_enrichment_day3.tsv', sep = "\t")
 mapman_day4 <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/Mercator_bin_enrichment_day4.tsv', sep = "\t")
 mapman_day6 <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/Mercator_bin_enrichment_day6.tsv', sep = "\t")
+
+# combine all results into one data frame
+all_mapman_results <- rbind(
+  add_timepoint(mapman_day1,1),
+  add_timepoint(mapman_day2,2),
+  add_timepoint(mapman_day3,3),
+  add_timepoint(mapman_day4,4),
+  add_timepoint(mapman_day6,6)
+)
 ```
+
+```{r}
+
+```
+
 
