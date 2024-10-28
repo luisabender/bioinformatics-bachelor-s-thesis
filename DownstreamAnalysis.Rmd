@@ -225,7 +225,7 @@ visualize_pca <- function(data, pca_result, mark_outliers, color_days){
     geom_text_repel(data = outliers, aes(label = Sample), vjust = -1, hjust = 1.1, color = "black") +
     xlab(paste0("PC1: ", round(100 * summary(pca_result)$importance[2, 1], 2), "% variance")) +
     ylab(paste0("PC2: ", round(100 * summary(pca_result)$importance[2, 2], 2), "% variance")) +
-    ggtitle("PCA with data ellipses") +
+    ggtitle("PCA of vst counts") +
     theme_minimal()
   } else{
     ggplot(data, aes(x = PC1, y = PC2, color = days_post_treatment, shape = treatment)) +
@@ -233,7 +233,7 @@ visualize_pca <- function(data, pca_result, mark_outliers, color_days){
     stat_ellipse(aes(color = treatment), type = "norm") +
     xlab(paste0("PC1: ", round(100 * summary(pca_result)$importance[2, 1], 2), "% variance")) +
     ylab(paste0("PC2: ", round(100 * summary(pca_result)$importance[2, 2], 2), "% variance")) +
-    ggtitle("PCA with data ellipses") +
+    ggtitle("PCA of vst counts") +
     theme_minimal()
   }
   } 
@@ -248,7 +248,7 @@ visualize_pca <- function(data, pca_result, mark_outliers, color_days){
       geom_text_repel(data = outliers, aes(label = Sample), vjust = -1, hjust = 1.1, color = "black") +
       xlab(paste0("PC1: ", round(100 * summary(pca_result)$importance[2, 1], 2), "% variance")) +
       ylab(paste0("PC2: ", round(100 * summary(pca_result)$importance[2, 2], 2), "% variance")) +
-      ggtitle("PCA with data ellipses") +
+      ggtitle("PCA of vst counts") +
       theme_minimal()
     } else{
       ggplot(data, aes(x = PC1, y = PC2, color = treatment)) +
@@ -257,7 +257,7 @@ visualize_pca <- function(data, pca_result, mark_outliers, color_days){
       stat_ellipse(type = "t") +
       xlab(paste0("PC1: ", round(100 * summary(pca_result)$importance[2, 1], 2), "% variance")) +
       ylab(paste0("PC2: ", round(100 * summary(pca_result)$importance[2, 2], 2), "% variance")) +
-      ggtitle("PCA with data ellipses") +
+      ggtitle("PCA of vst counts") +
       theme_minimal()
     }
   }
@@ -345,6 +345,7 @@ sig_genes_day2 <- rownames(res_interaction_day2)[which(res_interaction_day2$padj
 sig_genes_day3 <- rownames(res_interaction_day3)[which(res_interaction_day3$padj < 0.05 & abs(res_interaction_day3$log2FoldChange) > 1)]
 sig_genes_day4 <- rownames(res_interaction_day4)[which(res_interaction_day4$padj < 0.05 & abs(res_interaction_day4$log2FoldChange) > 1)]
 sig_genes_day6 <- rownames(res_interaction_day6)[which(res_interaction_day6$padj < 0.05 & abs(res_interaction_day6$log2FoldChange) > 1)]
+
 ```
 
 
@@ -372,7 +373,7 @@ res_lrt <- results(dds_lrt)
 
 # get significant genes from lrt
 sig_genes_lrt <- res_lrt[which(res_lrt$padj < 0.05),]
-rownames(sig_genes_int)
+#rownames(sig_genes_int)
 ```
 
 ```{r}
@@ -410,7 +411,7 @@ plot_volcano <- function(res, timepoint){
     x = 'log2FoldChange',
     y = 'padj')
 }
-
+library(EnhancedVolcano)
 plot_volcano(res_interaction_day1,1)
 plot_volcano(res_interaction_day2,2)
 plot_volcano(res_interaction_day3,3)
@@ -454,7 +455,7 @@ annotated_deseq_results <- function(res, mercator_annos){
 # Count significant genes in each category
 analyze_categories <- function(res_annotated, padj_cutoff=0.05, lfc_cutoff=1) {
     sig_genes <- res_annotated[abs(res_annotated$log2FoldChange) > lfc_cutoff & 
-                              res_annotated$padj < padj_cutoff, ]
+                             res_annotated$padj < padj_cutoff, ]
     
     category_counts <- table(sig_genes$CATEGORY)
     category_props <- prop.table(category_counts)
@@ -506,15 +507,17 @@ cat1 <- analyze_categories(res_day1_annotated)
 cat2 <- analyze_categories(res_day2_annotated)
 cat3 <- analyze_categories(res_day3_annotated)
 cat4 <- analyze_categories(res_day4_annotated)
+cat6 <- analyze_categories(res_day6_annotated)
+
 ```
 
 ```{r}
 # Get table for each timepoint
-result_day1_top30 <- get_top_annotated_genes(res_day1_annotated, createtable = TRUE) %>% add_timepoint(1)
-result_day2_top30 <- get_top_annotated_genes(res_day2_annotated, createtable = TRUE) %>% add_timepoint(2)
-result_day3_top30 <- get_top_annotated_genes(res_day3_annotated, createtable = TRUE) %>% add_timepoint(3)
-result_day4_top30 <- get_top_annotated_genes(res_day4_annotated, createtable = TRUE) %>% add_timepoint(4)
-result_day6_top30 <- get_top_annotated_genes(res_day6_annotated, createtable = TRUE) %>% add_timepoint(6)
+result_day1_top30 <- get_top_annotated_genes(res_day1_annotated, createtable = TRUE) %>% add_timepoint(1) %>% kable(format = "markdown")
+result_day2_top30 <- get_top_annotated_genes(res_day2_annotated, createtable = TRUE) %>% add_timepoint(2) %>% kable(format = "markdown")
+result_day3_top30 <- get_top_annotated_genes(res_day3_annotated, createtable = TRUE) %>% add_timepoint(3) %>% kable(format = "markdown")
+result_day4_top30 <- get_top_annotated_genes(res_day4_annotated, createtable = TRUE) %>% add_timepoint(4) %>% kable(format = "markdown")
+result_day6_top30 <- get_top_annotated_genes(res_day6_annotated, createtable = TRUE) %>% add_timepoint(6) %>% kable(format = "markdown")
 
 plot_data <- rbind(
   result_day1_top30,
@@ -538,7 +541,9 @@ plot_data2 <- rbind(
     plot_category_data(cat1, "Day1"),
     plot_category_data(cat2, "Day2"),
     plot_category_data(cat3, "Day3"),
-    plot_category_data(cat4, "Day4")
+    plot_category_data(cat4, "Day4"),
+    plot_category_data(cat6, "Day6")
+
 )
 
 ggplot(plot_data2, aes(x=Category, y = Count, fill = Timepoint)) +
@@ -549,7 +554,15 @@ ggplot(plot_data2, aes(x=Category, y = Count, fill = Timepoint)) +
          x="Functional Category",
          y="Number of Significant Genes")
 ```
+"Bubble" plots 
+columns --> days
+rows --> functional categories
+size of bubble -> number of siginificant genes
 
+```{r}
+plot_data2 <- plot_data2[order(-plot_data2$Count),]
+ggplot(plot_data2, aes(x=Timepoint, y=Category, size=Count, color = Count)) + geom_point() + scale_size(name = "Number of Significant Genes")
+```
 
 ```{r}
 ggplot(result_day1_top30, aes(CATEGORY)) + geom_bar() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) + ggtitle("Day 1")
@@ -559,13 +572,40 @@ ggplot(result_day4_top30, aes(CATEGORY)) + geom_bar() + theme(axis.text.x = elem
 ggplot(result_day6_top30, aes(CATEGORY)) + geom_bar() + theme(axis.text.x = element_text(angle = 45, hjust = 1)) + ggtitle("Day 6")
 ```
 
-
-### Pathway level enrichment
-
 ```{r}
-
+result_day1_top30
+result_day2_top30
+result_day3_top30
+result_day4_top30
+result_day6_top30
 ```
 
 
+### Pathway level enrichment
 
+Mercator4 BIN enrichment analysis (https://www.plabipd.de/mercator_main.html)
+
+One-sided fisher's exact test -> Over-representation analysis
+genes of interest -> significant genes from each day (sig_genes_dayx)
+background genes -> all gene IDs from Mercator fasta file (grep -o -E "^>\w+\.\d+" Job4112.fa | tr -d ">" > "geneIDs.txt")
+
+
+```{r}
+# extract genes of interest (per day) for upload into mercator enrichment analysis
+write_lines(sig_genes_day1, "sig_genes_day1.txt")
+write_lines(sig_genes_day2, "sig_genes_day2.txt")
+write_lines(sig_genes_day3, "sig_genes_day3.txt")
+write_lines(sig_genes_day4, "sig_genes_day4.txt")
+write_lines(sig_genes_day6, "sig_genes_day6.txt")
+```
+
+```{r}
+# load MapMan results (with significant pathways)
+
+mapman_day1 <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/Mercator_bin_enrichment_day1.tsv', sep = "\t")
+mapman_day2 <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/Mercator_bin_enrichment_day2.tsv', sep = "\t")
+mapman_day3 <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/Mercator_bin_enrichment_day3.tsv', sep = "\t")
+mapman_day4 <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/Mercator_bin_enrichment_day4.tsv', sep = "\t")
+mapman_day6 <- read.csv('/Users/luisabender/Studium/Praktische Arbeit/Mercator_bin_enrichment_day6.tsv', sep = "\t")
+```
 
