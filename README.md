@@ -50,22 +50,34 @@ DownstreamAnalysis.Rmd
 
 ![PCA with vst counts and marked outliers.](plots/PCA.png) 
 
+**DESeq2**
+
 - DESeq with Interaction term: design: ~treatment + days_post_treatment + treatment:days_post_treatment. 
 - Explored the DESeq results and saved the interaction results for time effect in untreated vs treated and the significant genes in each dataset. 
 - Created a venn diagram and upset to look for overlaps in significant genes from each day. 
 
 ![Venn Diagram with significant genes](plots/upset_sig_genes.png) 
 
-- Loaded Mercator results for Gene level annotations and merged them with the DESeq results. 
+**Mercator**
+
+- Mercator protein annotation with A. thaliana transcript file from TAIR
+- Loaded Mercator results (mapping file and fasta file) for Gene level annotations and merged them with the DESeq results. 
 - Counted significant genes in each functional category to visualize the counts for each timepoint.  
 
-    | 
-:-------------------------:|:-------------------------:
-![Barplot with category counts for each day](plots/sig_genes_category.png)  |  ![](plots/sig_genes_category_bubble.png)
+![Barplot with category counts for each day](plots/sig_genes_category.png)
 
+- Created a table with the top 30 significant genes for each timepoint and their functional categories. 
 
-- Created a table with the top 30 significant genes for each timepoint and their functional categories. <br>
+GENE_ID     |CATEGORY    |FUNCTION|  P_VALUE|  	LOG_FOLD_CHANGE|	days_post_treatment
+:----------:|:----------:|:------:|:-------:|:----------------:|:-----------------------:
+AT1G16030.1	|Protein homeostasis|	Protein homeostasis.protein quality control.cytosolic Hsp70 chaperone system.Hsp70 chaperone activities.molecular chaperone *(Hsp70-1/2/3/4/5)|	0|	-11.119594	|3
+AT2G22170.1|	Lipid metabolism|	Lipid metabolism.lipid trafficking.endoplasmic reticulum-plasma membrane lipid transfer.lipid trafficking protein *(PLAT)|	0	|5.416741|	3
+<br>
 
+**MapMan (Mercator4 BIN enrichment analysis)**
 
+- pathway enrichment analysis with Mercator result mapping file
+- genes of interest: significant genes for each timepoint, background genes: all genes from annotated fasta file
+- result: significant pathways with genes in MapMan category for each timepoint
 
-Next up: Pathway level enrichment
+Next up: visualization and interpretation of pathway enrichment, preparing final presentation
