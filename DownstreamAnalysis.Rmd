@@ -21,7 +21,6 @@ library(VennDiagram)
 library(UpSetR)
 library(seqinr)
 library(knitr)
-library(rmarkdown)
 ```
 
 #### What we need:
