@@ -177,6 +177,14 @@ to_drop = c("SRR13824039", "SRR13824011", "SRR13823999", "SRR13823997")
 dds <- subset(dds, select = !(colnames(dds) %in% to_drop))
 dds <- estimateSizeFactors(dds)
 dds <- estimateDispersions(dds)
+
+# multi factor design
+ddsMF <- dds
+design(ddsMF) <- formula(~treatment + days_post_treatment)
+
+# interaction design
+ddsInt <- dds
+design(ddsInt) <- formula(~treatment + days_post_treatment + treatment:days_post_treatment)
 ```
 
 ### Data quality assessment
@@ -290,7 +298,7 @@ pca_data_mf <- merge(pca_data_mf, meta_info2, by.x = "Sample", by.y = "Sample_ID
 pca_data_int <- merge(pca_data_int, meta_info2, by.x = "Sample", by.y = "Sample_ID")
 
 # mark potential outliers
-outliers <- pca_data_mf[abs(pca_data_mf$PC1) > 40 | abs(pca_data_mf$PC2) > 30, ]
+outliers <- pca_data_mf[abs(pca_data_mf$PC1) > 40 | abs(pca_data_mf$PC2) > 20, ]
 
 # visualize PC1 - PC2
 visualize_pca(pca_data_dds, mark_outliers = FALSE, color_days = TRUE, pca_result_dds)
@@ -312,17 +320,13 @@ resOrdered <- res[order(res$pvalue),]
 Number of adjusted p-values less than 0.1: 8767
 
 ```{r}
-# copy of DESeqDataSet to rerun analysis using multi-factor design
-ddsMF <- dds
-design(ddsMF) <- formula(~treatment + days_post_treatment)
+# rerun analysis using multi-factor design
 ddsMF <- DESeq(ddsMF)
 resMF <- results(ddsMF)
 ```
 
 ```{r}
 # DESeq with Interaction term
-ddsInt <- dds
-design(ddsInt) <- formula(~treatment + days_post_treatment + treatment:days_post_treatment)
 ddsInt <- DESeq(ddsInt)
 resInt <- results(ddsInt)
 
