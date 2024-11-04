@@ -301,7 +301,7 @@ pca_data_int <- merge(pca_data_int, meta_info2, by.x = "Sample", by.y = "Sample_
 outliers <- pca_data_mf[abs(pca_data_mf$PC1) > 40 | abs(pca_data_mf$PC2) > 20, ]
 
 # visualize PC1 - PC2
-visualize_pca(pca_data_dds, mark_outliers = FALSE, color_days = TRUE, pca_result_dds)
+visualize_pca(pca_data_dds, mark_outliers = TRUE, color_days = TRUE, pca_result_dds)
 visualize_pca(pca_data_mf, mark_outliers = TRUE, color_days = TRUE, pca_result_mf)
 visualize_pca(pca_data_int, mark_outliers = TRUE, color_days = TRUE, pca_result_int)
 ```
