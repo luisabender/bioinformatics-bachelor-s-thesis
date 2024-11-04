@@ -1,7 +1,8 @@
 ---
-title: "DownstreamAnalysis"
-output: html_document
+title: "DownstreamAnalysis - Praktische Arbeit"
+output: github_document
 date: "2024-10-04"
+author: Luisa Bender
 ---
 
 ```{r setup, include=FALSE}
@@ -20,6 +21,7 @@ library(VennDiagram)
 library(UpSetR)
 library(seqinr)
 library(knitr)
+library(rmarkdown)
 ```
 
 #### What we need:
@@ -345,7 +347,6 @@ sig_genes_day2 <- rownames(res_interaction_day2)[which(res_interaction_day2$padj
 sig_genes_day3 <- rownames(res_interaction_day3)[which(res_interaction_day3$padj < 0.05 & abs(res_interaction_day3$log2FoldChange) > 1)]
 sig_genes_day4 <- rownames(res_interaction_day4)[which(res_interaction_day4$padj < 0.05 & abs(res_interaction_day4$log2FoldChange) > 1)]
 sig_genes_day6 <- rownames(res_interaction_day6)[which(res_interaction_day6$padj < 0.05 & abs(res_interaction_day6$log2FoldChange) > 1)]
-
 ```
 
 
@@ -496,11 +497,11 @@ add_timepoint <- function(result, timepoint){
 
 
 ```{r}
-res_day1_annotated <- annotated_deseq_results(res_interaction_day1, mercator_result)
-res_day2_annotated <- annotated_deseq_results(res_interaction_day2, mercator_result)
-res_day3_annotated <- annotated_deseq_results(res_interaction_day3, mercator_result)
-res_day4_annotated <- annotated_deseq_results(res_interaction_day4, mercator_result)
-res_day6_annotated <- annotated_deseq_results(res_interaction_day6, mercator_result)
+res_day1_annotated <- annotated_deseq_results(res_interaction_day1, mercator_result) %>% write.csv(file="files/res_day1_annotated.csv")
+res_day2_annotated <- annotated_deseq_results(res_interaction_day2, mercator_result) %>% write.csv(file="files/res_day2_annotated.csv")
+res_day3_annotated <- annotated_deseq_results(res_interaction_day3, mercator_result) %>% write.csv(file="files/res_day3_annotated.csv")
+res_day4_annotated <- annotated_deseq_results(res_interaction_day4, mercator_result) %>% write.csv(file="files/res_day4_annotated.csv")
+res_day6_annotated <- annotated_deseq_results(res_interaction_day6, mercator_result) %>% write.csv(file="files/res_day6_annotated.csv")
 
 # list of category counts and proportions
 cat1 <- analyze_categories(res_day1_annotated)
@@ -508,7 +509,6 @@ cat2 <- analyze_categories(res_day2_annotated)
 cat3 <- analyze_categories(res_day3_annotated)
 cat4 <- analyze_categories(res_day4_annotated)
 cat6 <- analyze_categories(res_day6_annotated)
-
 ```
 
 ```{r}
@@ -518,14 +518,6 @@ result_day2_top30 <- get_top_annotated_genes(res_day2_annotated, createtable = T
 result_day3_top30 <- get_top_annotated_genes(res_day3_annotated, createtable = TRUE) %>% add_timepoint(3) %>% kable(format = "markdown")
 result_day4_top30 <- get_top_annotated_genes(res_day4_annotated, createtable = TRUE) %>% add_timepoint(4) %>% kable(format = "markdown")
 result_day6_top30 <- get_top_annotated_genes(res_day6_annotated, createtable = TRUE) %>% add_timepoint(6) %>% kable(format = "markdown")
-
-plot_data <- rbind(
-  result_day1_top30,
-  result_day2_top30,
-  result_day3_top30,
-  result_day4_top30,
-  result_day6_top30
-)
 
 plot_category_data <- function(category_results, timepoint) {
     df <- data.frame(
@@ -537,7 +529,7 @@ plot_category_data <- function(category_results, timepoint) {
     return(df)
 }
 
-plot_data2 <- rbind(
+plot_data <- rbind(
     plot_category_data(cat1, "Day1"),
     plot_category_data(cat2, "Day2"),
     plot_category_data(cat3, "Day3"),
@@ -546,22 +538,19 @@ plot_data2 <- rbind(
 
 )
 
-ggplot(plot_data2, aes(x=Category, y = Count, fill = Timepoint)) +
+ggplot(plot_data, aes(x=Category, y = Count, fill = Timepoint)) +
     geom_bar(stat="identity", position="dodge") +
     theme_minimal() +
-    theme(axis.text.x = element_text(angle=45, hjust=1)) +
+    theme(axis.text.x = element_text(angle=90, hjust=1)) +
     labs(title="Distribution of Significant Genes Across Categories",
          x="Functional Category",
          y="Number of Significant Genes")
 ```
-"Bubble" plots 
-columns --> days
-rows --> functional categories
-size of bubble -> number of siginificant genes
+
 
 ```{r}
-plot_data2 <- plot_data2[order(-plot_data2$Count),]
-ggplot(plot_data2, aes(x=Timepoint, y=Category, size=Count, color = Count)) + geom_point() + scale_size(name = "Number of Significant Genes")
+plot_data2 <- plot_data[order(-plot_data$Count),]
+ggplot(plot_data2, aes(x=Timepoint, y=Category)) + geom_point(aes(size = Count)) + theme_minimal()
 ```
 
 ```{r}
@@ -585,18 +574,18 @@ result_day6_top30
 
 Mercator4 BIN enrichment analysis (https://www.plabipd.de/mercator_main.html)
 
-One-sided fisher's exact test -> Over-representation analysis
-genes of interest -> significant genes from each day (sig_genes_dayx)
-background genes -> all gene IDs from Mercator fasta file (grep -o -E "^>\w+\.\d+" Job4112.fa | tr -d ">" > "geneIDs.txt")
+ - One-sided fisher's exact test -> Over-representation analysis
+ - genes of interest -> significant genes from each day (sig_genes_dayx)
+ - background genes -> all gene IDs from Mercator fasta file (grep -o -E "^>\w+\.\d+" Job4112.fa | tr -d ">" > "geneIDs.txt")
 
 
 ```{r}
 # extract genes of interest (per day) for upload into mercator enrichment analysis
-write_lines(sig_genes_day1, "sig_genes_day1.txt")
-write_lines(sig_genes_day2, "sig_genes_day2.txt")
-write_lines(sig_genes_day3, "sig_genes_day3.txt")
-write_lines(sig_genes_day4, "sig_genes_day4.txt")
-write_lines(sig_genes_day6, "sig_genes_day6.txt")
+write_lines(sig_genes_day1, "files/sig_genes_day1.txt")
+write_lines(sig_genes_day2, "files/sig_genes_day2.txt")
+write_lines(sig_genes_day3, "files/sig_genes_day3.txt")
+write_lines(sig_genes_day4, "files/sig_genes_day4.txt")
+write_lines(sig_genes_day6, "files/sig_genes_day6.txt")
 ```
 
 ```{r}
@@ -615,10 +604,99 @@ all_mapman_results <- rbind(
   add_timepoint(mapman_day4,4),
   add_timepoint(mapman_day6,6)
 )
+all_mapman_results$Category <- sapply(strsplit(all_mapman_results$Context.of.Protein.Function, ".", fixed=TRUE), `[`, 1)
+```
+
+
+```{r}
+get_enrichment_of_category <- function(mapman_result, category_number, category){
+  mapman_category <- all_mapman_results[startsWith(mapman_result$MapMan4.category.number, category_number),]
+  mapman_category <- mapman_category[order(mapman_category$MapMan4.category.number),]
+  return(mapman_category)
+}
+
+plot_enrichment_of_category <- function(mapman_result, category_number, category){
+  data <- get_enrichment_of_category(mapman_result, category_number, category)
+  
+  ggplot(data, aes(x = days_post_treatment, y = Enrichment.Factor, color = FDR.adjusted.p.value)) +
+  geom_point(aes(size = X.Genes.of.Interest.IN.MapMan4.category)) +
+  scale_color_gradient(low = "lightblue", high = "darkblue") +
+  labs(
+    x = "Day post Treatment",
+    y = "Enrichment Factor",
+    color = "FDR adjusted p-value",
+    size = "Number of Genes of Interest",
+    title = paste("Enrichment factor of genes in", category)) +
+  theme_minimal()
+}
 ```
 
 ```{r}
-
+plot_enrichment_of_category(all_mapman_results, "21", "Cell wall organisation")
+plot_enrichment_of_category(all_mapman_results, "19", "Protein homeostasis")
 ```
+
+```{r}
+# focusing on cell wall
+cell_wall_enrichment <- get_enrichment_of_category(all_mapman_results, "21", "Cell wall organisation")
+ggplot(cell_wall_enrichment, aes(x=MapMan4.category.number, y = Enrichment.Factor, fill = days_post_treatment)) +
+    geom_bar(stat="identity", position="dodge") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle=90, hjust=1)) +
+    labs(title=paste("Distribution of Significant Pathways in Cell wall organisation"),
+         x="Functional Category",
+         y="Enrichment Factor")
+
+ggplot(cell_wall_enrichment, aes(x=MapMan4.category.number, y = Enrichment.Factor)) +
+    geom_bar(stat="identity", position="dodge") +
+    facet_wrap(vars(days_post_treatment)) +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle=90, hjust=1)) +
+    labs(title="Distribution of Significant Pathways in Cell wall organisation",
+         x="Functional Category",
+         y="Enrichment Factor")
+
+cell_wall_genes_day2 <- res_day2_annotated[res_day2_annotated$CATEGORY == "Cell wall organisation",]
+```
+
+```{r}
+# best
+ggplot(all_mapman_results, aes(x = days_post_treatment, y = Category)) +
+  geom_point(aes(size = -log10(FDR.adjusted.p.value), color = Enrichment.Factor)) +
+  scale_color_gradient(low = "lightblue", high = "darkblue") +
+  labs(
+    x = "Timepoint",
+    y = "Pathway Category",
+    size = "-log10(Adjusted P-Value)",
+    color = "Enrichment Factor"
+  ) +
+  theme_minimal()
+```
+
+```{r}
+# other visualizations
+ggplot(all_mapman_results, aes(x = days_post_treatment, y = Enrichment.Factor, color = Category, group = Category)) +
+  geom_line() +
+  geom_point(aes(size = X.Genes.of.Interest.IN.MapMan4.category)) +
+  labs(
+    x = "Day post Treatment",
+    y = "Enrichment Factor",
+    color = "Pathway Category",
+    size = "Number of Genes of Interest"
+  ) +
+  theme_minimal()
+
+ggplot(all_mapman_results, aes(x = Category, y = Enrichment.Factor, fill = factor(days_post_treatment))) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  labs(
+    x = "Pathway Category",
+    y = "Enrichment Factor",
+    fill = "Timepoint"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+
 
 
