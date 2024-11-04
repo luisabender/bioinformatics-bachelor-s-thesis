@@ -1,6 +1,6 @@
 ---
 title: "DownstreamAnalysis - Praktische Arbeit"
-output: github_document
+output: html_output
 date: "2024-10-04"
 author: Luisa Bender
 ---
