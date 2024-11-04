@@ -1,6 +1,6 @@
 ---
 title: "DownstreamAnalysis - Praktische Arbeit"
-output: html_output
+output: github_document
 date: "2024-10-04"
 author: Luisa Bender
 ---
@@ -541,13 +541,13 @@ plot_data <- rbind(
 
 )
 
-ggplot(plot_data, aes(x=Category, y = Count, fill = Timepoint)) +
+ggplot(plot_data, aes(x=Count, y = Category, fill = Timepoint)) +
     geom_bar(stat="identity", position="dodge") +
     theme_minimal() +
     theme(axis.text.x = element_text(angle=90, hjust=1)) +
     labs(title="Distribution of Significant Genes Across Categories",
-         x="Functional Category",
-         y="Number of Significant Genes")
+         y="Functional Category",
+         x="Number of Significant Genes")
 ```
 
 
@@ -671,8 +671,9 @@ ggplot(all_mapman_results, aes(x = days_post_treatment, y = Category)) +
     x = "Timepoint",
     y = "Pathway Category",
     size = "-log10(Adjusted P-Value)",
-    color = "Enrichment Factor"
+    color = "Enrichment Factor",
   ) +
+  ggtitle("Pathway enrichment across different timepoints") +
   theme_minimal()
 ```
 
