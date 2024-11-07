@@ -64,7 +64,7 @@ DownstreamAnalysis.Rmd
 - Loaded Mercator results (mapping file and fasta file) for Gene level annotations and merged them with the DESeq results. 
 - Counted significant genes in each functional category to visualize the counts for each timepoint.  
 
-![Barplot with category counts for each day](plots/sig_genes_category.png)
+![Barplot with category counts for each day](plots/sig_genes_category_bubble.png)
 
 - Created a table with the top 30 significant genes for each timepoint and their functional categories. 
 
@@ -83,6 +83,10 @@ AT2G22170.1|	Lipid metabolism|	Lipid metabolism.lipid trafficking.endoplasmic re
 - genes of interest: significant genes for each timepoint, background genes: all genes from annotated fasta file
 - result: significant pathways with genes in MapMan category for each timepoint
 
-![Bubble plot for enriched pathways](plots/enrichment_all.png)
+![Bubble plot for enriched pathways](plots/enrichment_all_title.png)
+
+- focusing on cell wall organisation
+
+![Enrichment factor of cell wall category](plots/enrichment_cell_wall_bar.png)
 
 
