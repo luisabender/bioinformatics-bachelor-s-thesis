@@ -74,10 +74,15 @@ AT1G16030.1	|Protein homeostasis|	Protein homeostasis.protein quality control.cy
 AT2G22170.1|	Lipid metabolism|	Lipid metabolism.lipid trafficking.endoplasmic reticulum-plasma membrane lipid transfer.lipid trafficking protein *(PLAT)|	0	|5.416741|	3
 <br>
 
+- find here all different expressed annotated genes for each timepoint:
+[annotated genes](files/)
+
 **MapMan (Mercator4 BIN enrichment analysis)**
 
 - pathway enrichment analysis with Mercator result mapping file
 - genes of interest: significant genes for each timepoint, background genes: all genes from annotated fasta file
 - result: significant pathways with genes in MapMan category for each timepoint
 
-Next up: visualization and interpretation of pathway enrichment, preparing final presentation
+![Bubble plot for enriched pathways](plots/enrichment_all.png)
+
+
