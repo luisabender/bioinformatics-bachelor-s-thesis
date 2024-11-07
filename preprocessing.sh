@@ -138,6 +138,14 @@ for dir in "$base_dir"/"samples"/*/"fastq"/; do
     done
 done
 
+#### multiqc ####
+echo "Running MultiQC"
+cd $output_fastqc_trimmed
+multiqc .
+cd $base_dir
+
+
+
 # move trimmed fastq files
 for dir in "$base_dir"/"samples"/*/"fastq"/; do
     
@@ -150,3 +158,4 @@ echo "moved fastq files into folder sequences"
 
 # remove -cut from files
 for file in *-cut; do mv "$file" "${file%-cut}"; done
+
