@@ -3,7 +3,8 @@
 ## Praktische Arbeit
 Goal: To build a small pipeline for Differential Gene Expression Analysis of Arabidospis thaliana and to learn different tools to use for Preprocessing, Alignment and DGEA.
 
-**Following Dataset was used:*
+**Following Dataset was used:**
+
 Paper: A primary cell wall cellulose-dependent defense mechanism against vascular pathogens revealed by time-resolved dual transcriptomics. <br>
 https://bmcbiol.biomedcentral.com/articles/10.1186/s12915-021-01100-6#Sec13 <br>
 GEO repository: GSE168919, Accession via PRJNA714597<br>
@@ -16,17 +17,17 @@ Run preprocessing.sh
 
 1. Read in and extract the SRA samples with **sratoolkit**
 
-Downloaded 48 Samples from Day 0 and Day 6 post treatment (untreated and infected) to compare between later.
+    Downloaded 48 Samples from Day 0 and Day 6 post treatment (untreated and infected) to compare between later.
 
 2. Quality control with FASTQC
 
 3. Adapter trimming with trimmomatic and cutadapt
 
-Performed trimmomatic on the .fastq files for basic adapter trimming. Then run cutadapt on the results for removing specifically the polyA adapters.<br>
+    Performed trimmomatic on the .fastq files for basic adapter trimming. Then run cutadapt on the results for removing specifically the polyA adapters.<br>
 
 4. FASTQC again and MultiQC report
 
-[MultiQC-Report](multiqc_report_1.html)
+    [MultiQC-Report](multiqc_report_1.html)
 
 ### Alignment
 
@@ -35,7 +36,7 @@ Run index_kallisto.sh and alignment_kallisto.sh
 1. Build Kallisto Index with Arabidopsis thaliana transcriptome (from TAIR)
 2. Run Kallisto quantification algorithm with the build index 
 
-[Kallisto MultiQC-Report](kallisto_multiqc_report_1.html)
+    [Kallisto MultiQC-Report](kallisto_multiqc_report_1.html)
 
 3. Build raw and tpm count matrix with build_count_matrix.py and export them
 
@@ -70,7 +71,7 @@ AT1G16030.1	|Protein homeostasis|	Protein homeostasis.protein quality control.cy
 AT2G22170.1|	Lipid metabolism|	Lipid metabolism.lipid trafficking.endoplasmic reticulum-plasma membrane lipid transfer.lipid trafficking protein *(PLAT)|	0	|5.416741|	3
 <br>
 
-- find here all different expressed annotated genes for each timepoint:
+- all different expressed annotated genes for each timepoint are found here:
 [annotated DEG](files/)
 
 **MapMan (Mercator4 BIN enrichment analysis)**
@@ -82,18 +83,23 @@ AT2G22170.1|	Lipid metabolism|	Lipid metabolism.lipid trafficking.endoplasmic re
 
 ### Results
 The PCA is showing high variability in the infected samples from Day 3 to Day 6:
+
 ![PCA with vst counts and marked outliers.](plots/PCA.png) 
 
-The Upset plot is showing an increase in the number of different expressed genes from Day 1 - 6, where Day 3 has the highest number of DEG. Additionally, there are more significant overlaps in different expressed genes from Day 3 to Day 6.
+The Upset plot shows an increase in the number of different expressed genes from Day 1 - 6, where Day 3 has the highest number of DEG. Additionally, there are more significant overlaps in different expressed genes from Day 3 to Day 6.
+
 ![Upset with significant genes](plots/upset_sig_genes.png) 
 
 Significanly different expressed genes in enzyme, classification, protein biosynthesis and homeostasis, protein modification and RNA biosynthesis:
+
 ![Bubble plot with category counts for each day](plots/sig_genes_category_bubble.png)
 
 The Enrichment analysis shows fewer significantly different expressed genes and enriched pathways but strong enrichment factors for specific pathways on Day 1 and 2. On Day 3 and 4 there are multiple pathways enriched but an overall lower enrichment:
+
 ![Bubble plot for enriched pathways](plots/enrichment_all_title.png)
 
 Early response in cell wall organisation:
+
 ![Enrichment factor of cell wall category](plots/enrichment_cell_wall_bar.png)
 
 
