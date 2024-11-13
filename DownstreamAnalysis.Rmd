@@ -291,7 +291,7 @@ pca_data_mf <- merge(pca_data_mf, meta_info2, by.x = "Sample", by.y = "Sample_ID
 pca_data_int <- merge(pca_data_int, meta_info2, by.x = "Sample", by.y = "Sample_ID")
 
 # mark potential outliers in pca int
-outliers <- pca_data_int[abs(pca_data_int$PC1) > 100 | abs(pca_data_int$PC2) > 100, ]
+outliers <- pca_data_int[abs(pca_data_int$PC1) > 100 & abs(pca_data_int$PC2) > 100, ]
 
 # visualize PC1 - PC2
 visualize_pca(pca_data_dds, mark_outliers = TRUE, color_days = TRUE, pca_result_dds)
@@ -548,6 +548,12 @@ ggplot(plot_data, aes(x=Count, y = Category, fill = Timepoint)) +
 ```{r}
 plot_data2 <- plot_data[order(-plot_data$Count),]
 ggplot(plot_data2, aes(x=Timepoint, y=Category)) + geom_point(aes(size = Count)) + theme_minimal() + ggtitle("Distribution of Significantly DEG Across Categories")
+```
+
+```{r}
+cell_wall_day2 <- res_day2_annotated[res_day2_annotated$CATEGORY == "Cell wall organisation",]
+cell_wall_day2_sig <- cell_wall_day2[cell_wall_day2$pvalue < 0.05 & abs(cell_wall_day2$log2FoldChange) >1,]
+
 ```
 
 
