@@ -1,7 +1,6 @@
 # Bachelor thesis Luisa
 
 ## Praktische Arbeit
-Goal: To build a small pipeline for Differential Gene Expression Analysis of Arabidospis thaliana and to learn different tools to use for Preprocessing, Alignment and DGEA.
 
 **Following Dataset was used:**
 
@@ -9,7 +8,7 @@ Paper: A primary cell wall cellulose-dependent defense mechanism against vascula
 https://bmcbiol.biomedcentral.com/articles/10.1186/s12915-021-01100-6#Sec13 <br>
 GEO repository: GSE168919, Accession via PRJNA714597<br>
 
-mRNA-profiles of Arabidopsis thaliana both untreated and infected with pathogen Fusarium oxysporum. <br>
+Samples: mRNA-profiles of Arabidopsis thaliana roots both untreated and infected with pathogen Fusarium oxysporum over a time course of six days. <br>
 
 ### Preprocessing
 
@@ -71,7 +70,7 @@ AT1G16030.1	|Protein homeostasis|	Protein homeostasis.protein quality control.cy
 AT2G22170.1|	Lipid metabolism|	Lipid metabolism.lipid trafficking.endoplasmic reticulum-plasma membrane lipid transfer.lipid trafficking protein *(PLAT)|	0	|5.416741|	3
 <br>
 
-- all different expressed annotated genes for each timepoint are found here:
+- all different expressed annotated genes for each timepoint can be found here:
 [annotated DEG](files/)
 
 **MapMan (Mercator4 BIN enrichment analysis)**
@@ -82,24 +81,6 @@ AT2G22170.1|	Lipid metabolism|	Lipid metabolism.lipid trafficking.endoplasmic re
 - focusing on cone category, e.g. cell wall organisation
 
 ### Results
-The PCA is showing high variability in the infected samples from Day 3 to Day 6:
-
-![PCA with vst counts and marked outliers.](plots/PCA.png) 
-
-The Upset plot shows an increase in the number of different expressed genes from Day 1 - 6, where Day 3 has the highest number of DEG. Additionally, there are more significant overlaps in different expressed genes from Day 3 to Day 6.
-
-![Upset with significant genes](plots/upset_sig_genes.png) 
-
-Significanly different expressed genes in enzyme, classification, protein biosynthesis and homeostasis, protein modification and RNA biosynthesis:
-
-![Bubble plot with category counts for each day](plots/sig_genes_category_bubble.png)
-
-The Enrichment analysis shows fewer significantly different expressed genes and enriched pathways but strong enrichment factors for specific pathways on Day 1 and 2. On Day 3 and 4 there are multiple pathways enriched but an overall lower enrichment:
-
-![Bubble plot for enriched pathways](plots/enrichment_all_title.png)
-
-Early response in cell wall organisation:
-
-![Enrichment factor of cell wall category](plots/enrichment_cell_wall_bar.png)
+All result plots can be found here: [plots](plots/).
 
 
