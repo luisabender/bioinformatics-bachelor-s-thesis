@@ -1,8 +1,10 @@
 ---
 title: "DownstreamAnalysis - Praktische Arbeit"
-output: github_document
+author: "Luisa Bender"
 date: "2024-10-04"
-author: Luisa Bender
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -24,13 +26,6 @@ library(knitr)
 library(rmarkdown)
 ```
 
-#### What we need:
-1. raw count table for DESeq2
-2. count table with TPM counts to filter out low expressed genes
-3. vst count table for PCA analysis to detect potential outliers
-
---> before DESeq2 adjust the raw count table with kept genes and samples
-
 ### Input data
 
 ```{r}
@@ -50,7 +45,7 @@ meta_info$days_post_treatment <- factor(meta_info$days_post_treatment)
 meta_info_short <- meta_info[, -c(1:27,30)]
 ```
 
-### Counting reads (not needed)
+### Counting reads per sample
 
 ```{r}
 get_reads_per_sample <- function(counts, type, metadata){
@@ -101,48 +96,7 @@ bottom_20_genes <- get_top20_genes(count_matrix_raw, FALSE)
 ggplot(total_reads_per_sample_meta, aes(sample, total_counts, fill = treatment)) +
   geom_bar(stat="identity", position=position_dodge(width = 5)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-ggplot(top_20_genes, aes(gene, counts)) + geom_bar(stat="identity") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
-ggplot(bottom_20_genes, aes(gene, counts)) + geom_bar(stat="identity") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
-## DESeq2 (with raw counts)
-
-##### TODO:
-1. Construct a DESeqDataSet with count table, colData and design formula
-
---> design formula: put the variable of interest at the end of the formula and make sure the control level is the first level.
-
-2. Pre-filtering with TPM counts
-
-##### Differential expression analysis
-1. Run DESeq and results (build result table with name or contrast)
-2. Log fold change shrinkage
-3. Order result table by p-values
-
-##### Exploring and exporting results
-1. MA-plot to show log2 fold changes
-2. Read counts for a single gene (plot counts)
-
-##### Multi-factor design (maybe make a copy of the Data set to rerun the analysis)
-~treatment + time + treatment:time
-
-##### Data transformations and visualization (vst)
--blind = TRUE --> compare samples in a manner wholly unbiased by the information about experimental groups 
--blind = FALSE --> better when expecting that many of genes will have large differences in counts which are explainable by the experimental design
-
-##### Data quality assessment (clustering and visualization) in parallel to the differential expression testing (with vsd)
-1. Heatmap of count matrix
-2. Heatmap of the sample-to-sample distances
-3. PCA
-
-##### Interactions
-- for time-series experiments: 
-1. use interaction and the 
-2. likelihood ratio test with a reduced model (which does not contain the interaction terms) which will test whether the condition induces a change in gene expression at any time point after the reference level time point (time 0)
-
 
 ### Filter low expressed genes with TPM
 
@@ -294,8 +248,8 @@ pca_data_int <- merge(pca_data_int, meta_info2, by.x = "Sample", by.y = "Sample_
 outliers <- pca_data_int[abs(pca_data_int$PC1) > 100 & abs(pca_data_int$PC2) > 100, ]
 
 # visualize PC1 - PC2
-visualize_pca(pca_data_dds, mark_outliers = TRUE, color_days = TRUE, pca_result_dds)
-visualize_pca(pca_data_mf, mark_outliers = TRUE, color_days = TRUE, pca_result_mf)
+#visualize_pca(pca_data_dds, mark_outliers = TRUE, color_days = TRUE, pca_result_dds)
+#visualize_pca(pca_data_mf, mark_outliers = TRUE, color_days = TRUE, pca_result_mf)
 visualize_pca(pca_data_int, mark_outliers = TRUE, color_days = TRUE, pca_result_int)
 ```
 
@@ -343,6 +297,7 @@ sig_genes_day2 <- rownames(res_interaction_day2)[which(res_interaction_day2$padj
 sig_genes_day3 <- rownames(res_interaction_day3)[which(res_interaction_day3$padj < 0.05 & abs(res_interaction_day3$log2FoldChange) > 1)]
 sig_genes_day4 <- rownames(res_interaction_day4)[which(res_interaction_day4$padj < 0.05 & abs(res_interaction_day4$log2FoldChange) > 1)]
 sig_genes_day6 <- rownames(res_interaction_day6)[which(res_interaction_day6$padj < 0.05 & abs(res_interaction_day6$log2FoldChange) > 1)]
+
 ```
 
 
@@ -352,11 +307,6 @@ sig_genes_day6 <- rownames(res_interaction_day6)[which(res_interaction_day6$padj
 plotMA(res, ylim=c(-5,5), main="treatment")
 plotMA(resMF, ylim=c(-5,5), main="treatment + days_post_treatment")
 plotMA(resInt, ylim=c(-5,5), main="treatment + days_post_treatment + treatment:days_post_treatment")
-
-# p-values
-hist(res$pvalue)
-hist(resMF$pvalue)
-hist(resInt$pvalue)
 ```
 
 
@@ -508,6 +458,17 @@ cat6 <- analyze_categories(res_day6_annotated)
 ```
 
 ```{r}
+all_sig_genes <- rbind(
+  add_timepoint(sig_genes_day1,1),
+  add_timepoint(sig_genes_day2,2),
+  add_timepoint(sig_genes_day3,3),
+  add_timepoint(sig_genes_day4,4),
+  add_timepoint(sig_genes_day6,6)
+)
+```
+
+
+```{r}
 # Get table for each timepoint
 result_day1_top30 <- get_top_annotated_genes(res_day1_annotated, createtable = TRUE) %>% add_timepoint(1) %>% kable(format = "markdown")
 result_day2_top30 <- get_top_annotated_genes(res_day2_annotated, createtable = TRUE) %>% add_timepoint(2) %>% kable(format = "markdown")
@@ -597,12 +558,12 @@ all_mapman_results$Category <- sapply(strsplit(all_mapman_results$Context.of.Pro
 ```{r}
 # best
 ggplot(all_mapman_results, aes(x = days_post_treatment, y = Category)) +
-  geom_point(aes(size = X.Genes.of.Interest.IN.MapMan4.category, color = Enrichment.Factor)) +
+  geom_point(aes(size = -log10(FDR.adjusted.p.value), color = Enrichment.Factor)) +
   scale_color_gradient(low = "lightblue", high = "darkblue") +
   labs(
     x = "Timepoint",
     y = "Pathway Category",
-    size = "Number of DEG",
+    size = "-log10(adjusted p-value)",
     color = "Enrichment Factor",
     title = "Pathway enrichment across different timepoints"
   ) +
