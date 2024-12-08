@@ -28,10 +28,10 @@ fi
 if [ ! -d "$base_dir/raw_files/" ]; then
     mkdir $base_dir/raw_files/
     cd $base_dir/raw_files/
-    echo "created samples file and changed to directory"
+    echo "created raw file directory and changed to directory"
 else 
     cd $base_dir/raw_files/
-    echo "changed to directory samples"
+    echo "changed to directory raw_files"
 fi
 
 
