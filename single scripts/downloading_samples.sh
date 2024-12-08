@@ -25,10 +25,17 @@ if [ ! -f "$ACCESSION_LIST" ]; then
     exit 1
 fi
 
-cd $base_dir/samples/
-echo "changed to directory samples"
+if [ ! -d "$base_dir/raw_files/" ]; then
+    mkdir $base_dir/raw_files/
+    cd $base_dir/raw_files/
+    echo "created samples file and changed to directory"
+else 
+    cd $base_dir/raw_files/
+    echo "changed to directory samples"
+fi
 
-while IFS= read -r ACC; do
+
+while IFS= read -r ACC || [ -n "$ACC" ]; do
 
     if [ -n "$ACC" ]; then 
         echo "Downloading $ACC"

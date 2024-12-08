@@ -39,10 +39,21 @@ if [ ! -f "$ACCESSION_LIST" ]; then
     exit 1
 fi
 
-cd $base_dir/samples/
-echo "changed to directory samples"
+# get pathogen name out of accession file basename
+pathogen=$(basename -- "$ACCESSION_LIST") 
 
-while IFS= read -r ACC; do
+# create file for raw samples if not already provided
+if [ ! -d "$base_dir/raw_files/" ]; then
+    mkdir $base_dir/raw_files/
+    cd $base_dir/raw_files/
+    echo "changed to directory raw_files"
+else 
+    cd $base_dir/raw_files/
+    echo "changed to directory raw_files"
+fi
+
+
+while IFS= read -r ACC || [ -n "$ACC" ]; do
 
     if [ -n "$ACC" ]; then 
         echo "Downloading $ACC"
@@ -77,12 +88,15 @@ cd $base_dir
 
 #perform fastqc on every extracted .fastq file
 
-output_fastqc="/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/fastqc_results"
+output_fastqc="/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/$pathogen-fastqc"
 source /dss/dsshome1/0A/ge58rom2/miniconda3/bin/activate bio_env
-# mkdir "$output_fastqc"
+
+if [ ! -d "$output_fastqc" ]; then
+    mkdir "$output_fastqc"
+fi
 echo "Beginning FastQC"
 
-for dir in "$base_dir"/"samples"/*/"fastq"/; do
+for dir in "$base_dir"/"raw_files"/*/"fastq"/; do
     echo "Processing directory: $dir"
 
     # find all fastq files
@@ -97,7 +111,7 @@ done
 #### adapter trimming ####
 echo "Beginning adapter trimming"
 
-for dir in "$base_dir"/"samples"/*/"fastq"/; do
+for dir in "$base_dir"/"raw_files"/*/"fastq"/; do
     echo "Processing directory: $dir"
 
     for fastq_file in "$dir"*.fastq; do
@@ -122,13 +136,15 @@ done
 
 #### fastqc after trimming ####
 source /dss/dsshome1/0A/ge58rom2/miniconda3/bin/activate bio_env
-output_fastqc_trimmed="/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/fastqc_results_trimmed"
+output_fastqc_trimmed="/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/$pathogen-trimmed_fastqc"
 
-#mkdir "$output_fastqc"
+if [ ! -d "$output_fastqc_trimmed" ]; then
+    mkdir "$output_fastqc_trimmed"
+fi
 
-for dir in "$base_dir"/"samples"/*/"fastq"/; do
+
+for dir in "$base_dir"/"raw_files"/*/"fastq"/; do
     echo "Processing directory: $dir"
-
     
     for fastq_file in "$dir"*.fastq-cut; do
         if [ -f "$fastq_file" ]; then
@@ -147,15 +163,16 @@ cd $base_dir
 
 
 # move trimmed fastq files
-for dir in "$base_dir"/"samples"/*/"fastq"/; do
+for dir in "$base_dir"/"raw_files"/*/"fastq"/; do
     
     for fastq_file in "$dir"*.fastq-cut; do
-        mv $fastq_file "/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/sequences"
+        mv $fastq_file "/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/$pathogen"
     done
 done
 
-echo "moved fastq files into folder sequences"
+echo "moved fastq files into folder $pathogen"
 
 # remove -cut from files
 for file in *-cut; do mv "$file" "${file%-cut}"; done
 
+### delete raw files after trimming !!!
