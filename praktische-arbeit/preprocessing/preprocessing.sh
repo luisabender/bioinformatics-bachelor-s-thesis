@@ -174,5 +174,3 @@ echo "moved fastq files into folder $pathogen"
 
 # remove -cut from files
 for file in *-cut; do mv "$file" "${file%-cut}"; done
-
-### delete raw files after trimming !!!

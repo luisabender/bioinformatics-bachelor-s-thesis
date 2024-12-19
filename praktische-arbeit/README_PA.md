@@ -1,5 +1,3 @@
-# Bachelor thesis Luisa
-
 ## Praktische Arbeit
 
 **Following Dataset was used:**
@@ -26,7 +24,7 @@ Run preprocessing.sh
 
 4. FASTQC again and MultiQC report
 
-    [MultiQC-Report](multiqc_report_1.html)
+    [MultiQC-Report](files/multiqc_report_1.html)
 
 ### Alignment
 
@@ -35,7 +33,7 @@ Run index_kallisto.sh and alignment_kallisto.sh
 1. Build Kallisto Index with Arabidopsis thaliana transcriptome (from TAIR)
 2. Run Kallisto quantification algorithm with the build index 
 
-    [Kallisto MultiQC-Report](kallisto_multiqc_report_1.html)
+    [Kallisto MultiQC-Report](files/kallisto_multiqc_report_1.html)
 
 3. Build raw and tpm count matrix with build_count_matrix.py and export them
 
@@ -81,6 +79,6 @@ AT2G22170.1|	Lipid metabolism|	Lipid metabolism.lipid trafficking.endoplasmic re
 - focusing on cone category, e.g. cell wall organisation
 
 ### Results
-All result plots can be found here: [plots](plots/).
+All result plots can be found here: [plots](R/plots/).
 
 
