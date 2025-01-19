@@ -1,0 +1,40 @@
+---
+title: "WGCNA"
+output: html_document
+date: "2025-01-13"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#WGCNA - basic steps
+
+### Data cleaning
+1. load normalized expression Data and transform so that rows = samples and cols = genes
+2. Identify outlier genes with WGCNA package -> goodSamplesGenes
+3. Identify outlier samples with hierarchical clustering
+
+### Network construction
+1. pick soft threshold and call adjacency function
+
+### Module construction
+1a. use hierarchical clustering to cluster the network into modules (transform adjacency matrix into measures of gene dissimilarity) OR
+1b. use Topological Overlap Matrix (TOMsimilarity()) to define dissimilarity
+2. dissimilarity/distance measures are then clustered using linkage hierarchical clustering and a dendrogram of genes
+3. identify the Module Eigengene (standardized gene expression profile for a given module) using moduleEigengenes() function
+
+### Module merging
+1. cluster modules based on pairwise eigengene correlations and merge modules that have similar expression profiles
+
+### External Trait Matching
+1. relate the network to external traits (meta Info)
+2. calculate the correlation of a trait of interest with previously identified module eigengenes --> gene significance
+
+### Target Gene Identification
+1. use gene significance along with the genes intramodular connectivity to identify potential target genes associated with a particular trait of interest
+
+### Network Visualization of Eigengenes
+1. study the relationship among found modules
+2. quantify module similarity by calculating the pairwise correlation of representative eigengenes
+
