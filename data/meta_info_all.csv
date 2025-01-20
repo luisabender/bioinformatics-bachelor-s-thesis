@@ -101,11 +101,11 @@
 100;SRR18568322;Alternaria brassicae;10 dpi;Abra43;single;100;48.6;49600920;102153386;Good
 101;SRR18568323;Alternaria brassicae;10 dpi;Abra43;single;100;57.5;58837935;102415786;Good
 102;SRR18568324;Alternaria brassicae;10 dpi;Abra43;single;100;41.4;42298668;102223536;Good
-103;SRR18568325;Alternaria brassicae;6 dpi;Abra43;single;100;19.2;19625078;101979688;Good
-104;SRR18568326;Alternaria brassicae;6 dpi;Abra43;single;100;17.2;17506954;101933502;Good
-105;SRR18568327;Alternaria brassicae;6 dpi;Abra43;single;100;20.4;20807681;101877456;Good
+103;SRR18568325;Alternaria brassicae;6 dpi;Abra43;single;100;19. Feb;19625078;101979688;Good
+104;SRR18568326;Alternaria brassicae;6 dpi;Abra43;single;100;17. Feb;17506954;101933502;Good
+105;SRR18568327;Alternaria brassicae;6 dpi;Abra43;single;100;20. Apr;20807681;101877456;Good
 106;SRR18568328;Alternaria brassicae;3 dpi;Abra43;single;100;40.9;41799974;102288192;Good
-107;SRR18568329;Alternaria brassicae;3 dpi;Abra43;single;100;23.2;22484276;96984704;Good
+107;SRR18568329;Alternaria brassicae;3 dpi;Abra43;single;100;23. Feb;22484276;96984704;Good
 108;SRR18568330;Alternaria brassicae;3 dpi;Abra43;single;100;35.2;36598109;103856890;Good
 109;SRR24107301;Drought;no;salinity (mannitol);paired;202;76;23841832;31358207;Good
 110;SRR24107302;Drought;no;salinity (mannitol);paired;202;77.3;24116092;31187085;Good
@@ -264,3 +264,21 @@
 263;SRR8800704;Golovinomyces orontii;no;infected;single;150;96.8;5962554;6162088;Good
 264;SRR8800705;Golovinomyces orontii;no;infected;single;150;96.6;8229143;8521213;Good
 265;SRR8800706;Golovinomyces orontii;no;infected;single;150;96.6;2348324;2431973;Poor
+;SRR22565219;Hyaloperonospora arabidopsidis 2;no;Hyaloperonospora arabidopsidis ;single;86;;;;
+;SRR22565220;Hyaloperonospora arabidopsidis 2;no;Hyaloperonospora arabidopsidis ;single;87;;;;
+;SRR22565221;Hyaloperonospora arabidopsidis 2;no;Hyaloperonospora arabidopsidis ;single;88;;;;
+;SRR22565222;Hyaloperonospora arabidopsidis 2;no;Hyaloperonospora arabidopsidis ;single;86;;;;
+;SRR22565223;Hyaloperonospora arabidopsidis 2;no;Hyaloperonospora arabidopsidis ;single;87;;;;
+;SRR22565224;Hyaloperonospora arabidopsidis 2;no;Hyaloperonospora arabidopsidis ;single;88;;;;
+;SRR22565225;Hyaloperonospora arabidopsidis 2;no;Hyaloperonospora arabidopsidis ;single;87;;;;
+;SRR22565226;Hyaloperonospora arabidopsidis 2;no;Hyaloperonospora arabidopsidis ;single;87;;;;
+;SRR22565227;Hyaloperonospora arabidopsidis 2;no;Hyaloperonospora arabidopsidis ;single;88;;;;
+;SRR22565228;Hyaloperonospora arabidopsidis 2;no;Hyaloperonospora arabidopsidis ;single;86;;;;
+;SRR22565229;Hyaloperonospora arabidopsidis 2;no;Hyaloperonospora arabidopsidis ;single;86;;;;
+;SRR22565230;Hyaloperonospora arabidopsidis 2;no;Hyaloperonospora arabidopsidis ;single;88;;;;
+;SRR22565231;Hyaloperonospora arabidopsidis 2;no;Hyaloperonospora arabidopsidis ;single;85;;;;
+;SRR22565232;Hyaloperonospora arabidopsidis 2;no;Hyaloperonospora arabidopsidis ;single;86;;;;
+;SRR22565233;Hyaloperonospora arabidopsidis 2;no;Hyaloperonospora arabidopsidis ;single;88;;;;
+;SRR22565234;Hyaloperonospora arabidopsidis 2;no;Hyaloperonospora arabidopsidis ;single;86;;;;
+;SRR22565235;Hyaloperonospora arabidopsidis 2;no;Hyaloperonospora arabidopsidis ;single;87;;;;
+;SRR22565236;Hyaloperonospora arabidopsidis 2;no;Hyaloperonospora arabidopsidis ;single;88;;;;
