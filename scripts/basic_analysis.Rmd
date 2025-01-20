@@ -69,14 +69,18 @@ counts_tpm <- counts_tpm[, order(colnames(counts_tpm))]
 counts_geneID <- read.csv('~/Studium/Bachelor thesis/counts_geneID.csv', row.names = 1)
 duplicates <- c("ERR7738945.1", "ERR7738946.1", "ERR7738947.1")
 counts_geneID <- counts_geneID[,!names(counts_geneID) %in% duplicates]
+
+counts_genelev_tpm <- read.csv('~/Studium/bachelor-thesis-luisa/scripts/counts_geneID.csv', row.names = 1)
+counts_genelev_tpm <- counts_genelev_tpm[,!names(counts_genelev_tpm) %in% duplicates]
+
 ```
 
 Meta info:
 
 ```{r meta info}
-meta_info <- read.csv('~/Studium/Bachelor thesis/bachelor-thesis-luisa/data/meta_tables/meta_info_all.csv', sep = ';')
+meta_info <- read.csv('~/Studium/bachelor-thesis-luisa/data/meta_info_all.csv', sep = ';')
 # with infected/control table
-meta_info_general <- read.csv('~/Studium/Bachelor thesis/bachelor-thesis-luisa/data/meta_tables/meta_info_all_general.csv', sep = ';')
+meta_info_general <- read.csv('~/Studium/bachelor-thesis-luisa/data/meta_info_all_general.csv', sep = ';')
 
 # removing samples with bad alignment rate
 experiment_to_drop <- 'Hyaloperonospora arabidopsidis 2'
@@ -88,9 +92,11 @@ to_drop <- meta_info[meta_info$Experiment == experiment_to_drop, ]$Run
 meta_info <- meta_info[!meta_info$Run %in% to_drop,]
 meta_info_general <- meta_info_general[!meta_info_general$Run %in% to_drop,]
 counts_geneID <- counts_geneID[, !names(counts_geneID) %in% to_drop]
+
 # include number of aligned reads into meta_info table
-meta_info <- merge(meta_info, kallisto_alignment_summary, by.x = "Run", by.y = "sample_ID", all.x = TRUE)
-meta_info_general <- merge(meta_info_general, kallisto_alignment_summary, by.x = "Run", by.y = "sample_ID", all.x = TRUE)
+#meta_info <- merge(meta_info, kallisto_alignment_summary, by.x = "Run", by.y = "sample_ID", all.x = TRUE)
+#meta_info_general <- merge(meta_info_general, kallisto_alignment_summary, by.x = "Run", by.y = "sample_ID", all.x = TRUE)
+
 ```
 
 Filter low expressed genes: 
@@ -235,6 +241,30 @@ pca_data_genes2 <- data.frame(Sample = rownames(pca_genes2$x),
                        PC4 = pca_genes2$x[, 4]) %>% merge(meta_info_general, by.x = "Sample", by.y = "Run")
 ```
 
+PCA on tpm counts:
+
+```{r}
+pca_tpm <- perform_pca(counts_genelev_tpm)
+pca_data_tpm <- data.frame(Sample = rownames(pca_tpm$x),
+                       PC1 = pca_tpm$x[, 1], 
+                       PC2 = pca_tpm$x[, 2], 
+                       PC3 = pca_tpm$x[, 3], 
+                       PC4 = pca_tpm$x[, 4]) %>% merge(meta_info_general, by.x = "Sample", by.y = "Run")
+
+```
+
+```{r}
+ggplot(pca_data_tpm, aes(x = PC1, y = PC2, color = Experiment)) +
+      geom_point() +
+      stat_ellipse(aes(color = Experiment), type = "norm") +
+      xlab(paste0("PC1: ", round(100 * summary(pca_tpm)$importance[2, 1], 2), "% variance")) +
+      ylab(paste0("PC2: ", round(100 * summary(pca_tpm)$importance[2, 2], 2), "% variance")) +
+      ggtitle("PCA of vst counts") +
+      theme_minimal()
+```
+
+
+
 
 ```{r pca}
 # PC1 and PC2
@@ -256,6 +286,13 @@ ggplot(pca_data_genes, aes(x = PC1, y = PC2, color = Experiment)) +
 
 ggplot(pca_data_genes2, aes(x = PC1, y = PC2, color = Experiment)) +
       geom_point() +
+      #stat_ellipse(aes(color = Experiment), type = "norm") +
+      xlab(paste0("PC1: ", round(100 * summary(pca_genes2)$importance[2, 1], 2), "% variance")) +
+      ylab(paste0("PC2: ", round(100 * summary(pca_genes2)$importance[2, 2], 2), "% variance")) +
+      ggtitle("PCA of vst counts") +
+      theme_minimal()
+ggplot(pca_data_genes2, aes(x = PC1, y = PC2, color = Experiment)) +
+      geom_point() +
       stat_ellipse(aes(color = Experiment), type = "norm") +
       xlab(paste0("PC1: ", round(100 * summary(pca_genes2)$importance[2, 1], 2), "% variance")) +
       ylab(paste0("PC2: ", round(100 * summary(pca_genes2)$importance[2, 2], 2), "% variance")) +
@@ -269,65 +306,88 @@ ggplot(pca_data_genes2, aes(x = PC1, y = PC2, color = Experiment)) +
 ggplot(pca_data_filtered, aes(x = PC3, y = PC4, color = Experiment)) +
       geom_point() +
       stat_ellipse(aes(color = Experiment), type = "norm") +
-      xlab(paste0("PC1: ", round(100 * summary(pca_filtered)$importance[2, 3], 2), "% variance")) +
-      ylab(paste0("PC2: ", round(100 * summary(pca_filtered)$importance[2, 4], 2), "% variance")) +
+      xlab(paste0("PC3: ", round(100 * summary(pca_filtered)$importance[2, 3], 2), "% variance")) +
+      ylab(paste0("PC4: ", round(100 * summary(pca_filtered)$importance[2, 4], 2), "% variance")) +
       ggtitle("PCA of vst counts") +
       theme_minimal()
+
 ggplot(pca_data_genes2, aes(x = PC3, y = PC4, color = Experiment)) +
       geom_point() +
       stat_ellipse(aes(color = Experiment), type = "norm") +
-      xlab(paste0("PC1: ", round(100 * summary(pca_genes2)$importance[2, 3], 2), "% variance")) +
-      ylab(paste0("PC2: ", round(100 * summary(pca_genes2)$importance[2, 4], 2), "% variance")) +
+      xlab(paste0("PC3: ", round(100 * summary(pca_genes2)$importance[2, 3], 2), "% variance")) +
+      ylab(paste0("PC4: ", round(100 * summary(pca_genes2)$importance[2, 4], 2), "% variance")) +
       ggtitle("PCA of vst counts") +
       theme_minimal()
 ```
 
 
 ```{r pca}
-# include the number of aligned reads per sample
-ggplot(pca_data_filtered, aes(x = PC1, y = PC2, color = n_pseudoaligned)) +
-      geom_point(alpha = 0.8) +
-      scale_color_viridis_c(option = "plasma") +
-      stat_ellipse(aes(color = Experiment), type = "norm") +
-      xlab(paste0("PC1: ", round(100 * summary(pca_filtered)$importance[2, 3], 2), "% variance")) +
-      ylab(paste0("PC2: ", round(100 * summary(pca_filtered)$importance[2, 4], 2), "% variance")) +
-      ggtitle("PCA of vst counts") +
-      theme_minimal()
 # number of aligned reads per sample (absolute counts) to include in the PCA
-# include single and paired in the PCA
-```
-
-Normalize with DESeq2:
-
-```{r}
-rv_wpn <- rowVars(vsd_data)
-summary(rv_wpn)
-
-q75_wpn <- quantile( rowVars(vsd_data), .75)  # <= original
-q95_wpn <- quantile( rowVars(vsd_data), .95)  # <= changed to 95 quantile to reduce dataset
-expr_normalized <- vsd_data[ rv_wpn > q95_wpn, ]
-
-expr_normalized[1:5,1:10]
-dim(expr_normalized)
-
-expr_normalized_df <- data.frame(expr_normalized) %>%
-  mutate(
-    Gene_id = row.names(expr_normalized)
-  ) %>%
-  pivot_longer(-Gene_id)
-
-expr_normalized_df %>% ggplot(., aes(x = name, y = value)) +
-  geom_violin() +
-  geom_point() +
-  theme_bw() +
-  theme(
-    axis.text.x = element_text( angle = 90)
-  ) +
-  ylim(0, NA) +
+ggplot(pca_data_genes2, aes(x = PC1, y = PC2, color = n_pseudoaligned, size = n_pseudoaligned)) +
+  geom_point(alpha = 0.8) +
+  scale_color_viridis_c(option = "plasma") +
+  #stat_ellipse(aes(color = Experiment), type = "norm") +# Color gradient for aligned reads
+  theme_minimal() +
+  scale_y_continuous(labels = scales::comma)+
   labs(
-    title = "Normalized and 95 quantile Expression",
-    x = "treatment",
-    y = "normalized expression"
+    title = "PCA Plot with Aligned Reads",
+    x = "PC 1",
+    y = "PC 2",
+    size = "Aligned Reads",
+    color = "Aligned Reads"
+  ) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, size = 16)
+  )
+
+#PC3 and PC4
+ggplot(pca_data_genes2, aes(x = PC3, y = PC4, color = n_pseudoaligned, size = n_pseudoaligned)) +
+  geom_point(alpha = 0.8) +
+  scale_color_viridis_c(option = "plasma") +
+  #stat_ellipse(aes(color = Experiment), type = "norm") +# Color gradient for aligned reads
+  theme_minimal() +
+  scale_y_continuous(labels = scales::comma)+
+  labs(
+    title = "PCA Plot with Aligned Reads",
+    x = "PC 3",
+    y = "PC 4",
+    size = "Aligned Reads",
+    color = "Aligned Reads"
+  ) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, size = 16)
+  )
+
+# include single and paired in the PCA
+ggplot(pca_data_genes2, aes(x = PC1, y = PC2, color = single.paired)) +
+  geom_point(alpha = 0.8) +
+  theme_minimal() +
+  labs(
+    title = "PCA with vst counts",
+    x = "PC 1",
+    y = "PC 2",
+    color = "single-end/paired-end"
+  ) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, size = 16)
+  )
+
+# PC 3 and PC 4
+ggplot(pca_data_genes2, aes(x = PC3, y = PC4, color = single.paired)) +
+  geom_point(alpha = 0.8) +
+  theme_minimal() +
+  labs(
+    title = "PCA with vst counts",
+    x = "PC 3",
+    y = "PC 4",
+    color = "single-end/paired-end"
+  ) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, size = 16)
   )
 ```
 
