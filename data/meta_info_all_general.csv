@@ -1,0 +1,266 @@
+;Run;Experiment;Time.series;infected.control;single.paired;avgSpotLen;p_pseudoaligned;n_pseudoaligned;n_processed;alignment_status
+1;ERR7738942;Turnip yellows virus (TuYV);no;infected;paired;150;94.4;25530514;27031002;Good
+2;ERR7738943;Turnip yellows virus (TuYV);no;infected;paired;150;94.6;29159598;30823937;Good
+3;ERR7738944;Turnip yellows virus (TuYV);no;infected;paired;150;94.8;28693752;30274742;Good
+4;ERR7738945;Cauliflower mosaic virus (CaMV);no;infected;paired;150;86.6;27916909;32220560;Good
+5;ERR7738945;Turnip yellows virus (TuYV);no;control;paired;150;86.6;27916909;32220560;Good
+6;ERR7738946;Cauliflower mosaic virus (CaMV);no;infected;paired;150;86.6;25092950;28982193;Good
+7;ERR7738946;Turnip yellows virus (TuYV);no;control;paired;150;86.6;25092950;28982193;Good
+8;ERR7738947;Cauliflower mosaic virus (CaMV);no;infected;paired;150;86.5;24840655;28718288;Good
+9;ERR7738947;Turnip yellows virus (TuYV);no;control;paired;150;86.5;24840655;28718288;Good
+10;ERR9604272;Heterodera schachtii 2;72h;control;single;150;97.2;46897187;48232942;Good
+11;ERR9604276;Heterodera schachtii 2;24h;control;single;150;97;47484643;48929178;Good
+12;ERR9604277;Heterodera schachtii 2;24h;control;single;150;97.2;48289124;49705474;Good
+13;ERR9604278;Heterodera schachtii 2;24h;control;single;150;97.2;49068502;50474902;Good
+14;ERR9604282;Heterodera schachtii 2;72h;infected;single;150;90.6;45585554;50318764;Good
+15;ERR9604283;Heterodera schachtii 2;72h;control;single;150;97;48441269;49933448;Good
+16;ERR9604284;Heterodera schachtii 2;72h;infected;single;150;91.1;46766081;51336376;Good
+17;ERR9604285;Heterodera schachtii 2;72h;infected;single;150;91.5;45308069;49543654;Good
+18;ERR9604289;Heterodera schachtii 2;48h;infected;single;150;88.2;45627759;51733914;Good
+19;ERR9604290;Heterodera schachtii 2;48h;infected;single;150;86.6;44144530;50954642;Good
+20;ERR9604291;Heterodera schachtii 2;48h;infected;single;150;87.6;43772153;49984458;Good
+21;ERR9604294;Heterodera schachtii 2;72h;control;single;150;97.3;49060000;50428892;Good
+22;ERR9604296;Heterodera schachtii 2;24h;infected;single;150;90.6;45684395;50421322;Good
+23;ERR9604297;Heterodera schachtii 2;24h;infected;single;150;89.5;45571629;50928504;Good
+24;ERR9604298;Heterodera schachtii 2;24h;infected;single;150;91.6;46128137;50374802;Good
+25;ERR9604338;Heterodera schachtii 2;48h;control;single;150;97;48585012;50081308;Good
+26;ERR9604342;Heterodera schachtii 2;48h;control;single;150;96.9;49577046;51157022;Good
+27;ERR9604343;Heterodera schachtii 2;48h;control;single;150;97.1;49308905;50803094;Good
+28;SRR10030449;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.6;3293095;3715415;Poor
+29;SRR10030450;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.8;3052242;3436724;Poor
+30;SRR10030451;Hyaloperonospora arabidopsidis 3;no;infected;single;101;89;2757905;3100041;Poor
+31;SRR10030452;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.6;3332710;3761935;Poor
+32;SRR10030453;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.6;3317725;3745061;Poor
+33;SRR10030454;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.6;3287474;3709123;Poor
+34;SRR10030455;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.7;3176039;3579532;Poor
+35;SRR10030456;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.9;2965259;3337227;Poor
+36;SRR10030457;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.8;3020017;3401909;Poor
+37;SRR10030458;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.6;3307543;3732286;Poor
+38;SRR10030459;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.6;3288887;3710886;Poor
+39;SRR10030460;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.6;3276895;3696954;Poor
+40;SRR10030461;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.6;3250493;3666715;Poor
+41;SRR10030462;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.8;3111173;3503832;Poor
+42;SRR10030463;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.9;2925599;3290253;Poor
+43;SRR10030464;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.8;3240670;3650897;Poor
+44;SRR10030465;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.6;3295035;3718346;Poor
+45;SRR10030466;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.6;3275691;3695396;Poor
+46;SRR10030467;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.7;3204971;3613366;Poor
+47;SRR10030468;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.8;3042636;3425974;Poor
+48;SRR10030469;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.8;2987305;3363245;Poor
+49;SRR10030470;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.6;3308968;3736708;Poor
+50;SRR10030471;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.7;3224791;3636917;Poor
+51;SRR10030472;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.6;3288886;3711478;Poor
+52;SRR10030473;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.6;3239899;3654812;Poor
+53;SRR10030474;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.8;3152880;3552277;Poor
+54;SRR10030475;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.9;2911771;3276730;Poor
+55;SRR10030476;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.9;1270830;1429186;Poor
+56;SRR10030477;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.7;3170538;3572975;Poor
+57;SRR10030478;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.9;2947893;3316637;Poor
+58;SRR10030479;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.8;3080318;3468155;Poor
+59;SRR10030480;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.6;3296691;3720072;Poor
+60;SRR10030481;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.7;3276357;3695248;Poor
+61;SRR10030482;Hyaloperonospora arabidopsidis 3;no;infected;single;101;88.7;3230263;3641437;Poor
+62;SRR10030483;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.7;2729222;3703222;Poor
+63;SRR10030484;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.8;2700046;3661041;Poor
+64;SRR10030485;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.5;2513064;3417606;Poor
+65;SRR10030486;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.2;2617992;3575911;Poor
+66;SRR10030487;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.6;2730524;3711750;Poor
+67;SRR10030488;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.8;2663860;3610625;Poor
+68;SRR10030489;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.6;2496274;3393142;Poor
+69;SRR10030490;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.2;2696872;3686129;Poor
+70;SRR10030491;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.7;2722638;3694981;Poor
+71;SRR10030492;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.9;2650665;3587168;Poor
+72;SRR10030493;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.6;2473478;3360909;Poor
+73;SRR10030494;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.7;2698683;3659353;Poor
+74;SRR10030495;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.5;2740919;3730812;Poor
+75;SRR10030496;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.6;2716175;3688187;Poor
+76;SRR10030497;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.3;2611034;3563211;Poor
+77;SRR10030498;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.7;1987617;2696331;Poor
+78;SRR10030499;Hyaloperonospora arabidopsidis 3;no;infected;single;101;74;2630411;3554921;Poor
+79;SRR10030500;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.7;2489666;3377203;Poor
+80;SRR10030501;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.7;2730416;3703924;Poor
+81;SRR10030502;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.8;2701894;3663183;Poor
+82;SRR10030503;Hyaloperonospora arabidopsidis 3;no;infected;single;101;74.2;2531401;3413556;Poor
+83;SRR10030504;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.3;2545336;3471730;Poor
+84;SRR10030505;Hyaloperonospora arabidopsidis 3;no;infected;single;101;73.5;2749408;3740402;Poor
+85;SRR12330763;Meloidogyne javanica;no (3dpi);infected;paired;300;93.9;11422212;12168776;Good
+86;SRR12330764;Meloidogyne javanica;no (3dpi);infected;paired;300;93.7;11477475;12247190;Good
+87;SRR12330765;Meloidogyne javanica;no (3dpi);infected;paired;300;94.9;9504591;10013728;Good
+88;SRR12330766;Meloidogyne javanica;no (3dpi);control;paired;300;96.1;14825171;15427700;Good
+89;SRR12330767;Meloidogyne javanica;no (3dpi);control;paired;300;95.4;12288467;12879342;Good
+90;SRR12330768;Meloidogyne javanica;no (3dpi);control;paired;300;95.4;13782489;14442877;Good
+91;SRR18568313;Alternaria brassicae;10 dpi;control;single;100;96.4;49681644;51541986;Good
+92;SRR18568314;Alternaria brassicae;10 dpi;control;single;100;96.3;49684846;51576600;Good
+93;SRR18568315;Alternaria brassicae;10 dpi;control;single;100;96;49638995;51693464;Good
+94;SRR18568316;Alternaria brassicae;6 dpi;control;single;100;94.6;48417804;51175380;Good
+95;SRR18568317;Alternaria brassicae;6 dpi;control;single;100;94.2;48215209;51188912;Good
+96;SRR18568318;Alternaria brassicae;6 dpi;control;single;100;91.3;46876572;51334948;Good
+97;SRR18568319;Alternaria brassicae;3 dpi;control;single;100;96.3;49981250;51915012;Good
+98;SRR18568320;Alternaria brassicae;3 dpi;control;single;100;96.1;49670818;51660306;Good
+99;SRR18568321;Alternaria brassicae;3 dpi;control;single;100;96.9;50187044;51779478;Good
+100;SRR18568322;Alternaria brassicae;10 dpi;infected;single;100;48.6;49600920;102153386;Good
+101;SRR18568323;Alternaria brassicae;10 dpi;infected;single;100;57.5;58837935;102415786;Good
+102;SRR18568324;Alternaria brassicae;10 dpi;infected;single;100;41.4;42298668;102223536;Good
+103;SRR18568325;Alternaria brassicae;6 dpi;infected;single;100;19.2;19625078;101979688;Good
+104;SRR18568326;Alternaria brassicae;6 dpi;infected;single;100;17.2;17506954;101933502;Good
+105;SRR18568327;Alternaria brassicae;6 dpi;infected;single;100;20.4;20807681;101877456;Good
+106;SRR18568328;Alternaria brassicae;3 dpi;infected;single;100;40.9;41799974;102288192;Good
+107;SRR18568329;Alternaria brassicae;3 dpi;infected;single;100;23.2;22484276;96984704;Good
+108;SRR18568330;Alternaria brassicae;3 dpi;infected;single;100;35.2;36598109;103856890;Good
+109;SRR24107301;Drought;no;salinity (mannitol);paired;202;76;23841832;31358207;Good
+110;SRR24107302;Drought;no;salinity (mannitol);paired;202;77.3;24116092;31187085;Good
+111;SRR24107303;Drought;no;drought (NaCl);paired;202;66.8;20786177;31096038;Good
+112;SRR24107304;Drought;no;drought (NaCl);paired;202;73.5;23064586;31374763;Good
+113;SRR24107305;Drought;no;control;paired;202;68.7;21347202;31064384;Good
+114;SRR24107306;Drought;no;control;paired;202;70.1;22040811;31422652;Good
+115;SRR24657655;Turnip mosaic virus (TuMV) 3;no;infected;paired;300;64.7;15971581;24668579;Good
+116;SRR24657656;Turnip mosaic virus (TuMV) 3;no;infected;paired;300;64.4;16351959;25373823;Good
+117;SRR24657657;Turnip mosaic virus (TuMV) 3;no;infected;paired;300;57;12357482;21694683;Good
+118;SRR24657658;Turnip mosaic virus (TuMV) 3;no;infected;paired;300;62.9;14077399;22376738;Good
+119;SRR24657659;Turnip mosaic virus (TuMV) 3;no;infected;paired;300;60.4;13063892;21623904;Good
+120;SRR24657669;Turnip mosaic virus (TuMV) 3;no;infected;paired;300;72.1;14741057;20451802;Good
+121;SRR24657680;Turnip mosaic virus (TuMV) 3;no;infected;paired;300;75.2;17612346;23425495;Good
+122;SRR24657691;Turnip mosaic virus (TuMV) 3;no;infected;paired;300;73.3;17061110;23264794;Good
+123;SRR24657702;Turnip mosaic virus (TuMV) 3;no;infected;paired;300;72.6;15837145;21828275;Good
+124;SRR24657703;Turnip mosaic virus (TuMV) 3;no;infected;paired;300;77.2;15720499;20374483;Good
+125;SRR30310344;Turnip mosaic virus (TuMV);18 days after-sowing;infected;paired;300;70.8;15532545;21951892;Good
+126;SRR30310345;Turnip mosaic virus (TuMV);32 days after-sowing;control;paired;300;77.6;21847845;28150576;Good
+127;SRR30310346;Turnip mosaic virus (TuMV);32 days after-sowing;control;paired;300;96.8;20431650;21096749;Good
+128;SRR30310347;Turnip mosaic virus (TuMV);32 days after-sowing;control;paired;300;96.4;22934583;23795448;Good
+129;SRR30310348;Turnip mosaic virus (TuMV);25 days after-sowing;control;paired;300;82.6;17089986;20690051;Good
+130;SRR30310349;Turnip mosaic virus (TuMV);25 days after-sowing;control;paired;300;96.7;21703392;22443769;Good
+131;SRR30310350;Turnip mosaic virus (TuMV);25 days after-sowing;control;paired;300;84.9;19505263;22978714;Good
+132;SRR30310351;Turnip mosaic virus (TuMV);32 days after-sowing;infected;paired;300;61.8;13373495;21651786;Good
+133;SRR30310352;Turnip mosaic virus (TuMV);32 days after-sowing;infected;paired;300;58.1;13646746;23484987;Good
+134;SRR30310353;Turnip mosaic virus (TuMV);32 days after-sowing;infected;paired;300;42.1;12644712;30064881;Good
+135;SRR30310354;Turnip mosaic virus (TuMV);25 days after-sowing;infected;paired;300;70.2;15343835;21854424;Good
+136;SRR30310355;Turnip mosaic virus (TuMV);25 days after-sowing;infected;paired;300;62.3;12261790;19670858;Good
+137;SRR30310356;Turnip mosaic virus (TuMV);25 days after-sowing;infected;paired;300;64.2;14822786;23105497;Good
+138;SRR30310357;Turnip mosaic virus (TuMV);18 days after-sowing;infected;paired;300;82.3;19368694;23526220;Good
+139;SRR30310358;Turnip mosaic virus (TuMV);18 days after-sowing;control;paired;300;96.1;22620724;23538119;Good
+140;SRR30310359;Turnip mosaic virus (TuMV);18 days after-sowing;infected;paired;300;77.4;17840317;23043905;Good
+141;SRR30310360;Turnip mosaic virus (TuMV);18 days after-sowing;infected;paired;300;82.8;19810850;23921183;Good
+142;SRR30310361;Turnip mosaic virus (TuMV);32 days after-sowing;infected;paired;300;53.7;14925751;27811941;Good
+143;SRR30310362;Turnip mosaic virus (TuMV);32 days after-sowing;infected;paired;300;56.7;11895552;20983399;Good
+144;SRR30310363;Turnip mosaic virus (TuMV);32 days after-sowing;infected;paired;300;58.3;12394189;21265592;Good
+145;SRR30310364;Turnip mosaic virus (TuMV);25 days after-sowing;infected;paired;300;74.4;15539524;20880148;Good
+146;SRR30310365;Turnip mosaic virus (TuMV);25 days after-sowing;infected;paired;300;79.3;18190820;22926995;Good
+147;SRR30310366;Turnip mosaic virus (TuMV);25 days after-sowing;infected;paired;300;76.3;19674936;25781706;Good
+148;SRR30310367;Turnip mosaic virus (TuMV);18 days after-sowing;infected;paired;300;71.7;14467250;20165339;Good
+149;SRR30310368;Turnip mosaic virus (TuMV);18 days after-sowing;infected;paired;300;67.4;13284374;19697324;Good
+150;SRR30310369;Turnip mosaic virus (TuMV);18 days after-sowing;control;paired;300;95.9;20751924;21628907;Good
+151;SRR30310370;Turnip mosaic virus (TuMV);18 days after-sowing;control;paired;300;96;23076309;24044425;Good
+152;SRR30606508;Botrytis cinerea;12h;infected;paired;300;83.5;37585094;45011607;Good
+153;SRR30606509;Botrytis cinerea;6h;infected;paired;300;92.6;40208888;43408739;Good
+154;SRR30606510;Botrytis cinerea;6h;infected;paired;300;90.4;40560584;44852753;Good
+155;SRR30606511;Botrytis cinerea;6h;infected;paired;300;89.2;38191357;42807831;Good
+156;SRR30606517;Botrytis cinerea;96h;infected;paired;300;95.8;41033881;42828166;Good
+157;SRR30606518;Botrytis cinerea;96h;infected;paired;300;96.5;42727998;44297401;Good
+158;SRR30606519;Botrytis cinerea;96h;infected;paired;300;95.6;40274784;42138299;Good
+159;SRR30606520;Botrytis cinerea;72h;infected;paired;300;95.9;41745147;43551843;Good
+160;SRR30606521;Botrytis cinerea;control;control;paired;300;96;19176298;19976079;Good
+161;SRR30606522;Botrytis cinerea;72h;infected;paired;300;93.5;39242570;41967058;Good
+162;SRR30606523;Botrytis cinerea;72h;infected;paired;300;95.8;40390307;42166101;Good
+163;SRR30606524;Botrytis cinerea;48h;infected;paired;300;88.8;39811945;44855036;Good
+164;SRR30606525;Botrytis cinerea;48h;infected;paired;300;94.3;41436029;43944350;Good
+165;SRR30606526;Botrytis cinerea;48h;infected;paired;300;91.5;40080150;43796057;Good
+166;SRR30606527;Botrytis cinerea;24h;infected;paired;300;93;39184558;42154217;Good
+167;SRR30606528;Botrytis cinerea;24h;infected;paired;300;93.5;39476070;42211821;Good
+168;SRR30606529;Botrytis cinerea;24h;infected;paired;300;92.2;42182037;45739815;Good
+169;SRR30606530;Botrytis cinerea;12h;infected;paired;300;93;38521474;41439622;Good
+170;SRR30606531;Botrytis cinerea;12h;infected;paired;300;88.9;37595125;42279314;Good
+171;SRR30606532;Botrytis cinerea;control;control;paired;300;97;20866078;21519588;Good
+172;SRR30606533;Botrytis cinerea;control;control;paired;300;97;20889768;21546829;Good
+173;SRR3124722;Plasmodiophora brassicae 2;17 dpi;infected;paired;202;97.9;8186170;8358101;Good
+174;SRR3124724;Plasmodiophora brassicae 2;24 dpi;infected;paired;202;98;11109228;11332486;Good
+175;SRR3124726;Plasmodiophora brassicae 2;17 dpi;infected;paired;202;97.7;10391477;10635493;Good
+176;SRR3124729;Plasmodiophora brassicae 2;20 dpi;infected;paired;202;98.2;15567942;15847392;Good
+177;SRR3124731;Plasmodiophora brassicae 2;24 dpi;infected;paired;202;97.3;15944686;16393176;Good
+178;SRR3124735;Plasmodiophora brassicae 2;17 dpi;infected;paired;202;96.7;25174980;26026429;Good
+179;SRR3124737;Plasmodiophora brassicae 2;20 dpi;infected;paired;202;96.9;11963630;12341757;Good
+180;SRR3124740;Plasmodiophora brassicae 2;24 dpi;infected;paired;202;93.4;11688092;12514167;Good
+181;SRR3124742;Plasmodiophora brassicae 2;17 dpi;infected;paired;202;98;10311210;10524498;Good
+182;SRR3124743;Plasmodiophora brassicae 2;20 dpi;infected;paired;202;96.8;12564831;12978398;Good
+183;SRR3124745;Plasmodiophora brassicae 2;24 dpi;infected;paired;202;94.5;12610433;13348939;Good
+184;SRR3124747;Plasmodiophora brassicae 2;20 dpi;infected;paired;202;97.6;9139710;9363389;Good
+185;SRR3124748;Plasmodiophora brassicae 2;17 dpi;infected;paired;202;96.5;8604410;8919751;Good
+186;SRR3124750;Plasmodiophora brassicae 2;20 dpi;infected;paired;202;97.2;13420283;13808659;Good
+187;SRR3124752;Plasmodiophora brassicae 2;24 dpi;infected;paired;202;93.1;11791646;12665914;Good
+188;SRR3124754;Plasmodiophora brassicae 2;17 dpi;control;paired;202;98;15578453;15902816;Good
+189;SRR3124756;Plasmodiophora brassicae 2;20 dpi;control;paired;202;95.2;15063572;15816370;Good
+190;SRR3124759;Plasmodiophora brassicae 2;24 dpi;control;paired;202;97.8;10280256;10506544;Good
+191;SRR3124761;Plasmodiophora brassicae 2;17 dpi;control;paired;202;97.8;10579966;10814844;Good
+192;SRR3124764;Plasmodiophora brassicae 2;20 dpi;control;paired;202;97.9;11028372;11268726;Good
+193;SRR3124766;Plasmodiophora brassicae 2;24 dpi;control;paired;202;97.8;11741122;12004346;Good
+194;SRR3124767;Plasmodiophora brassicae 2;17 dpi;control;paired;202;97.8;5762645;5892667;Good
+195;SRR3124769;Plasmodiophora brassicae 2;24 dpi;infected;paired;202;98.1;20028003;20421974;Good
+196;SRR3124770;Plasmodiophora brassicae 2;20 dpi;control;paired;202;98;8813252;8993506;Good
+197;SRR3124772;Plasmodiophora brassicae 2;24 dpi;control;paired;202;97.9;13761877;14050423;Good
+198;SRR3124775;Plasmodiophora brassicae 2;17 dpi;control;paired;202;96.6;11374896;11777627;Good
+199;SRR3124986;Plasmodiophora brassicae 2;20 dpi;control;paired;202;97.3;20252610;20818323;Good
+200;SRR3124987;Plasmodiophora brassicae 2;24 dpi;control;paired;202;96.8;13089074;13516061;Good
+201;SRR3124990;Plasmodiophora brassicae 2;17 dpi;control;paired;202;96.5;13270398;13751446;Good
+202;SRR3124992;Plasmodiophora brassicae 2;20 dpi;control;paired;202;96.6;13650660;14133849;Good
+203;SRR3124994;Plasmodiophora brassicae 2;24 dpi;control;paired;202;96.4;11107922;11521985;Good
+204;SRR3124997;Plasmodiophora brassicae 2;17 dpi;control;paired;202;97.1;12922062;13309423;Good
+205;SRR3124998;Plasmodiophora brassicae 2;20 dpi;control;paired;202;96.7;9620466;9947495;Good
+206;SRR3125002;Plasmodiophora brassicae 2;17 dpi;infected;paired;202;97.8;11318568;11575777;Good
+207;SRR3125004;Plasmodiophora brassicae 2;24 dpi;control;paired;202;95.2;10246833;10761687;Good
+208;SRR3125005;Plasmodiophora brassicae 2;20 dpi;infected;paired;202;97.9;10295348;10518831;Good
+209;SRR7811358;Plasmodiophora brassicae;24 dpi;infected;paired;202;93.1;11791646;12665914;Good
+210;SRR7811359;Plasmodiophora brassicae;20 dpi;infected;paired;202;96.8;12564831;12978398;Good
+211;SRR7811360;Plasmodiophora brassicae;20 dpi;infected;paired;202;97.2;13420283;13808659;Good
+212;SRR7811361;Plasmodiophora brassicae;24 dpi;infected;paired;202;93.4;11688092;12514167;Good
+213;SRR7811362;Plasmodiophora brassicae;24 dpi;infected;paired;202;94.5;12610433;13348939;Good
+214;SRR7811363;Plasmodiophora brassicae;17 dpi;infected;paired;202;96.7;25174980;26026429;Good
+215;SRR7811364;Plasmodiophora brassicae;17 dpi;infected;paired;202;98;10311210;10524498;Good
+216;SRR7811365;Plasmodiophora brassicae;17 dpi;infected;paired;202;96.5;8604410;8919751;Good
+217;SRR7811366;Plasmodiophora brassicae;20 dpi;infected;paired;202;96.9;11963630;12341757;Good
+218;SRR8689382;Erysiphe cichoracearum ;2 dpi;infected;paired;252;93.4;9912564;10609250;Good
+219;SRR8689383;Erysiphe cichoracearum ;2 dpi;infected;paired;252;93.5;9188643;9829831;Good
+220;SRR8689384;Erysiphe cichoracearum ;2 dpi;infected;paired;252;93.8;10962220;11691263;Good
+221;SRR8689388;Erysiphe cichoracearum ;5 dpi;infected;paired;252;93.2;12549394;13466698;Good
+222;SRR8689389;Erysiphe cichoracearum ;5 dpi;infected;paired;252;93.1;9176092;9852794;Good
+223;SRR8689390;Erysiphe cichoracearum ;5 dpi;infected;paired;252;93;10037076;10797604;Good
+224;SRR8689394;Erysiphe cichoracearum ;7 dpi;infected;paired;252;94.5;9096496;9623065;Good
+225;SRR8689395;Erysiphe cichoracearum ;7 dpi;infected;paired;252;94.2;10336714;10968477;Good
+226;SRR8689396;Erysiphe cichoracearum ;7 dpi;infected;paired;252;93.8;11060979;11797045;Good
+227;SRR8689400;Erysiphe cichoracearum ;2 d;control;paired;252;94.3;10626172;11274142;Good
+228;SRR8689401;Erysiphe cichoracearum ;2 d;control;paired;252;94.1;10223312;10870046;Good
+229;SRR8689402;Erysiphe cichoracearum ;2 d;control;paired;252;94.6;10005205;10578778;Good
+230;SRR8689406;Erysiphe cichoracearum ;5 d;control;paired;252;94.7;10690017;11289729;Good
+231;SRR8689407;Erysiphe cichoracearum ;5 d;control;paired;252;93.2;10142912;10882252;Good
+232;SRR8689408;Erysiphe cichoracearum ;5 d;control;paired;252;95.2;9395824;9874422;Good
+233;SRR8689412;Erysiphe cichoracearum ;7 d;control;paired;252;90.1;9178285;10185941;Good
+234;SRR8689413;Erysiphe cichoracearum ;7 d;control;paired;252;93.9;9322937;9932654;Good
+235;SRR8689414;Erysiphe cichoracearum ;7 d;control;paired;252;95.2;10745370;11293079;Good
+236;SRR8800677;Golovinomyces orontii;no;control;single;150;97;2180440;2248775;Poor
+237;SRR8800678;Golovinomyces orontii;no;control;single;150;96.8;1320254;1363645;Poor
+238;SRR8800679;Golovinomyces orontii;no;control;single;150;96.9;6397985;6600480;Good
+239;SRR8800680;Golovinomyces orontii;no;control;single;150;96.8;4833081;4990510;Good
+240;SRR8800681;Golovinomyces orontii;no;control;single;150;96.8;5059584;5224394;Good
+241;SRR8800682;Golovinomyces orontii;no;control;single;150;97;2334111;2405142;Poor
+242;SRR8800683;Golovinomyces orontii;no;control;single;150;96.9;1389457;1433791;Poor
+243;SRR8800684;Golovinomyces orontii;no;control;single;150;97;6641714;6845261;Good
+244;SRR8800685;Golovinomyces orontii;no;control;single;150;96.9;4505250;4648582;Good
+245;SRR8800686;Golovinomyces orontii;no;control;single;150;96.9;4791035;4943005;Good
+246;SRR8800687;Golovinomyces orontii;no;control;single;150;96.9;2132610;2201631;Poor
+247;SRR8800688;Golovinomyces orontii;no;control;single;150;96.7;1176119;1216050;Poor
+248;SRR8800689;Golovinomyces orontii;no;control;single;150;96.8;5787775;5976042;Good
+249;SRR8800690;Golovinomyces orontii;no;control;single;150;96.7;8786385;9087445;Good
+250;SRR8800691;Golovinomyces orontii;no;control;single;150;96.7;4658130;4819277;Good
+251;SRR8800692;Golovinomyces orontii;no;infected;single;150;96.4;21273181;22070622;Good
+252;SRR8800693;Golovinomyces orontii;no;infected;single;150;96.5;11999803;12438787;Good
+253;SRR8800694;Golovinomyces orontii;no;infected;single;150;96.4;9762027;10126719;Good
+254;SRR8800695;Golovinomyces orontii;no;infected;single;150;90.4;13908243;15389851;Good
+255;SRR8800696;Golovinomyces orontii;no;infected;single;150;90.1;7278918;8074936;Good
+256;SRR8800697;Golovinomyces orontii;no;infected;single;150;96.8;2282577;2357891;Poor
+257;SRR8800698;Golovinomyces orontii;no;infected;single;150;96.6;1359742;1407576;Poor
+258;SRR8800699;Golovinomyces orontii;no;infected;single;150;96.8;6632681;6853015;Good
+259;SRR8800700;Golovinomyces orontii;no;infected;single;150;96.6;6277804;6499382;Good
+260;SRR8800701;Golovinomyces orontii;no;infected;single;150;96.6;6319093;6544596;Good
+261;SRR8800702;Golovinomyces orontii;no;infected;single;150;96.8;2125347;2195060;Poor
+262;SRR8800703;Golovinomyces orontii;no;infected;single;150;96.6;1194744;1236612;Poor
+263;SRR8800704;Golovinomyces orontii;no;infected;single;150;96.8;5962554;6162088;Good
+264;SRR8800705;Golovinomyces orontii;no;infected;single;150;96.6;8229143;8521213;Good
+265;SRR8800706;Golovinomyces orontii;no;infected;single;150;96.6;2348324;2431973;Poor
