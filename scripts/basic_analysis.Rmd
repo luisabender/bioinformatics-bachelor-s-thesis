@@ -1,5 +1,5 @@
 ---
-title: "VST_filtering"
+title: "VST and PCA"
 output: html_document
 date: "2025-01-13"
 ---
@@ -61,19 +61,19 @@ Count tables:
 
 ```{r count tables}
 counts_raw <- read.csv('~/Studium/Bachelor thesis/bachelor-thesis-luisa/count_tables/count_raw_tx.csv', row.names = 1)
-counts_raw <- counts_raw[, order(colnames(counts_raw))]
+counts_raw <- counts_raw[, order(colnames(counts_raw))] # transcripts
 
 counts_tpm <- read.csv('~/Studium/Bachelor thesis/bachelor-thesis-luisa/count_tables/counts_tpm_tx.csv', row.names = 1)
-counts_tpm <- counts_tpm[, order(colnames(counts_tpm))]
+counts_tpm <- counts_tpm[, order(colnames(counts_tpm))] # transcripts
 
 counts_geneID <- read.csv('~/Studium/bachelor-thesis-luisa/count_tables/counts_genelevel.csv', row.names = 1)
 duplicates <- c("ERR7738945.1", "ERR7738946.1", "ERR7738947.1")
-counts_geneID <- counts_geneID[,!names(counts_geneID) %in% duplicates]
+counts_geneID <- counts_geneID[,!names(counts_geneID) %in% duplicates] # genelevels
 
 counts_genelev_tpm <- read.csv('~/Studium/bachelor-thesis-luisa/count_tables/counts_tpm_abundance.csv', row.names = 1)
-counts_genelev_tpm <- counts_genelev_tpm[,!names(counts_genelev_tpm) %in% duplicates]
+counts_genelev_tpm <- counts_genelev_tpm[,!names(counts_genelev_tpm) %in% duplicates] # genelevel tpm
 
-counts_lengthscaledTPM <- read.csv('~/Studium/bachelor-thesis-luisa/count_tables/counts_lengthscaledTPM.csv', row.names = 1)
+counts_lengthscaledTPM <- read.csv('~/Studium/bachelor-thesis-luisa/count_tables/counts_lengthscaledTPM.csv', row.names = 1) # counts scaled with lenghtscaledTPM
 ```
 
 Meta info:
@@ -101,12 +101,13 @@ counts_genelev_tpm <- counts_genelev_tpm[, !names(counts_genelev_tpm) %in% hpa2]
 
 ```
 
-Filter low expressed genes: 
+Filter low expressed genes (with tpm values (genelevel tpm)): 
 
 Result: 
 - before filtering: 27321 genes
 - after filtering: 19017 genes
 
+--> keep genes that have at least 0.5 TPM per sample in at least 51% or 60% of your samples
 
 ```{r}
 smallest_tpm <- 0.5
@@ -120,7 +121,7 @@ counts_raw_filtered <- counts_raw[keep,]
 counts_genelev_filtered <- counts_geneID[keep,]
 ```
 
-Perform vst on raw counts:
+Perform vst on raw counts (transcripts):
 
 ```{r vst}
 dds <- DESeqDataSetFromMatrix(countData = round(counts_raw),
@@ -131,7 +132,7 @@ vsd <- varianceStabilizingTransformation(dds) # blind = FALSE!!
 vsd_data <- getVarianceStabilizedData(dds)
 ```
 
-vst with filtered dataset:
+vst with filtered dataset (transcripts):
 
 ```{r vst}
 dds_filtered <- DESeqDataSetFromMatrix(countData = round(counts_raw_filtered),
@@ -154,6 +155,7 @@ dds_genes <- DESeqDataSetFromMatrix(countData = round(counts_geneID),
 vsd_genes <- varianceStabilizingTransformation(dds_genes, blind = FALSE)
 ```
 
+without outlier:
 
 ```{r}
 dds_genes2 <- DESeqDataSetFromMatrix(countData = round(counts_geneID),
@@ -164,6 +166,8 @@ dds_genes2 <- DESeqDataSetFromMatrix(countData = round(counts_geneID),
 vsd_genes2 <- varianceStabilizingTransformation(dds_genes2, blind = FALSE)
 ```
 
+filtered count table:
+
 ```{r}
 dds_genelev_filtered <- DESeqDataSetFromMatrix(countData = round(counts_genelev_filtered),
                               colData = meta_info_general,
@@ -173,7 +177,7 @@ dds_genelev_filtered <- DESeqDataSetFromMatrix(countData = round(counts_genelev_
 vsd_genelev_filtered <- varianceStabilizingTransformation(dds_genelev_filtered, blind = FALSE)
 ```
 
-vst on tpm counts:
+vst on tpm counts (tpm values):
 
 ```{r}
 dds_tpm <- DESeqDataSetFromMatrix(countData = round(counts_genelev_tpm),
@@ -184,6 +188,7 @@ dds_tpm <- DESeqDataSetFromMatrix(countData = round(counts_genelev_tpm),
 vsd_tpm <- varianceStabilizingTransformation(dds_tpm, blind = FALSE)
 ```
 
+PCA function:
 
 ```{r pca function}
 perform_pca <- function(count){
@@ -235,6 +240,8 @@ visualize_standard_pca <- function(data, pca_result, ellipse, title, PC3){
   }
 }
 ```
+
+PCA on raw (and filtered) vst counts:  
   
 ```{r pca}
 # vst counts filtered with tpm value
@@ -261,7 +268,7 @@ pca_data_genes2 <- data.frame(Sample = rownames(pca_genes2$x),
                        PC4 = pca_genes2$x[, 4]) %>% merge(meta_info_general, by.x = "Sample", by.y = "Run")
 ```
 
-PCA on tpm counts:
+PCA on tpm counts (lengthscaledTPM):
 
 ```{r}
 pca_tpm <- perform_pca(counts_lengthscaledTPM)
@@ -274,9 +281,10 @@ pca_data_tpm <- data.frame(Sample = rownames(pca_tpm$x),
 ```
 
 ```{r}
-visualize_standard_pca(pca_data_tpm, pca_tpm, FALSE, "PCA of tpm counts (lengthscaledTPM", FALSE)
-visualize_standard_pca(pca_data_tpm, pca_tpm, FALSE,"PCA of tpm counts lengthscaledTPM", TRUE)
+visualize_standard_pca(pca_data_tpm, pca_tpm, FALSE, "PCA of tpm counts (lengthscaledTPM)", FALSE)
+visualize_standard_pca(pca_data_tpm, pca_tpm, FALSE,"PCA of tpm counts (lengthscaledTPM)", TRUE)
 ```
+
 PCA on raw counts (unchanged):
 
 ```{r}
@@ -292,9 +300,6 @@ visualize_standard_pca(pca_data_raw,pca_raw,TRUE, "PCA of raw counts", TRUE)
 ```
 
 
-
-
-
 PCA on unfiltered vs filtered counts
 
 ```{r pca}
@@ -308,49 +313,19 @@ visualize_standard_pca(pca_data_filtered,pca_filtered, FALSE,"PCA of filtered vs
 # PC3 and PC4
 visualize_standard_pca(pca_data_genes2,pca_genes2, FALSE,"PCA of vst counts", TRUE)
 visualize_standard_pca(pca_data_filtered,pca_filtered, FALSE,"PCA of filtered vst counts", TRUE)
+ggplot(pca_data_filtered, aes(x = PC1, y = PC2, color = Experiment, shape = infected.control)) +
+        geom_point() +
+        xlab(paste0("PC1: ", round(100 * summary(pca_filtered)$importance[2, 1], 2), "% variance")) +
+        ylab(paste0("PC2: ", round(100 * summary(pca_filtered)$importance[2, 2], 2), "% variance")) +
+        ggtitle(title) +
+        theme_minimal()
 ```
 
 
+PCA on further information:
+
 ```{r pca}
 # number of aligned reads per sample (absolute counts) to include in the PCA
-visualize_pca_aligned_reads(data, PC, title){
-  if(PC==1){
-    ggplot(data, aes(x = PC1, y = PC2, color = n_pseudoaligned, size = n_pseudoaligned)) +
-  geom_point(alpha = 0.8) +
-  scale_color_viridis_c(option = "plasma") +
-  theme_minimal() +
-  scale_y_continuous(labels = scales::comma)+
-  labs(
-    title = title,
-    x = "PC 1",
-    y = "PC 2",
-    size = "Aligned Reads",
-    color = "Aligned Reads"
-  ) +
-  theme(
-    legend.position = "right",
-    plot.title = element_text(hjust = 0.5, size = 16)
-  )
-  }}
-
-  ggplot(data, aes(x = PC1, y = PC2, color = n_pseudoaligned, size = n_pseudoaligned)) +
-  geom_point(alpha = 0.8) +
-  scale_color_viridis_c(option = "plasma") +
-  theme_minimal() +
-  scale_y_continuous(labels = scales::comma)+
-  labs(
-    title = title,
-    x = "PC 1",
-    y = "PC 2",
-    size = "Aligned Reads",
-    color = "Aligned Reads"
-  ) +
-  theme(
-    legend.position = "right",
-    plot.title = element_text(hjust = 0.5, size = 16)
-  )
-}
-
 ggplot(pca_data_genes2, aes(x = PC1, y = PC2, color = n_pseudoaligned, size = n_pseudoaligned)) +
   geom_point(alpha = 0.8) +
   scale_color_viridis_c(option = "plasma") +
@@ -485,5 +460,41 @@ ggplot(pca_data_genes2, aes(x = PC3, y = PC4, color = single.paired)) +
     legend.position = "right",
     plot.title = element_text(hjust = 0.5, size = 16)
   )
+
+#filtered
+ggplot(pca_data_filtered, aes(x = PC1, y = PC2, color = single.paired)) +
+  geom_point(alpha = 0.8) +
+  theme_minimal() +
+  labs(
+    title = "PCA with filtered vst counts",
+    x = "PC 1",
+    y = "PC 2",
+    color = "single-end/paired-end"
+  ) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, size = 16)
+  )
+
+ggplot(pca_data_filtered, aes(x = PC3, y = PC4, color = single.paired)) +
+  geom_point(alpha = 0.8) +
+  theme_minimal() +
+  labs(
+    title = "PCA with filtered vst counts",
+    x = "PC 3",
+    y = "PC 4",
+    color = "single-end/paired-end"
+  ) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, size = 16)
+  )
 ```
+
+save expression data (filtered and vst)
+
+```{r}
+write.csv(assay(vsd_genelev_filtered), "~/Studium/bachelor-thesis-luisa/count_tables/vst_expression_data.csv")
+```
+
 

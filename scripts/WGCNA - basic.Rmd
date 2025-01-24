@@ -8,6 +8,12 @@ date: "2025-01-13"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r}
+# load packages
+library(WGCNA)
+```
+
+
 #WGCNA - basic steps
 
 ### Data cleaning
@@ -15,8 +21,101 @@ knitr::opts_chunk$set(echo = TRUE)
 2. Identify outlier genes with WGCNA package -> goodSamplesGenes
 3. Identify outlier samples with hierarchical clustering
 
+```{r}
+# load expression data
+options(stringsAsFactors = FALSE)
+expr_data <- read.csv("~/Studium/bachelor-thesis-luisa/count_tables/vst_expression_data.csv", row.names = 1)
+
+# transpose it for WGCNA
+input_mat <- t(expr_data)
+```
+
+```{r}
+gsg = goodSamplesGenes(input_mat, verbose = 3)
+gsg$allOK # TRUE
+summary(gsg)
+```
+
+```{r}
+# Identifying outlier samples
+sampleTree <- hclust(dist(input_mat), method = "average") #Clustering samples based on distance 
+
+#Setting the graphical parameters
+par(cex = 0.6);
+par(mar = c(0,4,2,0))
+
+#Plotting the cluster dendrogram
+plot(sampleTree, main = "Sample clustering to detect outliers", sub="", xlab="", cex.lab = 1.5,
+cex.axis = 1.5, cex.main = 2)
+```
+
+
 ### Network construction
+Identify some sort of similarity measurement between pairs of genes -> represents the concordance of gene expression profiles across samples --> Pearson correlation coefficient
 1. pick soft threshold and call adjacency function
+
+```{r}
+allowWGCNAThreads()
+
+spt <- pickSoftThreshold(input_mat)
+spt
+
+# other method: set of soft-thresholding powers
+powers = c(c(1:10), seq(from = 12, to = 20, by = 2))
+sft <- pickSoftThreshold(input_mat, powerVector = powers, verbose = 5)
+```
+```{r}
+par(mar=c(1,1,1,1))
+plot(spt$fitIndices[,1],spt$fitIndices[,2],
+xlab="Soft Threshold (power)",ylab="Scale Free Topology Model Fit,signed R^2",type="n",
+main = paste("Scale independence"))
+text(spt$fitIndices[,1],spt$fitIndices[,2],col="red")
+abline(h=0.80,col="red")
+
+par(mar=c(1,1,1,1))
+plot(spt$fitIndices[,1], spt$fitIndices[,5],
+xlab="Soft Threshold (power)",ylab="Mean Connectivity", type="n",
+main = paste("Mean connectivity"))
+text(spt$fitIndices[,1], spt$fitIndices[,5], labels= spt$fitIndices[,1],col="red")
+```
+```{r}
+par(mfrow = c(1,2));
+cex1 = 0.9;
+
+plot(sft$fitIndices[, 1],
+     -sign(sft$fitIndices[, 3]) * sft$fitIndices[, 2],
+     xlab = "Soft Threshold (power)",
+     ylab = "Scale Free Topology Model Fit, signed R^2",
+     main = paste("Scale independence")
+)
+text(sft$fitIndices[, 1],
+     -sign(sft$fitIndices[, 3]) * sft$fitIndices[, 2],
+     labels = powers, cex = cex1, col = "red"
+)
+abline(h = 0.90, col = "red")
+plot(sft$fitIndices[, 1],
+     sft$fitIndices[, 5],
+     xlab = "Soft Threshold (power)",
+     ylab = "Mean Connectivity",
+     type = "n",
+     main = paste("Mean connectivity")
+)
+text(sft$fitIndices[, 1],
+     sft$fitIndices[, 5],
+     labels = powers,
+     cex = cex1, col = "red")
+```
+
+pick threshold 4 ??
+
+look at grey modules, number of modules, connectivity
+
+```{r}
+# adjacency with soft threshold 4
+softPower <- 4
+adjacency <- adjacency(input_mat, power = softPower)
+```
+
 
 ### Module construction
 1a. use hierarchical clustering to cluster the network into modules (transform adjacency matrix into measures of gene dissimilarity) OR
@@ -24,8 +123,83 @@ knitr::opts_chunk$set(echo = TRUE)
 2. dissimilarity/distance measures are then clustered using linkage hierarchical clustering and a dendrogram of genes
 3. identify the Module Eigengene (standardized gene expression profile for a given module) using moduleEigengenes() function
 
+```{r}
+# Topological Overlap Matrix
+TOM <- TOMsimilarity(adjacency)
+TOM.dissimilarity <- 1-TOM
+```
+
+```{r}
+# Hierarchical Clustering Analysis
+
+# creating the dendrogram
+geneTree <- hclust(as.dist(TOM.dissimilarity), method = "average")
+# plotting
+sizeGrWindow(12,9)
+plot(geneTree, xlab="", sub="", main = "Gene clustering on TOM-based dissimilarity", 
+labels = FALSE, hang = 0.04)
+
+# start with minimum module size 30 as recommended by the authors of WGCNA
+Modules <- cutreeDynamic(dendro = geneTree, distM = TOM.dissimilarity, deepSplit = 2, pamRespectsDendro = FALSE, minClusterSize = 30)
+table(Modules) # 25 modules created
+ModuleColors <- labels2colors(Modules) # assigns each module number a color
+table(ModuleColors) # returns the counts for each color (aka the number of genes within each module)
+
+# plots the gene dendrogram with the module colors
+plotDendroAndColors(geneTree, 
+                    ModuleColors,
+                    "Module",
+                    dendroLabels = FALSE, 
+                    hang = 0.03,
+                    addGuide = TRUE, 
+                    guideHang = 0.05,
+                    main = "Gene dendrogram and module colors")
+```
+```{r}
+# Module Eigengene Identification
+MElist <- moduleEigengenes(input_mat, colors = ModuleColors)
+MEs <- MElist$eigengenes
+head(MEs)
+```
+
+
 ### Module merging
 1. cluster modules based on pairwise eigengene correlations and merge modules that have similar expression profiles
+
+```{r}
+# eigengene dissimilarity
+ME.dissimilarity = 1-cor(MElist$eigengenes, use="complete") #Calculate eigengene dissimilarity
+
+# construct a cluster tree
+METree = hclust(as.dist(ME.dissimilarity), method = "average") #Clustering eigengenes 
+par(mar = c(0,4,2,0)) #seting margin sizes
+par(cex = 0.6);#scaling the graphic
+plot(METree)
+abline(h=.25, col = "red") #a height of .25 corresponds to correlation of .75
+```
+```{r}
+merge <- mergeCloseModules(input_mat, ModuleColors, cutHeight = 0.25)
+
+# merged module colors
+mergedColors <- merge$colors
+# eigengenes of the new merged modules
+mergedMEs <- merge$newMEs
+```
+```{r}
+# plot dendrogram of original and merged module colors
+plotDendroAndColors(geneTree, 
+                    cbind(ModuleColors, mergedColors),
+                    c("original Module", "merged Module"),
+                    dendroLabels = FALSE, 
+                    hang = 0.03,
+                    addGuide = TRUE, 
+                    guideHang = 0.05,
+                    main = "Gene dendrogram and module colors for original and merged modules")
+```
+
+```{r}
+#TOMplot(TOM.dissimilarity, geneTree, mergedColors)
+```
 
 ### External Trait Matching
 1. relate the network to external traits (meta Info)
