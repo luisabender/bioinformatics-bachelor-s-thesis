@@ -3,8 +3,10 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=55G
-#SBATCH --time=48:00:00
+#SBATCH --time=2:00:00
 #SBATCH --job-name=preprocessing
+#SBATCH --mail-user=luisa.bender@tum.de
+#SBATCH --mail-type=ALL
 
  
 #make sure you have the folder ~/logs/slurm/ for the next lines.
@@ -86,7 +88,7 @@ cd $base_dir
 echo "Beginning adapter trimming"
 
 source /dss/dsshome1/0A/ge58rom2/miniconda3/bin/activate bio_env
-outputdir_trimmed="$base_dir/trimmed_files"
+outputdir_trimmed="$base_dir/trimmed_files/missing"
 
 # create file for trimmed samples if not already provided
 if [ ! -d "$outputdir_trimmed" ]; then
@@ -129,7 +131,7 @@ for sample_dir in $base_dir/"raw_files"/*; do
 done
 
 #### fastqc after trimming ####
-output_fastqc_trimmed="/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/fastqc_trimmed"
+output_fastqc_trimmed="/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/fastqc_trimmed/missing"
 
 if [ ! -d "$output_fastqc_trimmed" ]; then
     mkdir "$output_fastqc_trimmed"
