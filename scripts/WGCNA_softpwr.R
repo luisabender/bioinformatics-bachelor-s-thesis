@@ -9,7 +9,7 @@ expr_data <- read.csv(file.path(base_dir,"count_tables/vst_expression_data.csv")
 input_mat <- t(expr_data)
 
 print("Running adjacency...")
-softPower <- 6
+softPower <- 10
 adjacency <- adjacency(input_mat, power = softPower)
 
 # Topological Overlap Matrix
@@ -70,7 +70,7 @@ merge <- mergeCloseModules(input_mat, ModuleColors, cutHeight = 0.25)
 mergedColors <- merge$colors
 # eigengenes of the new merged modules
 mergedMEs <- merge$newMEs
-write.csv(mergedMEs, "mergedMEs_new.csv")
+write.csv(mergedMEs, file.path(base_dir,"mergedMEs_new.csv"))
 
 # plot dendrogram of original and merged module colors
 pdf(file.path(base_dir,"/wgcna_results/dendro_merged_new.pdf"))
