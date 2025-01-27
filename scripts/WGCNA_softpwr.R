@@ -9,7 +9,7 @@ expr_data <- read.csv(file.path(base_dir,"count_tables/vst_expression_data.csv")
 input_mat <- t(expr_data)
 
 print("Running adjacency...")
-softPower <- 10
+softPower <- 4
 adjacency <- adjacency(input_mat, power = softPower)
 
 # Topological Overlap Matrix
@@ -21,8 +21,6 @@ TOM.dissimilarity <- 1-TOMsimilarity(adjacency)
 
 # creating the dendrogram
 geneTree <- hclust(as.dist(TOM.dissimilarity), method = "average")
-# plotting
-sizeGrWindow(12,9)
 
 # start with minimum module size 30 as recommended by the authors of WGCNA
 print("Creating Modules...")
@@ -70,7 +68,7 @@ merge <- mergeCloseModules(input_mat, ModuleColors, cutHeight = 0.25)
 mergedColors <- merge$colors
 # eigengenes of the new merged modules
 mergedMEs <- merge$newMEs
-write.csv(mergedMEs, file.path(base_dir,"mergedMEs_new.csv"))
+write.csv(mergedMEs, file.path(base_dir,"wgcna_results/mergedMEs_new.csv"))
 
 # plot dendrogram of original and merged module colors
 pdf(file.path(base_dir,"/wgcna_results/dendro_merged_new.pdf"))
@@ -82,6 +80,10 @@ dendro_merged <- plotDendroAndColors(geneTree,
                     addGuide = TRUE, 
                     guideHang = 0.05,
                     main = "Gene dendrogram and module colors for original and merged modules")
+dev.off()
+
+pdf(file.path(base_dir, "/wgcna_results/TOMplot_new.pdf"))
+TOMplot(TOM.dissimilarity, geneTree, mergedColors)
 dev.off()
 
 print("Finished succesfully.")
