@@ -79,20 +79,20 @@ main = paste("Mean connectivity"))
 text(spt$fitIndices[,1], spt$fitIndices[,5], labels= spt$fitIndices[,1],col="red")
 ```
 ```{r}
+sizeGrWindow(9,5)
 par(mfrow = c(1,2));
 cex1 = 0.9;
-
 plot(sft$fitIndices[, 1],
      -sign(sft$fitIndices[, 3]) * sft$fitIndices[, 2],
      xlab = "Soft Threshold (power)",
-     ylab = "Scale Free Topology Model Fit, signed R^2",
+     ylab = "Scale Free Topology Model Fit, signed R^2", type = "n",
      main = paste("Scale independence")
 )
 text(sft$fitIndices[, 1],
      -sign(sft$fitIndices[, 3]) * sft$fitIndices[, 2],
-     labels = powers, cex = cex1, col = "red"
-)
-abline(h = 0.90, col = "red")
+     labels = powers, cex = cex1, col = "red");
+
+abline(h = 0.80, col = "red")
 plot(sft$fitIndices[, 1],
      sft$fitIndices[, 5],
      xlab = "Soft Threshold (power)",
@@ -112,7 +112,7 @@ look at grey modules, number of modules, connectivity
 
 ```{r}
 # adjacency with soft threshold 4
-softPower <- 4
+softPower <- 8
 adjacency <- adjacency(input_mat, power = softPower)
 ```
 
@@ -125,8 +125,7 @@ adjacency <- adjacency(input_mat, power = softPower)
 
 ```{r}
 # Topological Overlap Matrix
-TOM <- TOMsimilarity(adjacency)
-TOM.dissimilarity <- 1-TOM
+TOM.dissimilarity <- 1-TOMsimilarity(adjacency)
 ```
 
 ```{r}
@@ -143,7 +142,7 @@ labels = FALSE, hang = 0.04)
 Modules <- cutreeDynamic(dendro = geneTree, distM = TOM.dissimilarity, deepSplit = 2, pamRespectsDendro = FALSE, minClusterSize = 30)
 table(Modules) # 25 modules created
 ModuleColors <- labels2colors(Modules) # assigns each module number a color
-table(ModuleColors) # returns the counts for each color (aka the number of genes within each module)
+write.csv(table(ModuleColors), "ModuleColors_sp8.csv") # returns the counts for each color (aka the number of genes within each module)
 
 # plots the gene dendrogram with the module colors
 plotDendroAndColors(geneTree, 
@@ -198,8 +197,41 @@ plotDendroAndColors(geneTree,
 ```
 
 ```{r}
-#TOMplot(TOM.dissimilarity, geneTree, mergedColors)
+TOMplot(TOM.dissimilarity, geneTree, mergedColors)
 ```
+WGCNA in one step:
+```{r}
+picked_power = 9
+temp_cor <- cor       
+cor <- WGCNA::cor         # Force it to use WGCNA cor function (fix a namespace conflict issue)
+netwk <- blockwiseModules(input_mat,                # <= input here
+                          
+                          # == Adjacency Function ==
+                          power = picked_power,                # <= power here
+                          networkType = "unsigned",
+                          
+                          # == Tree and Block Options ==
+                          deepSplit = 2,
+                          pamRespectsDendro = F,
+                          # detectCutHeight = 0.75,
+                          minModuleSize = 30,
+                          maxBlockSize = 4000,
+                          
+                          # == Module Adjustments ==
+                          reassignThreshold = 0, 
+                          mergeCutHeight = 0.25, 
+                          
+                          # == TOM == Archive the run results in TOM file (saves time)
+                          saveTOMs = T, 
+                          saveTOMFileBase = "TOM",
+                          
+                          # == Output Options
+                          numericLabels = T,
+                          verbose = 3)
+
+cor <- temp_cor
+```
+
 
 ### External Trait Matching
 1. relate the network to external traits (meta Info)

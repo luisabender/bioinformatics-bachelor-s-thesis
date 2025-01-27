@@ -1,0 +1,51 @@
+---
+title: "Data cleaning & preprocessing"
+output: html_document
+date: "2025-01-27"
+---
+
+```{r}
+# load expression data
+options(stringsAsFactors = FALSE)
+expr_data <- read.csv("~/Studium/bachelor-thesis-luisa/count_tables/vst_expression_data.csv", row.names = 1)
+
+# transpose it for WGCNA
+input_mat <- t(expr_data)
+```
+
+```{r}
+gsg = goodSamplesGenes(input_mat, verbose = 3)
+gsg$allOK # TRUE
+summary(gsg)
+```
+
+```{r}
+# Identifying outlier samples
+sampleTree <- hclust(dist(input_mat), method = "average") #Clustering samples based on distance 
+
+#Setting the graphical parameters
+par(cex = 0.6);
+par(mar = c(0,4,2,0))
+
+#Plotting the cluster dendrogram
+plot(sampleTree, main = "Sample clustering to detect outliers", sub="", xlab="", cex.lab = 1.5,
+cex.axis = 1.5, cex.main = 2)
+```
+
+Loading meta data:
+
+```{r}
+metaData <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData.csv", sep=";")
+metaData_num <- metaData[,c(1,3,8)]
+
+samples = rownames(input_mat)
+metaRows = match(samples, metaData$Run)
+metData = metaData[metaRows, -1]
+rownames(metData) <- metaData[metaRows, 1]
+
+# visualize how the clinical traits relate to the sample dendrogram
+sampleTree2 <- hclust(dist(expr_data), method = "average")
+metaColors <- numbers2colors(as.numeric(metaData_num), signed = FALSE)
+plotDendroAndColors(sampleTree2, metaColors, groupLabels = names(metaData), main = "Sample dendrogram and metadata heatmap")
+```
+
