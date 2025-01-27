@@ -9,7 +9,7 @@ expr_data <- read.csv(file.path(base_dir,"count_tables/vst_expression_data.csv")
 input_mat <- t(expr_data)
 
 print("Running adjacency...")
-softPower <- 6
+softPower <- 9
 adjacency <- adjacency(input_mat, power = softPower)
 
 # Topological Overlap Matrix
