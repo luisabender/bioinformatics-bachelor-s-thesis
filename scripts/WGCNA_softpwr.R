@@ -1,20 +1,20 @@
 # WGCNA adjacency with different soft thresholds
 library(WGCNA)
 # load expression data
+base_dir <- "/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/bachelor-thesis-luisa/"
 options(stringsAsFactors = FALSE)
-expr_data <- read.csv("~/Studium/bachelor-thesis-luisa/count_tables/vst_expression_data.csv", row.names = 1)
+expr_data <- read.csv(file.path(base_dir,"count_tables/vst_expression_data.csv"), row.names = 1)
 
 # transpose it for WGCNA
 input_mat <- t(expr_data)
 
 print("Running adjacency...")
-softPower <- 9
+softPower <- 6
 adjacency <- adjacency(input_mat, power = softPower)
 
 # Topological Overlap Matrix
 print("Calculating TOM...")
-TOM <- TOMsimilarity(adjacency)
-TOM.dissimilarity <- 1-TOM
+TOM.dissimilarity <- 1-TOMsimilarity(adjacency)
 
 
 ### Hierarchical Clustering Analysis
@@ -29,11 +29,11 @@ print("Creating Modules...")
 Modules <- cutreeDynamic(dendro = geneTree, distM = TOM.dissimilarity, deepSplit = 2, pamRespectsDendro = FALSE, minClusterSize = 30)
 ModuleColors <- labels2colors(Modules) # assigns each module number a color
 
-modules.table <- write.csv(table(Modules), "~/Studium/bachelor-thesis-luisa/wgcna_results/modules_table_new.csv")
-moduleColors.table <- write.csv(table(ModuleColors), "~/Studium/bachelor-thesis-luisa/wgcna_results/moduleColors_table_new.csv") # returns the counts for each color (aka the number of genes within each module)
+modules.table <- write.csv(table(Modules),file.path(base_dir,"/wgcna_results/modules_table_new.csv"))
+moduleColors.table <- write.csv(table(ModuleColors), file.path(base_dir,"/wgcna_results/moduleColors_table_new.csv")) # returns the counts for each color (aka the number of genes within each module)
 
 # plots the gene dendrogram with the module colors
-pdf("~/Studium/bachelor-thesis-luisa/wgcna_results/dendro_new.pdf")
+pdf(file.path(base_dir,"/wgcna_results/dendro_new.pdf"))
 dendro_plot <- plotDendroAndColors(geneTree, 
                     ModuleColors,
                     "Module",
@@ -47,7 +47,7 @@ dev.off()
 # Module Eigengene Identification
 MElist <- moduleEigengenes(input_mat, colors = ModuleColors)
 MEs <- MElist$eigengenes
-write.csv(MEs, "~/Studium/bachelor-thesis-luisa/wgcna_results/MEs_new.csv")
+write.csv(MEs,file.path(base_dir,"/wgcna_results/MEs_new.csv"))
 
 # eigengene dissimilarity
 ME.dissimilarity = 1-cor(MElist$eigengenes, use="complete") #Calculate eigengene dissimilarity
@@ -57,7 +57,7 @@ METree = hclust(as.dist(ME.dissimilarity), method = "average") #Clustering eigen
 par(mar = c(0,4,2,0)) #seting margin sizes
 par(cex = 0.6);#scaling the graphic
 
-pdf("~/Studium/bachelor-thesis-luisa/wgcna_results/METree_new.pdf")
+pdf(file.path(base_dir,"/wgcna_results/METree_new.pdf"))
 plot(METree)
 abline(h=.25, col = "red") #a height of .25 corresponds to correlation of .75
 dev.off()
@@ -72,7 +72,7 @@ mergedMEs <- merge$newMEs
 write.csv(mergedMEs, "mergedMEs_new.csv")
 
 # plot dendrogram of original and merged module colors
-pdf("~~/Studium/bachelor-thesis-luisa/wgcna_results/dendro_merged_new.pdf")
+pdf(file.path(base_dir,"/wgcna_results/dendro_merged_new.pdf"))
 dendro_merged <- plotDendroAndColors(geneTree, 
                     cbind(ModuleColors, mergedColors),
                     c("original Module", "merged Module"),
