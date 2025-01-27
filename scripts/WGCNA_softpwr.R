@@ -9,7 +9,7 @@ expr_data <- read.csv(file.path(base_dir,"count_tables/vst_expression_data.csv")
 input_mat <- t(expr_data)
 
 print("Running adjacency...")
-softPower <- 9
+softPower <- 6
 adjacency <- adjacency(input_mat, power = softPower)
 
 # Topological Overlap Matrix
@@ -26,6 +26,7 @@ sizeGrWindow(12,9)
 
 # start with minimum module size 30 as recommended by the authors of WGCNA
 print("Creating Modules...")
+minModuleSize = 30
 Modules <- cutreeDynamic(dendro = geneTree, distM = TOM.dissimilarity, deepSplit = 2, pamRespectsDendro = FALSE, minClusterSize = 30)
 ModuleColors <- labels2colors(Modules) # assigns each module number a color
 
