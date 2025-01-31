@@ -11,7 +11,7 @@ expr_data <- read.csv(file.path(base_dir,"count_tables/vst_expression_data.csv")
 input_mat <- t(expr_data)
 
 print("Running adjacency...")
-softPower <- 5
+softPower <- 7
 adjacency <- adjacency(input_mat, power = softPower)
 
 # Topological Overlap Matrix
@@ -58,7 +58,7 @@ METree = hclust(as.dist(ME.dissimilarity), method = "average") #Clustering eigen
 par(mar = c(0,4,2,0)) #seting margin sizes
 par(cex = 0.6);#scaling the graphic
 
-pdf(file.path(base_dir,"/wgcna_results/METree_sp4.pdf"))
+pdf(file.path(base_dir,"/wgcna_results/METree_sp7.pdf"))
 plot(METree)
 abline(h=.25, col = "red") #a height of .25 corresponds to correlation of .75
 dev.off()
@@ -73,7 +73,7 @@ mergedMEs <- merge$newMEs
 #write.csv(mergedMEs, file.path(base_dir,"wgcna_results/mergedMEs_sp5.csv"))
 
 # plot dendrogram of original and merged module colors
-pdf(file.path(base_dir,"/wgcna_results/dendro_merged_sp4.pdf"))
+pdf(file.path(base_dir,"/wgcna_results/dendro_merged_sp7.pdf"))
 dendro_merged <- plotDendroAndColors(geneTree, 
                     cbind(ModuleColors, mergedColors),
                     c("original Module", "merged Module"),
@@ -84,11 +84,11 @@ dendro_merged <- plotDendroAndColors(geneTree,
                     main = "Gene dendrogram and module colors for original and merged modules")
 dev.off()
 
-pdf(file.path(base_dir, "/wgcna_results/TOMplot_sp4.pdf"))
-TOMplot(TOM.dissimilarity, geneTree, mergedColors)
-dev.off()
+#pdf(file.path(base_dir, "/wgcna_results/TOMplot_sp6.pdf"))
+#TOMplot(TOM.dissimilarity, geneTree, mergedColors)
+#dev.off()
 
-save(mergedMEs, mergedColors, geneTree, file = file.path(base_dir,"/wgcna_results/networkConstruction-pow4.RData"))
+save(mergedMEs, mergedColors, geneTree, file = file.path(base_dir,"/wgcna_results/networkConstruction-pow7.RData"))
 
 
-print("Finished succesfully.")
+print("Finished succesfully")
