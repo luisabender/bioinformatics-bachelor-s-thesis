@@ -1,139 +1,139 @@
 Run;Experiment;Timepoint (dpi);infected/control;single/paired;avgSpotLen;infection;infected/control.num
-ERR7738945;Cauliflower mosaic virus (CaMV);21,00;infected;paired;150;infected;1
-ERR7738946;Cauliflower mosaic virus (CaMV);21,00;infected;paired;150;infected;1
-ERR7738947;Cauliflower mosaic virus (CaMV);21,00;infected;paired;150;infected;1
-ERR7738939;Cauliflower mosaic virus (CaMV);21,00;control;paired;150;control;0
-ERR7738940;Cauliflower mosaic virus (CaMV);21,00;control;paired;150;control;0
-ERR7738941;Cauliflower mosaic virus (CaMV);21,00;control;paired;150;control;0
-SRR8689382;Erysiphe cichoracearum ;2,00;infected;paired;252;infected;1
-SRR8689383;Erysiphe cichoracearum ;2,00;infected;paired;252;infected;1
-SRR8689384;Erysiphe cichoracearum ;2,00;infected;paired;252;infected;1
-SRR8689389;Erysiphe cichoracearum ;5,00;infected;paired;252;infected;1
-SRR8689390;Erysiphe cichoracearum ;5,00;infected;paired;252;infected;1
-SRR8689394;Erysiphe cichoracearum ;7,00;infected;paired;252;infected;1
-SRR8689395;Erysiphe cichoracearum ;7,00;infected;paired;252;infected;1
-SRR8689396;Erysiphe cichoracearum ;7,00;infected;paired;252;infected;1
-SRR8689400;Erysiphe cichoracearum ;2,00;control;paired;252;control;0
-SRR8689402;Erysiphe cichoracearum ;2,00;control;paired;252;control;0
-SRR8689407;Erysiphe cichoracearum ;5,00;control;paired;252;control;0
-SRR8689408;Erysiphe cichoracearum ;5,00;control;paired;252;control;0
-SRR8689412;Erysiphe cichoracearum ;7,00;control;paired;252;control;0
-SRR8689414;Erysiphe cichoracearum ;7,00;control;paired;252;control;0
-SRR8689388;Erysiphe cichoracearum ;5,00;infected;paired;252;infected;1
-SRR8689401;Erysiphe cichoracearum ;2,00;control;paired;252;control;0
-SRR8689406;Erysiphe cichoracearum ;5,00;control;paired;252;control;0
-SRR8689413;Erysiphe cichoracearum ;7,00;control;paired;252;control;0
-SRR8800677;Golovinomyces orontii;2,00;control;single;150;control;0
-SRR8800678;Golovinomyces orontii;2,00;control;single;150;control;0
-SRR8800679;Golovinomyces orontii;2,00;control;single;150;control;0
-SRR8800680;Golovinomyces orontii;2,00;control;single;150;control;0
-SRR8800681;Golovinomyces orontii;2,00;control;single;150;control;0
-SRR8800682;Golovinomyces orontii;2,00;control;single;150;control;0
-SRR8800683;Golovinomyces orontii;2,00;control;single;150;control;0
-SRR8800684;Golovinomyces orontii;2,00;control;single;150;control;0
-SRR8800685;Golovinomyces orontii;2,00;control;single;150;control;0
-SRR8800686;Golovinomyces orontii;2,00;control;single;150;control;0
-SRR8800687;Golovinomyces orontii;2,00;control;single;150;control;0
-SRR8800688;Golovinomyces orontii;2,00;control;single;150;control;0
-SRR8800689;Golovinomyces orontii;2,00;control;single;150;control;0
-SRR8800690;Golovinomyces orontii;2,00;control;single;150;control;0
-SRR8800691;Golovinomyces orontii;2,00;control;single;150;control;0
-SRR8800755;Golovinomyces orontii;2,00;infected;single;150;infected;1
-SRR8800754;Golovinomyces orontii;2,00;infected;single;150;infected;1
-SRR8800753;Golovinomyces orontii;2,00;infected;single;150;infected;1
-SRR8800752;Golovinomyces orontii;2,00;infected;single;150;infected;1
-SRR8800751;Golovinomyces orontii;2,00;infected;single;150;infected;1
-SRR8800750;Golovinomyces orontii;2,00;infected;single;150;infected;1
-SRR8800749;Golovinomyces orontii;2,00;infected;single;150;infected;1
-SRR8800748;Golovinomyces orontii;2,00;infected;single;150;infected;1
-SRR8800747;Golovinomyces orontii;2,00;infected;single;150;infected;1
-SRR8800746;Golovinomyces orontii;2,00;infected;single;150;infected;1
-SRR8800745;Golovinomyces orontii;2,00;infected;single;150;infected;1
-SRR8800744;Golovinomyces orontii;2,00;infected;single;150;infected;1
-SRR8800743;Golovinomyces orontii;2,00;infected;single;150;infected;1
-SRR8800742;Golovinomyces orontii;2,00;infected;single;150;infected;1
-SRR8800741;Golovinomyces orontii;2,00;infected;single;150;infected;1
-ERR9604272;Heterodera schachtii 2;3,00;control;single;150;control;0
-ERR9604276;Heterodera schachtii 2;1,00;control;single;150;control;0
-ERR9604277;Heterodera schachtii 2;1,00;control;single;150;control;0
-ERR9604278;Heterodera schachtii 2;1,00;control;single;150;control;0
-ERR9604282;Heterodera schachtii 2;3,00;infected;single;150;Heterodera schachtii;1
-ERR9604283;Heterodera schachtii 2;3,00;control;single;150;control;0
-ERR9604284;Heterodera schachtii 2;3,00;infected;single;150;Heterodera schachtii;1
-ERR9604285;Heterodera schachtii 2;3,00;infected;single;150;Heterodera schachtii;1
-ERR9604289;Heterodera schachtii 2;2,00;infected;single;150;Heterodera schachtii;1
-ERR9604290;Heterodera schachtii 2;2,00;infected;single;150;Heterodera schachtii;1
-ERR9604291;Heterodera schachtii 2;2,00;infected;single;150;Heterodera schachtii;1
-ERR9604294;Heterodera schachtii 2;3,00;control;single;150;control;0
-ERR9604296;Heterodera schachtii 2;1,00;infected;single;150;Heterodera schachtii;1
-ERR9604297;Heterodera schachtii 2;1,00;infected;single;150;Heterodera schachtii;1
-ERR9604298;Heterodera schachtii 2;1,00;infected;single;150;Heterodera schachtii;1
-ERR9604338;Heterodera schachtii 2;2,00;control;single;150;control;0
-ERR9604342;Heterodera schachtii 2;2,00;control;single;150;control;0
-ERR9604343;Heterodera schachtii 2;2,00;control;single;150;control;0
-SRR10030449;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030450;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030451;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030452;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030453;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030454;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030455;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030456;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030457;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030458;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030459;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030460;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030461;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030462;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030463;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030464;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030465;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030466;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030467;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030468;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030469;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030470;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030471;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030472;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030473;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030474;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030475;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030476;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030477;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030478;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030479;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030480;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030481;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030482;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - D-tagatose;1
-SRR10030483;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030484;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030485;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030486;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030487;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030488;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030489;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030490;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030491;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030492;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030493;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030494;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030495;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030496;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030497;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030498;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030499;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030500;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030501;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030502;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030503;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030504;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR10030505;Hyaloperonospora arabidopsidis 3;17,00;infected;single;101;infected - mock solution;1
-SRR12330763;Meloidogyne javanica;3,00;infected;paired;300;infected;1
-SRR12330764;Meloidogyne javanica;3,00;infected;paired;300;infected;1
-SRR12330765;Meloidogyne javanica;3,00;infected;paired;300;infected;1
-SRR12330766;Meloidogyne javanica;3,00;control;paired;300;control;0
-SRR12330767;Meloidogyne javanica;3,00;control;paired;300;control;0
-SRR12330768;Meloidogyne javanica;3,00;control;paired;300;control;0
+ERR7738945;Cauliflower mosaic virus (CaMV);21;infected;paired;150;infected;1
+ERR7738946;Cauliflower mosaic virus (CaMV);21;infected;paired;150;infected;1
+ERR7738947;Cauliflower mosaic virus (CaMV);21;infected;paired;150;infected;1
+ERR7738939;Cauliflower mosaic virus (CaMV);21;control;paired;150;control;0
+ERR7738940;Cauliflower mosaic virus (CaMV);21;control;paired;150;control;0
+ERR7738941;Cauliflower mosaic virus (CaMV);21;control;paired;150;control;0
+SRR8689382;Erysiphe cichoracearum ;2;infected;paired;252;infected;1
+SRR8689383;Erysiphe cichoracearum ;2;infected;paired;252;infected;1
+SRR8689384;Erysiphe cichoracearum ;2;infected;paired;252;infected;1
+SRR8689389;Erysiphe cichoracearum ;5;infected;paired;252;infected;1
+SRR8689390;Erysiphe cichoracearum ;5;infected;paired;252;infected;1
+SRR8689394;Erysiphe cichoracearum ;7;infected;paired;252;infected;1
+SRR8689395;Erysiphe cichoracearum ;7;infected;paired;252;infected;1
+SRR8689396;Erysiphe cichoracearum ;7;infected;paired;252;infected;1
+SRR8689400;Erysiphe cichoracearum ;2;control;paired;252;control;0
+SRR8689402;Erysiphe cichoracearum ;2;control;paired;252;control;0
+SRR8689407;Erysiphe cichoracearum ;5;control;paired;252;control;0
+SRR8689408;Erysiphe cichoracearum ;5;control;paired;252;control;0
+SRR8689412;Erysiphe cichoracearum ;7;control;paired;252;control;0
+SRR8689414;Erysiphe cichoracearum ;7;control;paired;252;control;0
+SRR8689388;Erysiphe cichoracearum ;5;infected;paired;252;infected;1
+SRR8689401;Erysiphe cichoracearum ;2;control;paired;252;control;0
+SRR8689406;Erysiphe cichoracearum ;5;control;paired;252;control;0
+SRR8689413;Erysiphe cichoracearum ;7;control;paired;252;control;0
+SRR8800677;Golovinomyces orontii;2;control;single;150;control;0
+SRR8800678;Golovinomyces orontii;2;control;single;150;control;0
+SRR8800679;Golovinomyces orontii;2;control;single;150;control;0
+SRR8800680;Golovinomyces orontii;2;control;single;150;control;0
+SRR8800681;Golovinomyces orontii;2;control;single;150;control;0
+SRR8800682;Golovinomyces orontii;2;control;single;150;control;0
+SRR8800683;Golovinomyces orontii;2;control;single;150;control;0
+SRR8800684;Golovinomyces orontii;2;control;single;150;control;0
+SRR8800685;Golovinomyces orontii;2;control;single;150;control;0
+SRR8800686;Golovinomyces orontii;2;control;single;150;control;0
+SRR8800687;Golovinomyces orontii;2;control;single;150;control;0
+SRR8800688;Golovinomyces orontii;2;control;single;150;control;0
+SRR8800689;Golovinomyces orontii;2;control;single;150;control;0
+SRR8800690;Golovinomyces orontii;2;control;single;150;control;0
+SRR8800691;Golovinomyces orontii;2;control;single;150;control;0
+SRR8800755;Golovinomyces orontii;2;infected;single;150;infected;1
+SRR8800754;Golovinomyces orontii;2;infected;single;150;infected;1
+SRR8800753;Golovinomyces orontii;2;infected;single;150;infected;1
+SRR8800752;Golovinomyces orontii;2;infected;single;150;infected;1
+SRR8800751;Golovinomyces orontii;2;infected;single;150;infected;1
+SRR8800750;Golovinomyces orontii;2;infected;single;150;infected;1
+SRR8800749;Golovinomyces orontii;2;infected;single;150;infected;1
+SRR8800748;Golovinomyces orontii;2;infected;single;150;infected;1
+SRR8800747;Golovinomyces orontii;2;infected;single;150;infected;1
+SRR8800746;Golovinomyces orontii;2;infected;single;150;infected;1
+SRR8800745;Golovinomyces orontii;2;infected;single;150;infected;1
+SRR8800744;Golovinomyces orontii;2;infected;single;150;infected;1
+SRR8800743;Golovinomyces orontii;2;infected;single;150;infected;1
+SRR8800742;Golovinomyces orontii;2;infected;single;150;infected;1
+SRR8800741;Golovinomyces orontii;2;infected;single;150;infected;1
+ERR9604272;Heterodera schachtii 2;3;control;single;150;control;0
+ERR9604276;Heterodera schachtii 2;1;control;single;150;control;0
+ERR9604277;Heterodera schachtii 2;1;control;single;150;control;0
+ERR9604278;Heterodera schachtii 2;1;control;single;150;control;0
+ERR9604282;Heterodera schachtii 2;3;infected;single;150;Heterodera schachtii;1
+ERR9604283;Heterodera schachtii 2;3;control;single;150;control;0
+ERR9604284;Heterodera schachtii 2;3;infected;single;150;Heterodera schachtii;1
+ERR9604285;Heterodera schachtii 2;3;infected;single;150;Heterodera schachtii;1
+ERR9604289;Heterodera schachtii 2;2;infected;single;150;Heterodera schachtii;1
+ERR9604290;Heterodera schachtii 2;2;infected;single;150;Heterodera schachtii;1
+ERR9604291;Heterodera schachtii 2;2;infected;single;150;Heterodera schachtii;1
+ERR9604294;Heterodera schachtii 2;3;control;single;150;control;0
+ERR9604296;Heterodera schachtii 2;1;infected;single;150;Heterodera schachtii;1
+ERR9604297;Heterodera schachtii 2;1;infected;single;150;Heterodera schachtii;1
+ERR9604298;Heterodera schachtii 2;1;infected;single;150;Heterodera schachtii;1
+ERR9604338;Heterodera schachtii 2;2;control;single;150;control;0
+ERR9604342;Heterodera schachtii 2;2;control;single;150;control;0
+ERR9604343;Heterodera schachtii 2;2;control;single;150;control;0
+SRR10030449;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030450;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030451;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030452;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030453;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030454;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030455;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030456;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030457;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030458;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030459;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030460;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030461;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030462;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030463;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030464;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030465;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030466;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030467;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030468;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030469;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030470;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030471;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030472;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030473;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030474;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030475;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030476;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030477;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030478;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030479;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030480;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030481;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030482;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;1
+SRR10030483;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030484;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030485;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030486;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030487;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030488;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030489;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030490;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030491;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030492;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030493;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030494;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030495;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030496;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030497;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030498;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030499;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030500;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030501;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030502;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030503;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030504;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR10030505;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;1
+SRR12330763;Meloidogyne javanica;3;infected;paired;300;infected;1
+SRR12330764;Meloidogyne javanica;3;infected;paired;300;infected;1
+SRR12330765;Meloidogyne javanica;3;infected;paired;300;infected;1
+SRR12330766;Meloidogyne javanica;3;control;paired;300;control;0
+SRR12330767;Meloidogyne javanica;3;control;paired;300;control;0
+SRR12330768;Meloidogyne javanica;3;control;paired;300;control;0
 SRR7811358;Plasmodiophora brassicae;24;infected;paired;202;infected;1
 SRR7811359;Plasmodiophora brassicae;20;infected;paired;202;infected;1
 SRR7811360;Plasmodiophora brassicae;20;infected;paired;202;infected;1
@@ -219,48 +219,48 @@ SRR24657703;Turnip mosaic virus (TuMV) 3;14;infected;paired;300;Naïve TuMV infe
 ERR7738942;Turnip yellows virus (TuYV);14;infected;paired;150;infected;1
 ERR7738943;Turnip yellows virus (TuYV);14;infected;paired;150;infected;1
 ERR7738944;Turnip yellows virus (TuYV);14;infected;paired;150;infected;1
-SRR30606508;Botrytis cinerea;0,50;infected;paired;300;infected;1
+SRR30606508;Botrytis cinerea;0,5;infected;paired;300;infected;1
 SRR30606509;Botrytis cinerea;0,25;infected;paired;300;infected;1
 SRR30606510;Botrytis cinerea;0,25;infected;paired;300;infected;1
 SRR30606511;Botrytis cinerea;0,25;infected;paired;300;infected;1
-SRR30606517;Botrytis cinerea;4,00;infected;paired;300;infected;1
-SRR30606518;Botrytis cinerea;4,00;infected;paired;300;infected;1
-SRR30606519;Botrytis cinerea;4,00;infected;paired;300;infected;1
-SRR30606520;Botrytis cinerea;3,00;infected;paired;300;infected;1
-SRR30606521;Botrytis cinerea;0,00;control;paired;300;control;0
-SRR30606522;Botrytis cinerea;3,00;infected;paired;300;infected;1
-SRR30606523;Botrytis cinerea;3,00;infected;paired;300;infected;1
-SRR30606524;Botrytis cinerea;2,00;infected;paired;300;infected;1
-SRR30606525;Botrytis cinerea;2,00;infected;paired;300;infected;1
-SRR30606526;Botrytis cinerea;2,00;infected;paired;300;infected;1
-SRR30606527;Botrytis cinerea;1,00;infected;paired;300;infected;1
-SRR30606528;Botrytis cinerea;1,00;infected;paired;300;infected;1
-SRR30606529;Botrytis cinerea;1,00;infected;paired;300;infected;1
-SRR30606530;Botrytis cinerea;0,50;infected;paired;300;infected;1
-SRR30606531;Botrytis cinerea;0,50;infected;paired;300;infected;1
-SRR30606532;Botrytis cinerea;0,00;control;paired;300;control;0
-SRR30606533;Botrytis cinerea;0,00;control;paired;300;control;0
-SRR18568313;Alternaria brassicae;10,00;control;single;100;control;0
-SRR18568314;Alternaria brassicae;10,00;control;single;100;control;0
-SRR18568315;Alternaria brassicae;10,00;control;single;100;control;0
-SRR18568316;Alternaria brassicae;6,00;control;single;100;control;0
-SRR18568317;Alternaria brassicae;6,00;control;single;100;control;0
-SRR18568318;Alternaria brassicae;6,00;control;single;100;control;0
-SRR18568319;Alternaria brassicae;3,00;control;single;100;control;0
-SRR18568320;Alternaria brassicae;3,00;control;single;100;control;0
-SRR18568321;Alternaria brassicae;3,00;control;single;100;control;0
-SRR18568322;Alternaria brassicae;10,00;infected;single;100;Abra43;1
-SRR18568323;Alternaria brassicae;10,00;infected;single;100;Abra43;1
-SRR18568324;Alternaria brassicae;10,00;infected;single;100;Abra43;1
-SRR18568325;Alternaria brassicae;6,00;infected;single;100;Abra43;1
-SRR18568326;Alternaria brassicae;6,00;infected;single;100;Abra43;1
-SRR18568327;Alternaria brassicae;6,00;infected;single;100;Abra43;1
-SRR18568328;Alternaria brassicae;3,00;infected;single;100;Abra43;1
-SRR18568329;Alternaria brassicae;3,00;infected;single;100;Abra43;1
-SRR18568330;Alternaria brassicae;3,00;infected;single;100;Abra43;1
-SRR24107301;Drought;0,00;infected;paired;202;salinity (mannitol);1
-SRR24107302;Drought;0,00;infected;paired;202;salinity (mannitol);1
-SRR24107303;Drought;0,00;infected;paired;202;drought (NaCl);1
-SRR24107304;Drought;0,00;infected;paired;202;drought (NaCl);1
-SRR24107305;Drought;0,00;control;paired;202;control;0
-SRR24107306;Drought;0,00;control;paired;202;control;0
+SRR30606517;Botrytis cinerea;4;infected;paired;300;infected;1
+SRR30606518;Botrytis cinerea;4;infected;paired;300;infected;1
+SRR30606519;Botrytis cinerea;4;infected;paired;300;infected;1
+SRR30606520;Botrytis cinerea;3;infected;paired;300;infected;1
+SRR30606521;Botrytis cinerea;0;control;paired;300;control;0
+SRR30606522;Botrytis cinerea;3;infected;paired;300;infected;1
+SRR30606523;Botrytis cinerea;3;infected;paired;300;infected;1
+SRR30606524;Botrytis cinerea;2;infected;paired;300;infected;1
+SRR30606525;Botrytis cinerea;2;infected;paired;300;infected;1
+SRR30606526;Botrytis cinerea;2;infected;paired;300;infected;1
+SRR30606527;Botrytis cinerea;1;infected;paired;300;infected;1
+SRR30606528;Botrytis cinerea;1;infected;paired;300;infected;1
+SRR30606529;Botrytis cinerea;1;infected;paired;300;infected;1
+SRR30606530;Botrytis cinerea;0,5;infected;paired;300;infected;1
+SRR30606531;Botrytis cinerea;0,5;infected;paired;300;infected;1
+SRR30606532;Botrytis cinerea;0;control;paired;300;control;0
+SRR30606533;Botrytis cinerea;0;control;paired;300;control;0
+SRR18568313;Alternaria brassicae;10;control;single;100;control;0
+SRR18568314;Alternaria brassicae;10;control;single;100;control;0
+SRR18568315;Alternaria brassicae;10;control;single;100;control;0
+SRR18568316;Alternaria brassicae;6;control;single;100;control;0
+SRR18568317;Alternaria brassicae;6;control;single;100;control;0
+SRR18568318;Alternaria brassicae;6;control;single;100;control;0
+SRR18568319;Alternaria brassicae;3;control;single;100;control;0
+SRR18568320;Alternaria brassicae;3;control;single;100;control;0
+SRR18568321;Alternaria brassicae;3;control;single;100;control;0
+SRR18568322;Alternaria brassicae;10;infected;single;100;Abra43;1
+SRR18568323;Alternaria brassicae;10;infected;single;100;Abra43;1
+SRR18568324;Alternaria brassicae;10;infected;single;100;Abra43;1
+SRR18568325;Alternaria brassicae;6;infected;single;100;Abra43;1
+SRR18568326;Alternaria brassicae;6;infected;single;100;Abra43;1
+SRR18568327;Alternaria brassicae;6;infected;single;100;Abra43;1
+SRR18568328;Alternaria brassicae;3;infected;single;100;Abra43;1
+SRR18568329;Alternaria brassicae;3;infected;single;100;Abra43;1
+SRR18568330;Alternaria brassicae;3;infected;single;100;Abra43;1
+SRR24107301;Drought;0;infected;paired;202;salinity (mannitol);1
+SRR24107302;Drought;0;infected;paired;202;salinity (mannitol);1
+SRR24107303;Drought;0;infected;paired;202;drought (NaCl);1
+SRR24107304;Drought;0;infected;paired;202;drought (NaCl);1
+SRR24107305;Drought;0;control;paired;202;control;0
+SRR24107306;Drought;0;control;paired;202;control;0

@@ -57,27 +57,11 @@ Identify some sort of similarity measurement between pairs of genes -> represent
 ```{r}
 allowWGCNAThreads()
 
-spt <- pickSoftThreshold(input_mat)
-spt
-
 # other method: set of soft-thresholding powers
 powers = c(c(1:10), seq(from = 12, to = 20, by = 2))
 sft <- pickSoftThreshold(input_mat, powerVector = powers, verbose = 5)
 ```
-```{r}
-par(mar=c(1,1,1,1))
-plot(spt$fitIndices[,1],spt$fitIndices[,2],
-xlab="Soft Threshold (power)",ylab="Scale Free Topology Model Fit,signed R^2",type="n",
-main = paste("Scale independence"))
-text(spt$fitIndices[,1],spt$fitIndices[,2],col="red")
-abline(h=0.80,col="red")
 
-par(mar=c(1,1,1,1))
-plot(spt$fitIndices[,1], spt$fitIndices[,5],
-xlab="Soft Threshold (power)",ylab="Mean Connectivity", type="n",
-main = paste("Mean connectivity"))
-text(spt$fitIndices[,1], spt$fitIndices[,5], labels= spt$fitIndices[,1],col="red")
-```
 ```{r}
 sizeGrWindow(9,5)
 par(mfrow = c(1,2));
@@ -92,7 +76,7 @@ text(sft$fitIndices[, 1],
      -sign(sft$fitIndices[, 3]) * sft$fitIndices[, 2],
      labels = powers, cex = cex1, col = "red");
 
-abline(h = 0.80, col = "red")
+abline(h = 0.90, col = "red")
 plot(sft$fitIndices[, 1],
      sft$fitIndices[, 5],
      xlab = "Soft Threshold (power)",
@@ -106,7 +90,6 @@ text(sft$fitIndices[, 1],
      cex = cex1, col = "red")
 ```
 
-pick threshold 4 ??
 
 look at grey modules, number of modules, connectivity
 
@@ -199,7 +182,9 @@ plotDendroAndColors(geneTree,
 ```{r}
 TOMplot(TOM.dissimilarity, geneTree, mergedColors)
 ```
+
 WGCNA in one step:
+
 ```{r}
 picked_power = 9
 temp_cor <- cor       
@@ -237,10 +222,71 @@ cor <- temp_cor
 1. relate the network to external traits (meta Info)
 2. calculate the correlation of a trait of interest with previously identified module eigengenes --> gene significance
 
+eigengene = summary profile for each module
+--> correlate eigengenes with external traits and look for the most significant associations
+
+```{r}
+# Define numbers of genes and samples
+nGenes = ncol(input_mat);
+nSamples = nrow(input_mat);
+# Recalculate MEs with color labels
+MEs0 = moduleEigengenes(input_mat, moduleColors)$eigengenes
+MEs = orderMEs(MEs0)
+moduleTraitCor = cor(MEs, metaData, use = "p");
+moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
+```
+
+```{r}
+sizeGrWindow(10,6)
+# sill display correlations and their p-values
+textMatrix = paste(signif(moduleTraitCor, 2), "\n(",
+                   signif(moduleTraitPvalue, 1), ")", sep = "");
+
+dim(textMatrix) = dim(moduleTraitCor)
+par(mar = c(6, 8.5, 3, 3));
+# Display the correlation values within a heatmap plot
+
+labeledHeatmap(Matrix = moduleTraitCor,
+               xLabels = names(metaData),
+               yLabels = names(MEs),
+               ySymbols = names(MEs),
+               colorLabels = FALSE,
+               colors = greenWhiteRed(50),
+               textMatrix = textMatrix,
+               setStdMargins = FALSE,
+               cex.text = 0.5,
+               zlim = c(-1,1),
+               main = paste("Module-trait relationships"))
+```
+
+We quantify associations of individual genes with our trait of interest (weight) by defining Gene Significance GS as
+(the absolute value of) the correlation between the gene and the trait. For each module, we also define a quantitative
+measure of module membership MM as the correlation of the module eigengene and the gene expression profile. This
+allows us to quantify the similarity of all genes on the array to every module.
+
+```{r}
+# Define variable weight containing the weight column of datTrait
+weight = as.data.frame(datTraits$weight_g);
+names(weight) = "weight"
+# names (colors) of the modules
+modNames = substring(names(MEs), 3)
+geneModuleMembership = as.data.frame(cor(datExpr, MEs, use = "p"));
+MMPvalue = as.data.frame(corPvalueStudent(as.matrix(geneModuleMembership), nSamples));
+```
+
 ### Target Gene Identification
 1. use gene significance along with the genes intramodular connectivity to identify potential target genes associated with a particular trait of interest
 
 ### Network Visualization of Eigengenes
 1. study the relationship among found modules
 2. quantify module similarity by calculating the pairwise correlation of representative eigengenes
+
+
+### Network analysis with functional annotation and gene ontology
+--> export a list of gene identifiers that can be used as input for Mercator OR
+Enrichment analysis directly within R:
+
+-> organism-specific package: Genome wide annotaation for Arabidopsis: org.At.tair.db
+
+
 

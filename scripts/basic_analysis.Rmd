@@ -25,7 +25,7 @@ library(tidyr)
 Kallisto alignment result: 
 
 ```{r}
-kallisto_alignment_summary <- read.csv('~/Studium/Bachelor thesis/kallisto_alignment_summary.csv')
+kallisto_alignment_summary <- read.csv('~/Studium/bachelor-thesis-luisa/scripts/kallisto_alignment_summary.csv')
 poor_alignment_threshold <- 2500000
 kallisto_alignment_summary$alignment_status <- ifelse(kallisto_alignment_summary$n_pseudoaligned < poor_alignment_threshold, "Poor", "Good")
 
@@ -61,12 +61,15 @@ counts_raw <- counts_raw[, order(colnames(counts_raw))] # transcripts
 
 counts_tpm <- read.csv('~/Studium/Bachelor thesis/bachelor-thesis-luisa/count_tables/counts_tpm_tx.csv', row.names = 1)
 counts_tpm <- counts_tpm[, order(colnames(counts_tpm))] # transcripts
+```
 
-counts_geneID <- read.csv('~/Studium/bachelor-thesis-luisa/count_tables/counts_genelevel.csv', row.names = 1)
+
+```{r count tables}
+counts_geneID <- read.csv('~/Studium/bachelor-thesis-luisa/count_tables/counts_genelev_corrected.csv', row.names = 1)
 duplicates <- c("ERR7738945.1", "ERR7738946.1", "ERR7738947.1")
 counts_geneID <- counts_geneID[,!names(counts_geneID) %in% duplicates] # genelevels
 
-counts_genelev_tpm <- read.csv('~/Studium/bachelor-thesis-luisa/count_tables/counts_tpm_abundance.csv', row.names = 1)
+counts_genelev_tpm <- read.csv('~/Studium/bachelor-thesis-luisa/count_tables/counts_tpm_abundance2.csv', row.names = 1)
 counts_genelev_tpm <- counts_genelev_tpm[,!names(counts_genelev_tpm) %in% duplicates] # genelevel tpm
 
 counts_lengthscaledTPM <- read.csv('~/Studium/bachelor-thesis-luisa/count_tables/counts_lengthscaledTPM.csv', row.names = 1) # counts scaled with lenghtscaledTPM
@@ -89,8 +92,8 @@ experiment_to_drop <- 'Hyaloperonospora arabidopsidis 2'
 to_drop <- meta_info[meta_info$Experiment == experiment_to_drop, ]$Run
 hpa2 <- c("SRR22565219","SRR22565220","SRR22565221","SRR22565222","SRR22565223","SRR22565224","SRR22565225","SRR22565226","SRR22565227","SRR22565228","SRR22565229","SRR22565230","SRR22565231","SRR22565232","SRR22565233","SRR22565234","SRR22565235","SRR22565236")
 
-meta_info <- meta_info[!meta_info$Run %in% to_drop,]
-meta_info_general <- meta_info_general[!meta_info_general$Run %in% to_drop,]
+#meta_info <- meta_info[!meta_info$Run %in% to_drop,]
+#meta_info_general <- meta_info_general[!meta_info_general$Run %in% to_drop,]
 counts_geneID <- counts_geneID[, !names(counts_geneID) %in% hpa2]
 counts_genelev_tpm <- counts_genelev_tpm[, !names(counts_genelev_tpm) %in% hpa2]
 ```
@@ -99,8 +102,7 @@ Filter low expressed genes (with tpm values (genelevel tpm)):
 
 Result: 
 - before filtering: 27321 genes
-- after filtering: 19017 genes
-24994 genes
+- after filtering: 24991 genes
 
 if tiniest dataset with contrast, is 3 samples, then
 --> keep genes that have at least 0.5 TPM per sample in at least 3 samples.
@@ -119,15 +121,15 @@ counts_genelev_filtered <- counts_geneID[keep,]
 VST on filtered gene count table:
 
 ```{r}
-counts_genelev_filtered <- counts_genelev_filtered[, !names(counts_genelev_filtered) %in% hpa2]
+#counts_genelev_filtered <- counts_genelev_filtered[, !names(counts_genelev_filtered) %in% hpa2]
 dds_genelev_filtered <- DESeqDataSetFromMatrix(countData = round(counts_genelev_filtered),
-                              colData = meta_info_general,
+                              colData = metaData,
                               design = ~Experiment + infected.control)
 
-dds_genelev_filtered <- DESeq(dds_genelev_filtered)
+#dds_genelev_filtered <- DESeq(dds_genelev_filtered)
 #dds_filtered <- estimateDispersions(dds_filtered)
 vsd_genelev_filtered <- varianceStabilizingTransformation(dds_genelev_filtered, blind = FALSE)
-vsd_genelev_filtered_data <- getVarianceStabilizedData(dds_genelev_filtered)
+#vsd_genelev_filtered_data <- getVarianceStabilizedData(dds_genelev_filtered)
 ```
 
 
@@ -193,7 +195,7 @@ pca_data_filtered <- data.frame(Sample = rownames(pca_filtered$x),
                        PC1 = pca_filtered$x[, 1], 
                        PC2 = pca_filtered$x[, 2], 
                        PC3 = pca_filtered$x[, 3], 
-                       PC4 = pca_filtered$x[, 4]) %>% merge(meta_info_general, by.x = "Sample", by.y = "Run")
+                       PC4 = pca_filtered$x[, 4]) %>% merge(metaData, by.x = "Sample", by.y = "Run")
 ```
 
 

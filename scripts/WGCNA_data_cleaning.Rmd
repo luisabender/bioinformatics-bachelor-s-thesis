@@ -3,6 +3,9 @@ title: "Data cleaning & preprocessing"
 output: html_document
 date: "2025-01-27"
 ---
+```{r}
+library(WGCNA)
+```
 
 ```{r}
 # load expression data
@@ -36,16 +39,19 @@ Loading meta data:
 
 ```{r}
 metaData <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData.csv", sep=";")
-metaData_num <- metaData[,c(1,3,8)]
+metaData$Timepoint_dpi <- metaData$Timepoint..dpi.
+metaData$infected_control <- metaData$infected.control.num
+metaData_num <- metaData[,c(1,9,10)]
 
 samples = rownames(input_mat)
-metaRows = match(samples, metaData$Run)
-metData = metaData[metaRows, -1]
-rownames(metData) <- metaData[metaRows, 1]
+metaRows = match(samples, metaData_num$Run)
+metData = metaData_num[metaRows, -1]
+rownames(metData) <- metaData_num[metaRows, 1]
+metData$Timepoint_dpi <- as.numeric(metData$Timepoint_dpi)
 
 # visualize how the clinical traits relate to the sample dendrogram
-sampleTree2 <- hclust(dist(expr_data), method = "average")
-metaColors <- numbers2colors(as.numeric(metaData_num), signed = FALSE)
-plotDendroAndColors(sampleTree2, metaColors, groupLabels = names(metaData), main = "Sample dendrogram and metadata heatmap")
+sampleTree2 <- hclust(dist(input_mat), method = "average")
+metaColors <- numbers2colors(metData, signed = FALSE)
+plotDendroAndColors(sampleTree2, metaColors, groupLabels = names(metData), main = "Sample dendrogram and metadata heatmap")
 ```
 
