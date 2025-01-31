@@ -1,9 +1,8 @@
 #!/bin/bash
 #unless you are running a parallelized task and know what you're doing, ntasks remain 1, modify the next lines to your task.
 #SBATCH --ntasks=1
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=112
 #SBATCH --mem=55G
-#SBATCH --time=2:00:00
 #SBATCH --job-name=preprocessing
 #SBATCH --mail-user=luisa.bender@tum.de
 #SBATCH --mail-type=ALL
@@ -14,8 +13,9 @@
 #SBATCH -e /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/slurm_preprocessing/%x.%j.%a.err
  
 #This is where you allocate some of cluster specific parameters.
-#SBATCH --clusters=serial
-#SBATCH --partition=serial_long
+#SBATCH --clusters=cm4
+#SBATCH --partition=cm4_tiny
+#SBATCH --qos=cm4_tiny
 
 set -e
 set -u

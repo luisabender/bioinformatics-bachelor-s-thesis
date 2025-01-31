@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the root directories for single and paired alignments
-ROOT_DIRS=("/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/kallisto_single" "/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/kallisto_paired")
+ROOT_DIR="/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/kallisto_paired"
 
 # Output file
 OUTPUT_FILE="kallisto_alignment_summary.csv"
@@ -10,7 +10,7 @@ OUTPUT_FILE="kallisto_alignment_summary.csv"
 echo "sample_ID,p_pseudoaligned,n_pseudoaligned, n_processed" > "$OUTPUT_FILE"
 
 # Loop through the root directories
-for ROOT_DIR in "${ROOT_DIRS[@]}"; do
+#for ROOT_DIR in "${ROOT_DIRS[@]}"; do
     # Find all run_info.json files in the directory
     find "$ROOT_DIR" -type f -name "run_info.json" | while read -r JSON_FILE; do
         # Extract the sample name from the file path
@@ -24,4 +24,4 @@ for ROOT_DIR in "${ROOT_DIRS[@]}"; do
         # Append the results to the output file
         echo "$SAMPLE_NAME,$P_PSEUDOALIGNED,$N_PSEUDOALIGNED, $N_PROCESSED" >> "$OUTPUT_FILE"
     done
-done
+#done

@@ -1,10 +1,11 @@
 #!/bin/bash
 #SBATCH --nodes=1
-#SBATCH --cpus-per-task=8
+#SBATCH --cpus-per-task=112
 #SBATCH --mem=50G
 #SBATCH --job-name=kallisto_single
-#SBATCH --clusters=serial
-#SBATCH --partition=serial_long
+#SBATCH --clusters=cm4
+#SBATCH --partition=cm4_tiny
+#SBATCH --qos=cm4_tiny
 #SBATCH --get-user-env
 #SBATCH -o /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/slurm_kallisto_single/%x.%j.%a.out
 #SBATCH -e /dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/slurm_kallisto_single/%x.%j.%a.err
@@ -16,7 +17,7 @@ source /dss/dsshome1/0A/ge58rom2/miniconda3/bin/activate bio_env
 module load parallel/20220522
  
 base_dir="/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa"
-sample_file="$base_dir/trimmed_files/sample_single.paths"
+sample_file="$base_dir/trimmed_files/missing/sample_single.paths"
  
 # Check if sample file exists
 if [[ ! -f $sample_file ]]; then
@@ -24,7 +25,7 @@ if [[ ! -f $sample_file ]]; then
     exit 1
 fi
  
-output_base="$base_dir/kallisto_single"
+output_base="$base_dir/kallisto_single/missing"
 mkdir -p "$output_base"
  
 # Number of parallel tasks to run (adjust this to control parallelism)

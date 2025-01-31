@@ -21,6 +21,6 @@ tx2gene <- data.frame(TXNAME = tx2gene[, 2], GENEID = tx2gene[, 1], stringsAsFac
 tx2gene <- tx2gene[,c("GENEID", "TXNAME")]
 
 # tximport
-txi.kallisto <- tximport(files, type = "kallisto", tx2gene = tx2gene, ignoreTxVersion = TRUE, countsFromAbundance = "lengthScaledTPM")
-write.csv(txi.kallisto$counts, "counts_lengthscaledTPM.csv")
+txi.kallisto <- tximport(files, type = "kallisto", tx2gene = tx2gene, ignoreTxVersion = TRUE)
+write.csv(txi.kallisto$counts, "counts_genelev_corrected.csv")
 write.csv(txi.kallisto$abundance, "counts_tpm_abundance.csv")
