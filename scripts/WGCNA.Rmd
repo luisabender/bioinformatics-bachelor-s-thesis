@@ -76,7 +76,7 @@ text(sft$fitIndices[, 1],
      -sign(sft$fitIndices[, 3]) * sft$fitIndices[, 2],
      labels = powers, cex = cex1, col = "red");
 
-abline(h = 0.90, col = "red")
+abline(h = 0.9, col = "red")
 plot(sft$fitIndices[, 1],
      sft$fitIndices[, 5],
      xlab = "Soft Threshold (power)",
@@ -93,11 +93,32 @@ text(sft$fitIndices[, 1],
 
 look at grey modules, number of modules, connectivity
 
+Run WGCNA_netconstr.R on the cluster.
+Results for different soft powers:
+
 ```{r}
-# adjacency with soft threshold 4
-softPower <- 8
-adjacency <- adjacency(input_mat, power = softPower)
+# network construction with soft power 4
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow6.RData')
+moduleColors_pow6 <- mergedColors
+MEs_pow6 <- mergedMEs
+geneTree_pow6 <- geneTree
+
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow7.RData')
+moduleColors_pow7 <- mergedColors
+MEs_pow7 <- mergedMEs
+geneTree_pow7 <- geneTree
+
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow5.RData')
+moduleColors_pow5 <- mergedColors
+MEs_pow5 <- mergedMEs
+geneTree_pow5 <- geneTree
+
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow8.RData')
+moduleColors_pow8 <- mergedColors
+MEs_pow8 <- mergedMEs
+geneTree_pow8 <- geneTree
 ```
+
 
 
 ### Module construction
@@ -108,28 +129,31 @@ adjacency <- adjacency(input_mat, power = softPower)
 
 ```{r}
 # Topological Overlap Matrix
-TOM.dissimilarity <- 1-TOMsimilarity(adjacency)
+#TOM.dissimilarity <- 1-TOMsimilarity(adjacency)
 ```
 
 ```{r}
 # Hierarchical Clustering Analysis
 
 # creating the dendrogram
-geneTree <- hclust(as.dist(TOM.dissimilarity), method = "average")
+#geneTree <- hclust(as.dist(TOM.dissimilarity), method = "average")
 # plotting
 sizeGrWindow(12,9)
-plot(geneTree, xlab="", sub="", main = "Gene clustering on TOM-based dissimilarity", 
+plot(geneTree_pow6, xlab="", sub="", main = "Gene clustering on TOM-based dissimilarity", 
 labels = FALSE, hang = 0.04)
 
 # start with minimum module size 30 as recommended by the authors of WGCNA
-Modules <- cutreeDynamic(dendro = geneTree, distM = TOM.dissimilarity, deepSplit = 2, pamRespectsDendro = FALSE, minClusterSize = 30)
-table(Modules) # 25 modules created
-ModuleColors <- labels2colors(Modules) # assigns each module number a color
-write.csv(table(ModuleColors), "ModuleColors_sp8.csv") # returns the counts for each color (aka the number of genes within each module)
+#Modules <- cutreeDynamic(dendro = geneTree, distM = TOM.dissimilarity, deepSplit = 2, pamRespectsDendro = FALSE, minClusterSize = 30)
+table(moduleColors_pow6) # 25 modules created
+#ModuleColors <- labels2colors(Modules) # assigns each module number a color
+#write.csv(table(ModuleColors), "ModuleColors_sp8.csv") # returns the counts for each color (aka the number of genes within each module)
+```
 
+
+```{r}
 # plots the gene dendrogram with the module colors
-plotDendroAndColors(geneTree, 
-                    ModuleColors,
+plotDendroAndColors(geneTree_pow6, 
+                    moduleColors_pow6,
                     "Module",
                     dendroLabels = FALSE, 
                     hang = 0.03,
@@ -137,11 +161,12 @@ plotDendroAndColors(geneTree,
                     guideHang = 0.05,
                     main = "Gene dendrogram and module colors")
 ```
+
 ```{r}
 # Module Eigengene Identification
-MElist <- moduleEigengenes(input_mat, colors = ModuleColors)
-MEs <- MElist$eigengenes
-head(MEs)
+#MElist <- moduleEigengenes(input_mat, colors = ModuleColors)
+#MEs <- MElist$eigengenes
+head(MEs_pow6)
 ```
 
 
@@ -159,6 +184,7 @@ par(cex = 0.6);#scaling the graphic
 plot(METree)
 abline(h=.25, col = "red") #a height of .25 corresponds to correlation of .75
 ```
+
 ```{r}
 merge <- mergeCloseModules(input_mat, ModuleColors, cutHeight = 0.25)
 
@@ -167,6 +193,7 @@ mergedColors <- merge$colors
 # eigengenes of the new merged modules
 mergedMEs <- merge$newMEs
 ```
+
 ```{r}
 # plot dendrogram of original and merged module colors
 plotDendroAndColors(geneTree, 
@@ -217,6 +244,29 @@ netwk <- blockwiseModules(input_mat,                # <= input here
 cor <- temp_cor
 ```
 
+```{r}
+# network construction with soft power 6
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow6.RData')
+moduleColors_pow6 <- mergedColors
+MEs_pow6 <- mergedMEs
+geneTree_pow6 <- geneTree
+
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow7.RData')
+moduleColors_pow7 <- mergedColors
+MEs_pow7 <- mergedMEs
+geneTree_pow7 <- geneTree
+
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow5.RData')
+moduleColors_pow5 <- mergedColors
+MEs_pow5 <- mergedMEs
+geneTree_pow5 <- geneTree
+
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow8.RData')
+moduleColors_pow8 <- mergedColors
+MEs_pow8 <- mergedMEs
+geneTree_pow8 <- geneTree
+```
+
 
 ### External Trait Matching
 1. relate the network to external traits (meta Info)
@@ -229,25 +279,38 @@ eigengene = summary profile for each module
 # Define numbers of genes and samples
 nGenes = ncol(input_mat);
 nSamples = nrow(input_mat);
+picked_module_colors = moduleColors_pow6
+
+#library(caret)
+# create meta data table with pathogens as columns
+dummyVarsObject <- dummyVars(~ pathogen_abbr, data = metaData)
+metaData_num2 <- cbind(metaData, predict(dummyVarsObject, newdata = metaData))
+metaData_num2 <- metaData_num2[,-c(9,10)]
+
 # Recalculate MEs with color labels
-MEs0 = moduleEigengenes(input_mat, moduleColors)$eigengenes
+MEs0 = moduleEigengenes(input_mat, picked_module_colors)$eigengenes
 MEs = orderMEs(MEs0)
-moduleTraitCor = cor(MEs, metaData, use = "p");
+
+# rest meta info
+moduleTraitCor = cor(MEs, metaData_num[,-1], use = "p"); # pearson correlation
 moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
+
+# calculate correlation based on pathogens
+moduleTraitCor_path = cor(MEs, metaData_num2[, grep("pathogen_abbr", colnames(metaData_num2))], use = "p") 
+moduleTraitPvalue_path = corPvalueStudent(moduleTraitCor, nSamples)
 ```
 
 ```{r}
 sizeGrWindow(10,6)
-# sill display correlations and their p-values
 textMatrix = paste(signif(moduleTraitCor, 2), "\n(",
-                   signif(moduleTraitPvalue, 1), ")", sep = "");
+                   signif(moduleTraitPvalue, 1), ")", sep = "")
 
 dim(textMatrix) = dim(moduleTraitCor)
-par(mar = c(6, 8.5, 3, 3));
-# Display the correlation values within a heatmap plot
+par(mar = c(6, 8.5, 3, 3))
 
+# plot meta info
 labeledHeatmap(Matrix = moduleTraitCor,
-               xLabels = names(metaData),
+               xLabels = names(metaData_num[,-1]),
                yLabels = names(MEs),
                ySymbols = names(MEs),
                colorLabels = FALSE,
@@ -257,12 +320,55 @@ labeledHeatmap(Matrix = moduleTraitCor,
                cex.text = 0.5,
                zlim = c(-1,1),
                main = paste("Module-trait relationships"))
+
+# plot pathogens
+textMatrix_path = paste(signif(moduleTraitCor_path, 2), "\n(",
+                   signif(moduleTraitPvalue_path, 1), ")", sep = "")
+
+dim(textMatrix_path) = dim(moduleTraitCor_path)
+par(mar = c(6, 8.5, 3, 3))
+
+labeledHeatmap(Matrix = moduleTraitCor_path,
+               xLabels = colnames(metaData_num2[, grep("pathogen_abbr", colnames(metaData_num2))]) %>% gsub("pathogen_abbr", "", .),
+               yLabels = names(MEs),
+               ySymbols = names(MEs),
+               colorLabels = FALSE,
+               colors = greenWhiteRed(50),
+               textMatrix = textMatrix_path,
+               setStdMargins = FALSE,
+               cex.text = 0.5,
+               zlim = c(-1,1),
+               main = paste("Module-trait relationships with Pathogens"))
 ```
 
-We quantify associations of individual genes with our trait of interest (weight) by defining Gene Significance GS as
-(the absolute value of) the correlation between the gene and the trait. For each module, we also define a quantitative
-measure of module membership MM as the correlation of the module eigengene and the gene expression profile. This
-allows us to quantify the similarity of all genes on the array to every module.
+```{r}
+module_order = names(MEs0) %>% gsub("ME","", .)
+# add experiment to data
+MEs0$treatment = row.names(MEs0)
+MEs0 <- merge(MEs0,metaData, by.x = "treatment", by.y = "Run", all = TRUE)
+
+# plot data
+mME = MEs0 %>%
+  pivot_longer(-c(treatment, Timepoint_dpi, infected.control.num, infection, infected_control, single_paired, avgSpotLen, pathogen, Experiment, pathogen_abbr)) %>%
+  mutate(
+    name = gsub("ME", "", name),
+    name = factor(name, levels = module_order)
+  )
+
+mME %>% ggplot(., aes(x=pathogen, y=name, fill=value)) +
+  geom_tile() +
+  theme_bw() +
+  scale_fill_gradient2(
+    low = "blue",
+    high = "red",
+    mid = "white",
+    midpoint = 0,
+    limit = c(-1,1)) +
+  theme(axis.text.x = element_text(angle=90)) +
+  labs(title = "Module-trait Relationships", y = "Modules", fill="corr")
+```
+
+We quantify associations of individual genes with our trait of interest (weight) by defining Gene Significance GS as (the absolute value of) the correlation between the gene and the trait. For each module, we also define a quantitative measure of module membership MM as the correlation of the module eigengene and the gene expression profile. This allows us to quantify the similarity of all genes on the array to every module.
 
 ```{r}
 # Define variable weight containing the weight column of datTrait
@@ -271,8 +377,15 @@ names(weight) = "weight"
 # names (colors) of the modules
 modNames = substring(names(MEs), 3)
 geneModuleMembership = as.data.frame(cor(datExpr, MEs, use = "p"));
-MMPvalue = as.data.frame(corPvalueStudent(as.matrix(geneModuleMembership), nSamples));
+MMPvalue = as.data.frame(corPvalueStudent(as.matrix(geneModuleMembership), nSamples))
 ```
+
+```{r}
+# identify hub genes
+hubGenes = chooseTopHubInEachModule(input_mat, picked_module_colors)
+print(hubGenes) 
+```
+
 
 ### Target Gene Identification
 1. use gene significance along with the genes intramodular connectivity to identify potential target genes associated with a particular trait of interest
@@ -280,6 +393,16 @@ MMPvalue = as.data.frame(corPvalueStudent(as.matrix(geneModuleMembership), nSamp
 ### Network Visualization of Eigengenes
 1. study the relationship among found modules
 2. quantify module similarity by calculating the pairwise correlation of representative eigengenes
+```{r}
+dissTOM = 1-TOMsimilarityFromExpr(input_mat, power = 6);
+# Transform dissTOM with a power to make moderately strong connections more visible in the heatmap
+plotTOM = dissTOM^7;
+# Set diagonal to NA for a nicer plot
+diag(plotTOM) = NA;
+# Call the plot function
+sizeGrWindow(9,9)
+TOMplot(plotTOM, geneTree_pow6, moduleColors_pow6, main = "Network heatmap plot, all genes")
+```
 
 
 ### Network analysis with functional annotation and gene ontology
@@ -288,5 +411,33 @@ Enrichment analysis directly within R:
 
 -> organism-specific package: Genome wide annotaation for Arabidopsis: org.At.tair.db
 
+```{r}
+#library(clusterProfiler)
+#library(org.At.tair.db)
+
+genes_in_module <- colnames(input_mat)[moduleColors_pow6=="brown"]
+# remove .1 from gene IDs
+genes_in_module <- gsub("\\.1$", "", genes_in_module)
+enriched_go <- enrichGO(gene = genes_in_module, OrgDb = org.At.tair.db, keyType = "TAIR", 
+                        ont = "BP", pAdjustMethod = "BH", pvalueCutoff = 0.05)
+
+barplot(enriched_go, showCategory = 10)
+
+simple_enriched_go <- simplify(enriched_go)
+
+simple_enriched_go %>% filter(p.adjust < 0.03) %>%
+ggplot(showCategory = 20,
+  aes(GeneRatio, forcats::fct_reorder(Description, GeneRatio))) + 
+  geom_segment(aes(xend=0, yend = Description)) +
+  geom_point(aes(color=p.adjust, size = Count)) +
+  scale_color_viridis_c(guide=guide_colorbar(reverse=TRUE)) +
+  scale_size_continuous(range=c(1, 7)) +
+  theme_minimal() + 
+  xlab("Gene Ratio") +
+  ylab(NULL) + 
+  ggtitle("GO Enrichment of up-regulated genes")
+
+
+```
 
 

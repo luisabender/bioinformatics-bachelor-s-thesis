@@ -41,7 +41,29 @@ Loading meta data:
 metaData <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData.csv", sep=";")
 metaData$Timepoint_dpi <- metaData$Timepoint..dpi.
 metaData$infected_control <- metaData$infected.control.num
-metaData_num <- metaData[,c(1,9,10)]
+metaData$single_paired <- ifelse(metaData$single.paired =="single", 1,0)
+# create pathogen column
+metaData$pathogen <- ifelse(metaData$Experiment == "Heterodera schachtii 2", "Heterodera schachtii", metaData$Experiment)
+metaData$pathogen <- ifelse(metaData$Experiment == "Hyaloperonospora arabidopsidis 3", "Hyaloperonospora arabidopsidis", metaData$pathogen)
+metaData$pathogen <- ifelse(metaData$Experiment == "Plasmodiophora brassicae 2", "Plasmodiophora brassicae", metaData$pathogen)
+metaData$pathogen <- ifelse(metaData$Experiment == "Turnip mosaic virus (TuMV) 3", "Turnip mosaic virus (TuMV)", metaData$pathogen)
+metaData <- metaData[, -c(3,4,5)]
+
+# get pathogen abbreviations
+metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Heterodera schachtii", "H. schachtii", metaData$pathogen)
+metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Alternaria brassicae", "A. brassicae", metaData$pathogen_abbr)
+metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Botrytis cinerea", "B. cinerea", metaData$pathogen_abbr)
+metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Cauliflower mosaic virus (CaMV)", "CaMV", metaData$pathogen_abbr)
+metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Turnip mosaic virus (TuMV)", "TuMV", metaData$pathogen_abbr)
+metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Turnip yellows virus (TuYV)", "TuYV", metaData$pathogen_abbr)
+metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Turnip yellows virus (TuYV)", "TuYV", metaData$pathogen_abbr)
+metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Golovinomyces orontii", "G. orontii", metaData$pathogen_abbr)
+metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Erysiphe cichoracearum ", "E. cichoracearum", metaData$pathogen_abbr) 	
+metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Hyaloperonospora arabidopsidis", "Hpa", metaData$pathogen_abbr)
+metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Meloidogyne javanica", "M. javanica", metaData$pathogen_abbr)
+metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Plasmodiophora brassicae", "P. brassicae", metaData$pathogen_abbr)
+
+metaData_num <- metaData[,c(1,9,10,11)]
 
 samples = rownames(input_mat)
 metaRows = match(samples, metaData_num$Run)
@@ -49,9 +71,24 @@ metData = metaData_num[metaRows, -1]
 rownames(metData) <- metaData_num[metaRows, 1]
 metData$Timepoint_dpi <- as.numeric(metData$Timepoint_dpi)
 
-# visualize how the clinical traits relate to the sample dendrogram
+dummyVarsObject <- dummyVars(~ pathogen_abbr, data = metaData)
+metaData_num2 <- cbind(metaData, predict(dummyVarsObject, newdata = metaData))
+metaData_num2 <- metaData_num2[,-c(9,10)]
+
+metData_path = metaData_num2
+rownames(metData_path) <- metaData_num2[metaRows,1]
+metData_path <- metaData_num2[, -c(1,2,3,4,5)]
+metData_path$Timepoint_dpi <- as.numeric(metData_path$Timepoint_dpi)
+
+
 sampleTree2 <- hclust(dist(input_mat), method = "average")
+
 metaColors <- numbers2colors(metData, signed = FALSE)
-plotDendroAndColors(sampleTree2, metaColors, groupLabels = names(metData), main = "Sample dendrogram and metadata heatmap")
+options(repr.plot.width = 20, repr.plot.height = 20,repr.res = 200)
+plotDendroAndColors(sampleTree2, metaColors, groupLabels = names(metData)%>% gsub("pathogen", "", .), main = "Sample dendrogram and metadata heatmap")
+
+metaColors_path <- numbers2colors(metData_path, signed = FALSE)
+options(repr.plot.width = 20, repr.plot.height = 20,repr.res = 200)
+plotDendroAndColors(sampleTree2, metaColors_path, groupLabels = names(metData_path)%>% gsub("pathogen_abbr", "", .), main = "Sample dendrogram and metadata heatmap")
 ```
 
