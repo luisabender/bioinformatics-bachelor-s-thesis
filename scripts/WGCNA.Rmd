@@ -14,6 +14,9 @@ library(WGCNA)
 library(dplyr)
 library(ggplot2)
 library(tidyr)
+library(clusterProfiler)
+library(org.At.tair.db)
+library(caret)
 ```
 
 
@@ -187,9 +190,9 @@ rownames(metData) <- metaData_num[metaRows, 1]
 # Define numbers of genes and samples
 nGenes = ncol(input_mat);
 nSamples = nrow(input_mat);
-picked_module_colors = moduleColors_pow5
+picked_module_colors = moduleColors_pow6
 
-library(caret)
+
 # create meta data table with pathogens as columns
 dummyVarsObject <- dummyVars(~ pathogen_abbr, data = metaData)
 metaData_num2 <- cbind(metaData, predict(dummyVarsObject, newdata = metaData))
@@ -282,35 +285,20 @@ We quantify associations of individual genes with our trait of interest (weight)
 ```{r}
 # identify hub genes
 hubGenes = chooseTopHubInEachModule(input_mat, picked_module_colors)
-print(hubGenes) 
+print(hubGenes)
 ```
 
 
 ### Target Gene Identification
 1. use gene significance along with the genes intramodular connectivity to identify potential target genes associated with a particular trait of interest
+--> The higher the mean gene significance in a module, the more significantly related the module is to the clinical trait of interest (see WGCNA paper)
 --> Using the gene significance you can identify genes that have a high significance for weight. Using the module membership measures you can identify genes with high module membership in interesting modules.
 
 Connectivity: how connected a speficic node is in the network (how many nodes have high correlation with that node). High connectivity indicates a hub gene (central to many nodes). Whole Network connectivity - a measure for how well the node is connected throughout the entire system Intramodular connectivity - a measure for how well the node is connected within its assigned module. Also an indicator for how well that node belongs to its module. This is also known as module membership.
 
 ```{r}
-# define a pathogen variable containing the pathogen column
-TuMV = as.data.frame(metaData_num2$pathogen_abbrTuMV)
-names(TuMV) = "TuMV"
-rownames(TuMV) = rownames(metData)
-
-Hpa = as.data.frame(metaData_num2$pathogen_abbrHpa)
-names(Hpa) = "Hpa"
-rownames(Hpa) = rownames(metData)
-
-Gorontii = as.data.frame(metaData_num2$`pathogen_abbrG. orontii`)
-names(Gorontii) = "G. orontii"
-rownames(Gorontii) = rownames(metData)
-
-Hschachtii = as.data.frame(metaData_num2$`pathogen_abbrH. schachtii`)
-names(Hschachtii) = "H. schachtii"
-rownames(Hschachtii) = rownames(metData)
-
-picked_MEs <- MEs_pow5
+### Module Membership ###
+picked_MEs <- MEs_pow6
 modNames = substring(names(picked_MEs), 3) #extract module names
 
 #Calculate the module membership and the associated p-values for every gene and module
@@ -322,60 +310,59 @@ names(MMPvalue) = paste("p.MM", modNames, sep="")
 
 
 ```{r}
-#Calculate the gene significance and associated p-values for specific trait (pathogen)
-geneTraitSignificance = as.data.frame(cor(input_mat, TuMV, use = "p"))
+### Gene significance ###
+
+# either define one variable containing the pathogen column
+TuMV = as.data.frame(metaData_num2$pathogen_abbrTuMV)
+names(TuMV) = "TuMV"
+rownames(TuMV) = rownames(metData)
+
+# calculate gene significance for every pathogen
+path_df <- metaData_num2[, -c(1:8)]
+rownames(path_df) <- metaData_num2[,1]
+names(path_df) <- c("A.brassicae", "B.cinerea", "CaMV", "Drought", "E.cichoracearum", "G.orontii", "H.schachtii", "Hpa","M.javanica", "P.brassicae", "TuMV", "TuYV")
+
+geneTraitSignificance = as.data.frame(cor(input_mat,path_df, use = "p"))
 GSPvalue = as.data.frame(corPvalueStudent(as.matrix(geneTraitSignificance), nSamples))
-names(geneTraitSignificance) = paste("GS.", names(TuMV), sep="")
-names(GSPvalue) = paste("p.GS.", names(TuMV), sep="")
+names(geneTraitSignificance) = paste("GS.", names(path_df), sep="")
+names(GSPvalue) = paste("p.GS.", names(path_df), sep="")
+
+# mean GS across modules for specific trait
+geneTraitSignificance$Module <- picked_module_colors
+meanGS_per_module <- aggregate(. ~ Module, data = geneTraitSignificance, mean)
+ggplot(meanGS_per_module, aes(Module, (GS.TuMV), fill = Module)) + geom_bar(stat = "identity") + theme(axis.text.x = element_text(angle=90)) + ggtitle("Mean Gene Significance across modules for specific pathogen")
+barplot(
+  height = meanGS_per_module$GS.TuMV, 
+  names.arg = meanGS_per_module$Module, 
+  col = meanGS_per_module$Module,  # Uses module names as colors if they are valid
+  las = 2,  # Rotate x-axis labels for readability
+  main = "Mean Gene Significance across Modules for TuMV",
+  ylab = "Mean Gene Significance"
+)
+```
 
 
+```{r}
 # look at specific module that has high significance with choosen trait
-module = "yellow"
+module = "lightcyan"
+GS_pathogen = "GS.TuMV"
 column = match(module, modNames)
 moduleGenes = picked_module_colors==module
 
+# in modules related to the trait of interest, genes with high module membership often also have high gene significance
 #pdf("~/Studium/bachelor-thesis-luisa/plots/GS_vs_MM_TuMV_magenta.pdf")
 verboseScatterplot(abs(geneModuleMembership[moduleGenes,column]),
-abs(geneTraitSignificance[moduleGenes,1]),
+abs(geneTraitSignificance[moduleGenes,GS_pathogen]),
 xlab = paste("Module Membership in", module, "module"),
 ylab = "Gene significance for TuMV",
 main = paste("Module membership vs. gene significance\n"),
-cex.main = 1.2, cex.lab = 1.2, cex.axis = 1.2, col = module)
+cex.main = 1.2, cex.lab = 1.2, cex.axis = 1.2, col = "cyan")
 #dev.off()
-
 ```
 
 
 ```{r}
-plot_geneSignificance_MM <- function(pathogen_name,pathogen_abbr, module){
-  pathogen = as.data.frame(metaData_num2$pathogen_abbr)
-  names(pathogen) = pathogen_name
-  rownames(pathogen) = rownames(metData)
-  
-  # gene significance
-  geneTraitSignificance = as.data.frame(cor(input_mat, pathogen, use = "p"))
-  GSPvalue = as.data.frame(corPvalueStudent(as.matrix(geneTraitSignificance), nSamples))
-  names(geneTraitSignificance) = paste("GS.", names(pathogen), sep="")
-  names(GSPvalue) = paste("p.GS.", names(pathogen), sep="")
-  head(GSPvalue)
-
-  #plot
-  column = match(module, modNames)
-  moduleGenes = picked_module_colors==module
-  verboseScatterplot(abs(geneModuleMembership[moduleGenes,column]),
-  abs(geneTraitSignificance[moduleGenes,1]),
-  xlab = paste("Module Membership in", module, "module"),
-  ylab = paste("Gene significance for ", pathogen_name),
-  main = paste("Module membership vs. gene significance\n"),
-  cex.main = 1.2, cex.lab = 1.2, cex.axis = 1.2, col = module)
-  }
-```
-
-
-
-
-```{r}
-MET = orderMEs(cbind(picked_MEs))
+MET = orderMEs(cbind(picked_MEs, path_df))
 # Plot the relationships among the eigengenes and the trait
 par(cex = 0.9)
 plotEigengeneNetworks(MET, "", marDendro = c(0,4,1,2), marHeatmap = c(5,4,1,2), cex.lab = 0.8, xLabelsAngle
@@ -408,20 +395,15 @@ Enrichment analysis directly within R:
 
 
 ```{r}
-library(clusterProfiler)
-library(org.At.tair.db)
-
 # BP = biological processes
 # CC = Cellular components
 # MF = molecular functions
 
-module_list <- unique(moduleColors_pow5)
-
 module_genes <- list()
 
 # get genes from each module
-for (module in module_list) {
-  module_genes[[module]] <- colnames(input_mat)[moduleColors_pow5 == module] %>% gsub("\\.1$", "", .)
+for (module in modNames) {
+  module_genes[[module]] <- colnames(input_mat)[moduleColors_pow6 == module] %>% gsub("\\.1$", "", .)
 }
 
 # get all GO enrichment results for each module
@@ -495,7 +477,7 @@ print(enrichment_table)
 
 ```{r}
 # plotting of enrichment results of specific module
-module = "blue"
+module = "brown"
 
 # simplify enrichGO output by removing redundancy of enriched GO terms
 # plot with gene ratio

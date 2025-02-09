@@ -75,9 +75,9 @@ dummyVarsObject <- dummyVars(~ pathogen_abbr, data = metaData)
 metaData_num2 <- cbind(metaData, predict(dummyVarsObject, newdata = metaData))
 metaData_num2 <- metaData_num2[,-c(9,10)]
 
-metData_path = metaData_num2
+
+metData_path <- metaData_num2[, -c(1:8)]
 rownames(metData_path) <- metaData_num2[metaRows,1]
-metData_path <- metaData_num2[, -c(1,2,3,4,5)]
 metData_path$Timepoint_dpi <- as.numeric(metData_path$Timepoint_dpi)
 
 
