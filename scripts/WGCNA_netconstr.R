@@ -12,7 +12,7 @@ input_mat <- t(expr_data)
 
 # change the adjacancy into signed hybrid
 print("Running adjacency...")
-softPower <- 6
+softPower <- 5
 adjacency <- adjacency(input_mat, power = softPower, type = "signed hybrid")
 
 # Topological Overlap Matrix
