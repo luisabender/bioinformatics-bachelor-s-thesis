@@ -12,7 +12,7 @@ input_mat <- t(expr_data)
 
 # change the adjacancy into signed hybrid
 print("Running adjacency...")
-softPower <- 5
+softPower <- 4
 adjacency <- adjacency(input_mat, power = softPower, type = "signed hybrid")
 
 # Topological Overlap Matrix
@@ -43,7 +43,7 @@ METree = hclust(as.dist(ME.dissimilarity), method = "average") #Clustering eigen
 par(mar = c(0,4,2,0)) #seting margin sizes
 par(cex = 0.6);#scaling the graphic
 
-pdf(file.path(base_dir,"/wgcna_results/METree_sp6.pdf"))
+pdf(file.path(base_dir,"/wgcna_results/METree_sp4_signed.pdf"))
 plot(METree)
 abline(h=.25, col = "red") #a height of .25 corresponds to correlation of .75
 dev.off()
@@ -57,7 +57,7 @@ mergedColors <- merge$colors
 mergedMEs <- merge$newMEs
 
 # plot dendrogram of original and merged module colors
-pdf(file.path(base_dir,"/wgcna_results/dendro_merged_sp6_signed.pdf"))
+pdf(file.path(base_dir,"/wgcna_results/dendro_merged_sp4_signed.pdf"))
 dendro_merged <- plotDendroAndColors(geneTree, 
                     cbind(ModuleColors, mergedColors),
                     c("original Module", "merged Module"),
@@ -69,7 +69,7 @@ dendro_merged <- plotDendroAndColors(geneTree,
 dev.off()
 
 
-save(mergedMEs, mergedColors, geneTree, file = file.path(base_dir,"/wgcna_results/networkConstruction-pow6_signed.RData"))
+save(mergedMEs, mergedColors, geneTree, file = file.path(base_dir,"/wgcna_results/networkConstruction-pow4_signed.RData"))
 
 
 print("Finished succesfully")
