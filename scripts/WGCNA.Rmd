@@ -155,14 +155,12 @@ eigengene = summary profile for each module
 # loading meta data
 metaData <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData.csv", sep=";")
 metaData$Timepoint_dpi <- metaData$Timepoint..dpi.
-metaData$infected_control <- metaData$infected.control.num
-metaData$single_paired <- ifelse(metaData$single.paired =="single", 1,0)
+
 # create pathogen column
 metaData$pathogen <- ifelse(metaData$Experiment == "Heterodera schachtii 2", "Heterodera schachtii", metaData$Experiment)
 metaData$pathogen <- ifelse(metaData$Experiment == "Hyaloperonospora arabidopsidis 3", "Hyaloperonospora arabidopsidis", metaData$pathogen)
 metaData$pathogen <- ifelse(metaData$Experiment == "Plasmodiophora brassicae 2", "Plasmodiophora brassicae", metaData$pathogen)
 metaData$pathogen <- ifelse(metaData$Experiment == "Turnip mosaic virus (TuMV) 3", "Turnip mosaic virus (TuMV)", metaData$pathogen)
-metaData <- metaData[, -c(3,4,5)]
 
 # get pathogen abbreviations
 metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Heterodera schachtii", "H. schachtii", metaData$pathogen)
@@ -178,13 +176,27 @@ metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Hyaloperonospora arabidop
 metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Meloidogyne javanica", "M. javanica", metaData$pathogen_abbr)
 metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Plasmodiophora brassicae", "P. brassicae", metaData$pathogen_abbr)
 
-metaData_num <- metaData[,c(1,5,6,7,8)]
+# column with infected pathogens (take all control samples together)
+metaData$inf_path <- ifelse(metaData$infected_control == "infected", metaData$pathogen_abbr, "control")
 
-samples = rownames(input_mat)
-metaRows = match(samples, metaData_num$Run)
-metData = metaData_num[metaRows, -1]
-rownames(metData) <- metaData_num[metaRows, 1]
+# coumn with infected pathogens in category
+metaData$Category <- ifelse(metaData$infected_control == "infected", metaData$Category, "control")
+metaData$Category_trophs <- ifelse(metaData$infected_control == "infected", metaData$Category_trophs, "control")
+
+# get library size in the metadata
+kallisto_alignment_results <- read.csv('~/Studium/bachelor-thesis-luisa/multiqc/kallisto_alignment_summary.csv')
+metaData <- merge(metaData, kallisto_alignment_results, by.x = "Run", by.y = "sample_ID", all.x = TRUE)
+colnames(metaData) <- ifelse(colnames(metaData) == "n_pseudoaligned", "LibrarySize", colnames(metaData))
+metaData <- metaData[order(metaData$ID),]
+
+# create binary meta data for correlation calculations
+metaData_bin <- binarizeCategoricalColumns(metaData, convertColumns = c("inf_path", "infected_control", "Timepoint_dpi", "Library", "Category", "Category_trophs"), includePairwise = FALSE, includeLevelVsAll = TRUE, minCount = 1, dropFirstLevelVsAll = FALSE)
+colnames(metaData_bin) <- gsub(".vs.all", "", colnames(metaData_bin))
+
+# remove CaMV category (unsure)
+metaData_bin <- metaData_bin[,-35]
 ```
+
 
 ```{r}
 # Define numbers of genes and samples
@@ -192,92 +204,68 @@ nGenes = ncol(input_mat);
 nSamples = nrow(input_mat);
 picked_module_colors = moduleColors_pow6
 
-
-# create meta data table with pathogens as columns
-dummyVarsObject <- dummyVars(~ pathogen_abbr, data = metaData)
-metaData_num2 <- cbind(metaData, predict(dummyVarsObject, newdata = metaData))
-metaData_num2 <- metaData_num2[,-c(9,10)]
-
 # Recalculate MEs with color labels
 MEs0 = moduleEigengenes(input_mat, picked_module_colors)$eigengenes
 MEs = orderMEs(MEs0)
-
-# rest meta info
-moduleTraitCor = cor(MEs, metaData_num[,-1], use = "p"); # pearson correlation
-moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
-
-# calculate correlation based on pathogens
-moduleTraitCor_path = cor(MEs, metaData_num2[, grep("pathogen_abbr", colnames(metaData_num2))], use = "p") 
-moduleTraitPvalue_path = corPvalueStudent(moduleTraitCor, nSamples)
 ```
+
+Discover Module trait relationships:
 
 ```{r}
-sizeGrWindow(10,6)
-textMatrix = paste(signif(moduleTraitCor, 2), "\n(",
-                   signif(moduleTraitPvalue, 1), ")", sep = "")
+# divide meta table into subsets
 
-dim(textMatrix) = dim(moduleTraitCor)
-par(mar = c(6, 8.5, 3, 3))
+# infected pathogens
+inf_path_df <- metaData_bin[, grep("inf_path", colnames(metaData_bin))]
+colnames(inf_path_df) <- gsub("inf_path.", "", colnames(inf_path_df))
 
-# plot meta info
-labeledHeatmap(Matrix = moduleTraitCor,
-               xLabels = names(metaData_num[,-1]),
-               yLabels = names(MEs),
-               ySymbols = names(MEs),
-               colorLabels = FALSE,
-               colors = greenWhiteRed(50),
-               textMatrix = textMatrix,
-               setStdMargins = FALSE,
-               cex.text = 0.5,
-               zlim = c(-1,1),
-               main = paste("Module-trait relationships"))
+# pathogen categories
+cat_df <- metaData_bin[, grep("Category_trophs", colnames(metaData_bin))]
+colnames(cat_df) <- gsub("Category_trophs.", "", colnames(cat_df))
 
-# plot pathogens
-textMatrix_path = paste(signif(moduleTraitCor_path, 2), "\n(",
-                   signif(moduleTraitPvalue_path, 1), ")", sep = "")
+# pathogen subcategories
+sub_cat_df <- metaData_bin[, grep("Category\\.", colnames(metaData_bin))]
+colnames(sub_cat_df) <- gsub("Category\\.", "", colnames(sub_cat_df))
 
-dim(textMatrix_path) = dim(moduleTraitCor_path)
-#par(mar = c(6, 8.5, 3, 3))
-
-labeledHeatmap(Matrix = moduleTraitCor_path,
-               xLabels = colnames(metaData_num2[, grep("pathogen_abbr", colnames(metaData_num2))]) %>% gsub("pathogen_abbr", "", .),
-               yLabels = names(MEs),
-               ySymbols = names(MEs),
-               colorLabels = FALSE,
-               colors = greenWhiteRed(50),
-               textMatrix = textMatrix_path,
-               setStdMargins = FALSE,
-               cex.text = 0.5,
-               zlim = c(-1,1),
-               main = paste("Module-trait relationships with Pathogens"))
+# librarySize
+libsize_df <- data.frame(LibrarySize = metaData[, 16])
 ```
+
 
 ```{r}
-module_order = names(MEs0) %>% gsub("ME","", .)
-# add experiment to data
-MEs0$treatment = row.names(MEs0)
-MEs0 <- merge(MEs0,metaData, by.x = "treatment", by.y = "Run", all = TRUE)
+moduleTraitCorrelation <- function(MEs, metaData, trait){
+  moduleTraitCor = cor(MEs, metaData, use = "p"); # pearson correlation
+  moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
+  
+  sizeGrWindow(10,6)
+  textMatrix = paste(signif(moduleTraitCor, 2), "\n(",
+                     signif(moduleTraitPvalue, 1), ")", sep = "")
+  
+  dim(textMatrix) = dim(moduleTraitCor)
+  par(mar = c(6, 13, 3, 2.2))
+  
+  labeledHeatmap(Matrix = moduleTraitCor,
+                 xLabels = colnames(metaData),
+                 yLabels = names(MEs),
+                 xLabelsAngle = 30,
+                 ySymbols = names(MEs),
+                 colorLabels = TRUE,
+                 colors = blueWhiteRed(50),
+                 textMatrix = textMatrix,
+                 setStdMargins = FALSE,
+                 cex.text = 0.5,
+                 cex.lab.x = 1,
+                 cex.lab.y = 1,
+                 zlim = c(-1,1),
+                 legendLabel = "Pearson's correlation",
+                 main = paste("Module-trait relationships -", trait))
+}
 
-# plot data
-mME = MEs0 %>%
-  pivot_longer(-c(treatment, Timepoint_dpi, infected.control.num, infection, infected_control, single_paired, avgSpotLen, pathogen, Experiment, pathogen_abbr)) %>%
-  mutate(
-    name = gsub("ME", "", name),
-    name = factor(name, levels = module_order)
-  )
-
-mME %>% ggplot(., aes(x=pathogen, y=name, fill=value)) +
-  geom_tile() +
-  theme_bw() +
-  scale_fill_gradient2(
-    low = "blue",
-    high = "red",
-    mid = "white",
-    midpoint = 0,
-    limit = c(-1,1)) +
-  theme(axis.text.x = element_text(angle=90)) +
-  labs(title = "Module-trait Relationships", y = "Modules", fill="corr")
+moduleTraitCorrelation(MEs, inf_path_df, "Pathogens")
+moduleTraitCorrelation(MEs, sub_cat_df, "Pathogens (subcategories)")
+moduleTraitCorrelation(MEs, cat_df, "Pathogens (categories)")
+moduleTraitCorrelation(MEs, libsize_df, "Library Size")
 ```
+
 
 We quantify associations of individual genes with our trait of interest (weight) by defining Gene Significance GS as (the absolute value of) the correlation between the gene and the trait. For each module, we also define a quantitative measure of module membership MM as the correlation of the module eigengene and the gene expression profile. This allows us to quantify the similarity of all genes on the array to every module.
 
@@ -312,70 +300,108 @@ names(MMPvalue) = paste("p.MM", modNames, sep="")
 ```{r}
 ### Gene significance ###
 
-# either define one variable containing the pathogen column
+# either define one variable containing the pathogen column, e.g.:
 TuMV = as.data.frame(metaData_num2$pathogen_abbrTuMV)
 names(TuMV) = "TuMV"
 rownames(TuMV) = rownames(metData)
 
-# calculate gene significance for every pathogen
-path_df <- metaData_num2[, -c(1:8)]
-rownames(path_df) <- metaData_num2[,1]
-names(path_df) <- c("A.brassicae", "B.cinerea", "CaMV", "Drought", "E.cichoracearum", "G.orontii", "H.schachtii", "Hpa","M.javanica", "P.brassicae", "TuMV", "TuYV")
+rownames(inf_path_df) <- metaData[,1]
+rownames(sub_cat_df) <- metaData[,1]
+rownames(cat_df) <- metaData[,1]
+```
 
-geneTraitSignificance = as.data.frame(cor(input_mat,path_df, use = "p"))
-GSPvalue = as.data.frame(corPvalueStudent(as.matrix(geneTraitSignificance), nSamples))
-names(geneTraitSignificance) = paste("GS.", names(path_df), sep="")
-names(GSPvalue) = paste("p.GS.", names(path_df), sep="")
 
-# mean GS across modules for specific trait
-geneTraitSignificance$Module <- picked_module_colors
-meanGS_per_module <- aggregate(. ~ Module, data = geneTraitSignificance, mean)
-ggplot(meanGS_per_module, aes(Module, (GS.TuMV), fill = Module)) + geom_bar(stat = "identity") + theme(axis.text.x = element_text(angle=90)) + ggtitle("Mean Gene Significance across modules for specific pathogen")
+```{r}
+geneTraitSignificance_inf_path = as.data.frame(cor(input_mat,inf_path_df, use = "p"))
+GSPvalue = as.data.frame(corPvalueStudent(as.matrix(geneTraitSignificance_inf_path), nSamples))
+
+geneTraitSignificance_cat = as.data.frame(cor(input_mat,cat_df, use = "p"))
+GSPvalue = as.data.frame(corPvalueStudent(as.matrix(geneTraitSignificance_cat), nSamples))
+
+geneTraitSignificance_sub_cat = as.data.frame(cor(input_mat,sub_cat_df, use = "p"))
+GSPvalue = as.data.frame(corPvalueStudent(as.matrix(geneTraitSignificance_sub_cat), nSamples))
+
+geneTraitSignificance_inf_path$Module <- picked_module_colors
+geneTraitSignificance_cat$Module <- picked_module_colors
+geneTraitSignificance_sub_cat$Module <- picked_module_colors
+
+meanGS_per_module_inf_path <- aggregate(. ~ Module, data = geneTraitSignificance_inf_path, mean)
+meanGS_per_module_cat <- aggregate(. ~ Module, data = geneTraitSignificance_cat, mean)
+meanGS_per_module_sub_cat <- aggregate(. ~ Module, data = geneTraitSignificance_sub_cat, mean)
+```
+
+
+```{r}
 barplot(
-  height = meanGS_per_module$GS.TuMV, 
-  names.arg = meanGS_per_module$Module, 
-  col = meanGS_per_module$Module,  # Uses module names as colors if they are valid
-  las = 2,  # Rotate x-axis labels for readability
-  main = "Mean Gene Significance across Modules for TuMV",
-  ylab = "Mean Gene Significance"
+    height = meanGS_per_module_sub_cat$`fungal biotroph`, 
+    names.arg = meanGS_per_module_sub_cat$Module, 
+    col = meanGS_per_module_sub_cat$Module,  # module name as colors
+    las = 2,  
+    main = "Mean Gene Significance across Modules for fungal biotrophs",
+    ylab = "Mean Gene Significance"
 )
 ```
 
 
 ```{r}
+plot_meanGS <- function(moduleColors, GS, trait){
+  # mean GS across modules for specific trait
+  GS$Module <- moduleColors
+  meanGS_per_module <- aggregate(. ~ Module, data = GS, mean)
+  
+  barplot(
+    height = meanGS_per_module$TuMV, 
+    names.arg = meanGS_per_module$Module, 
+    col = meanGS_per_module$Module,  # module name as colors
+    las = 2,  
+    main = paste("Mean Gene Significance across Modules for", trait),
+    ylab = "Mean Gene Significance"
+  )
+}
+```
+
+
+
+
+```{r}
 # look at specific module that has high significance with choosen trait
-module = "lightcyan"
-GS_pathogen = "GS.TuMV"
+module = "darkgrey"
+category = "fungal biotroph"
 column = match(module, modNames)
 moduleGenes = picked_module_colors==module
 
 # in modules related to the trait of interest, genes with high module membership often also have high gene significance
+
 #pdf("~/Studium/bachelor-thesis-luisa/plots/GS_vs_MM_TuMV_magenta.pdf")
 verboseScatterplot(abs(geneModuleMembership[moduleGenes,column]),
-abs(geneTraitSignificance[moduleGenes,GS_pathogen]),
+abs(geneTraitSignificance_sub_cat[moduleGenes,category]),
 xlab = paste("Module Membership in", module, "module"),
-ylab = "Gene significance for TuMV",
+ylab = paste("Gene significance for ", category),
 main = paste("Module membership vs. gene significance\n"),
-cex.main = 1.2, cex.lab = 1.2, cex.axis = 1.2, col = "cyan")
+cex.main = 1.2, cex.lab = 1.2, cex.axis = 1.2, col = module)
 #dev.off()
 ```
 
 
 ```{r}
-MET = orderMEs(cbind(picked_MEs, path_df))
+MET = orderMEs(cbind(picked_MEs, inf_path_df))
 # Plot the relationships among the eigengenes and the trait
 par(cex = 0.9)
-plotEigengeneNetworks(MET, "", marDendro = c(0,4,1,2), marHeatmap = c(5,4,1,2), cex.lab = 0.8, xLabelsAngle
-= 90)
+#bottom, left, top, right
+plotEigengeneNetworks(MET, "Eigengene dendrogram and adjacency heatmap - including pathogens", marDendro = c(1,5,2,2), marHeatmap = c(7,7,2,2), cex.lab = 0.8, xLabelsAngle = 90)
 
-#sizeGrWindow(6,6);
-par(cex = 1.0)
-plotEigengeneNetworks(MET, "Eigengene dendrogram", marDendro = c(0,4,2,0),
-plotHeatmaps = FALSE)
-# Plot the heatmap matrix (note: this plot will overwrite the dendrogram plot)
-par(cex = 1.0)
-plotEigengeneNetworks(MET, "Eigengene adjacency heatmap",  marHeatmap = c(3,4,2,2),
-plotDendrograms = FALSE, xLabelsAngle = 90)
+MET_cat <- orderMEs(cbind(picked_MEs, cat_df))
+# Plot the relationships among the eigengenes and the trait
+par(cex = 0.9)
+#bottom, left, top, right
+plotEigengeneNetworks(MET_cat, "Eigengene dendrogram and adjacency heatmap - categories", marDendro = c(1,5,2,2), marHeatmap = c(7,7,2,2), cex.lab = 0.8, xLabelsAngle = 90)
+
+MET_sub_cat <- orderMEs(cbind(picked_MEs, sub_cat_df))
+# Plot the relationships among the eigengenes and the trait
+par(cex = 0.9)
+#bottom, left, top, right
+plotEigengeneNetworks(MET_sub_cat, "Eigengene dendrogram and adjacency heatmap - subcategories", marDendro = c(1,5,2,2), marHeatmap = c(7,7,2,2), cex.lab = 0.8, xLabelsAngle = 90)
+
 ```
 
 
@@ -477,7 +503,7 @@ print(enrichment_table)
 
 ```{r}
 # plotting of enrichment results of specific module
-module = "brown"
+module = "purple"
 
 # simplify enrichGO output by removing redundancy of enriched GO terms
 # plot with gene ratio

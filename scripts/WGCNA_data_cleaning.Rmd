@@ -36,18 +36,16 @@ cex.axis = 1.5, cex.main = 2)
 ```
 
 Loading meta data:
-
 ```{r}
+# loading meta data
 metaData <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData.csv", sep=";")
 metaData$Timepoint_dpi <- metaData$Timepoint..dpi.
-metaData$infected_control <- metaData$infected.control.num
-metaData$single_paired <- ifelse(metaData$single.paired =="single", 1,0)
+
 # create pathogen column
 metaData$pathogen <- ifelse(metaData$Experiment == "Heterodera schachtii 2", "Heterodera schachtii", metaData$Experiment)
 metaData$pathogen <- ifelse(metaData$Experiment == "Hyaloperonospora arabidopsidis 3", "Hyaloperonospora arabidopsidis", metaData$pathogen)
 metaData$pathogen <- ifelse(metaData$Experiment == "Plasmodiophora brassicae 2", "Plasmodiophora brassicae", metaData$pathogen)
 metaData$pathogen <- ifelse(metaData$Experiment == "Turnip mosaic virus (TuMV) 3", "Turnip mosaic virus (TuMV)", metaData$pathogen)
-metaData <- metaData[, -c(3,4,5)]
 
 # get pathogen abbreviations
 metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Heterodera schachtii", "H. schachtii", metaData$pathogen)
@@ -63,32 +61,35 @@ metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Hyaloperonospora arabidop
 metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Meloidogyne javanica", "M. javanica", metaData$pathogen_abbr)
 metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Plasmodiophora brassicae", "P. brassicae", metaData$pathogen_abbr)
 
-metaData_num <- metaData[,c(1,9,10,11)]
+# column with infected pathogens (take all control samples together)
+metaData$inf_path <- ifelse(metaData$infected_control == "infected", metaData$pathogen_abbr, "control")
 
-samples = rownames(input_mat)
-metaRows = match(samples, metaData_num$Run)
-metData = metaData_num[metaRows, -1]
-rownames(metData) <- metaData_num[metaRows, 1]
-metData$Timepoint_dpi <- as.numeric(metData$Timepoint_dpi)
+# coumn with infected pathogens in category
+metaData$Category <- ifelse(metaData$infected_control == "infected", metaData$Category, "control")
+metaData$Category_trophs <- ifelse(metaData$infected_control == "infected", metaData$Category_trophs, "control")
 
-dummyVarsObject <- dummyVars(~ pathogen_abbr, data = metaData)
-metaData_num2 <- cbind(metaData, predict(dummyVarsObject, newdata = metaData))
-metaData_num2 <- metaData_num2[,-c(9,10)]
+# create binary meta data for correlation calculations
+metaData_bin <- binarizeCategoricalColumns(metaData, convertColumns = c("inf_path", "infected_control", "Timepoint..dpi.", "Library", "Category", "Category_trophs"), includePairwise = FALSE, includeLevelVsAll = TRUE, minCount = 1, dropFirstLevelVsAll = FALSE)
+colnames(metaData_bin) <- gsub(".vs.all", "", colnames(metaData_bin))
 
+# remove CaMV category (unsure)
+metaData_bin <- metaData_bin[,-35]
+```
 
-metData_path <- metaData_num2[, -c(1:8)]
-rownames(metData_path) <- metaData_num2[metaRows,1]
-metData_path$Timepoint_dpi <- as.numeric(metData_path$Timepoint_dpi)
-
+```{r}
+# only numerical meta Data
+metData <- metaData_bin[, -c(1,2,3)]
 
 sampleTree2 <- hclust(dist(input_mat), method = "average")
 
-metaColors <- numbers2colors(metData, signed = FALSE)
+metaColors <- numbers2colors(metaData_bin[, grep("inf_path", colnames(metaData_bin))], signed = FALSE)
 options(repr.plot.width = 20, repr.plot.height = 20,repr.res = 200)
-plotDendroAndColors(sampleTree2, metaColors, groupLabels = names(metData)%>% gsub("pathogen", "", .), main = "Sample dendrogram and metadata heatmap")
+plotDendroAndColors(sampleTree2, metaColors, groupLabels = names(metaData_bin[, grep("inf_path", colnames(metaData_bin))])%>% gsub("inf_path.", "", .), main = "Sample dendrogram and metadata heatmap")
 
-metaColors_path <- numbers2colors(metData_path, signed = FALSE)
+metaColors_sub_cat <- numbers2colors(metaData_bin[, grep("Category\\.", colnames(metaData_bin))], signed = FALSE)
 options(repr.plot.width = 20, repr.plot.height = 20,repr.res = 200)
-plotDendroAndColors(sampleTree2, metaColors_path, groupLabels = names(metData_path)%>% gsub("pathogen_abbr", "", .), main = "Sample dendrogram and metadata heatmap")
+plotDendroAndColors(sampleTree2, metaColors_sub_cat, groupLabels = names(metaData_bin[, grep("Category\\.", colnames(metaData_bin))])%>% gsub("Category\\.", "", .), main = "Sample dendrogram and metadata heatmap")
+
 ```
+
 
