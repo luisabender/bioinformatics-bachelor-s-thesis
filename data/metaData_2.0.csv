@@ -1,0 +1,283 @@
+ID;Run;Experiment;Timepoint (dpi);infected_control;Library;avgSpotLen;infection_type;Category;Category_trophs
+1;ERR7738945;Cauliflower mosaic virus (CaMV);21;infected;paired;150;infected;viral pathogen;
+2;ERR7738946;Cauliflower mosaic virus (CaMV);21;infected;paired;150;infected;viral pathogen;
+3;ERR7738947;Cauliflower mosaic virus (CaMV);21;infected;paired;150;infected;viral pathogen;
+4;ERR7738939;Cauliflower mosaic virus (CaMV);21;control;paired;150;control;viral pathogen;
+5;ERR7738940;Cauliflower mosaic virus (CaMV);21;control;paired;150;control;viral pathogen;
+6;ERR7738941;Cauliflower mosaic virus (CaMV);21;control;paired;150;control;viral pathogen;
+7;SRR8689382;Erysiphe cichoracearum ;2;infected;paired;252;infected;fungal biotroph;biotroph
+8;SRR8689383;Erysiphe cichoracearum ;2;infected;paired;252;infected;fungal biotroph;biotroph
+9;SRR8689384;Erysiphe cichoracearum ;2;infected;paired;252;infected;fungal biotroph;biotroph
+10;SRR8689389;Erysiphe cichoracearum ;5;infected;paired;252;infected;fungal biotroph;biotroph
+11;SRR8689390;Erysiphe cichoracearum ;5;infected;paired;252;infected;fungal biotroph;biotroph
+12;SRR8689394;Erysiphe cichoracearum ;7;infected;paired;252;infected;fungal biotroph;biotroph
+13;SRR8689395;Erysiphe cichoracearum ;7;infected;paired;252;infected;fungal biotroph;biotroph
+14;SRR8689396;Erysiphe cichoracearum ;7;infected;paired;252;infected;fungal biotroph;biotroph
+15;SRR8689400;Erysiphe cichoracearum ;2;control;paired;252;control;fungal biotroph;biotroph
+16;SRR8689402;Erysiphe cichoracearum ;2;control;paired;252;control;fungal biotroph;biotroph
+17;SRR8689407;Erysiphe cichoracearum ;5;control;paired;252;control;fungal biotroph;biotroph
+18;SRR8689408;Erysiphe cichoracearum ;5;control;paired;252;control;fungal biotroph;biotroph
+19;SRR8689412;Erysiphe cichoracearum ;7;control;paired;252;control;fungal biotroph;biotroph
+20;SRR8689414;Erysiphe cichoracearum ;7;control;paired;252;control;fungal biotroph;biotroph
+21;SRR8689388;Erysiphe cichoracearum ;5;infected;paired;252;infected;fungal biotroph;biotroph
+22;SRR8689401;Erysiphe cichoracearum ;2;control;paired;252;control;fungal biotroph;biotroph
+23;SRR8689406;Erysiphe cichoracearum ;5;control;paired;252;control;fungal biotroph;biotroph
+24;SRR8689413;Erysiphe cichoracearum ;7;control;paired;252;control;fungal biotroph;biotroph
+25;SRR8800677;Golovinomyces orontii;2;control;single;150;control;fungal biotroph;biotroph
+26;SRR8800678;Golovinomyces orontii;2;control;single;150;control;fungal biotroph;biotroph
+27;SRR8800679;Golovinomyces orontii;2;control;single;150;control;fungal biotroph;biotroph
+28;SRR8800680;Golovinomyces orontii;2;control;single;150;control;fungal biotroph;biotroph
+29;SRR8800681;Golovinomyces orontii;2;control;single;150;control;fungal biotroph;biotroph
+30;SRR8800682;Golovinomyces orontii;2;control;single;150;control;fungal biotroph;biotroph
+31;SRR8800683;Golovinomyces orontii;2;control;single;150;control;fungal biotroph;biotroph
+32;SRR8800684;Golovinomyces orontii;2;control;single;150;control;fungal biotroph;biotroph
+33;SRR8800685;Golovinomyces orontii;2;control;single;150;control;fungal biotroph;biotroph
+34;SRR8800686;Golovinomyces orontii;2;control;single;150;control;fungal biotroph;biotroph
+35;SRR8800687;Golovinomyces orontii;2;control;single;150;control;fungal biotroph;biotroph
+36;SRR8800688;Golovinomyces orontii;2;control;single;150;control;fungal biotroph;biotroph
+37;SRR8800689;Golovinomyces orontii;2;control;single;150;control;fungal biotroph;biotroph
+38;SRR8800690;Golovinomyces orontii;2;control;single;150;control;fungal biotroph;biotroph
+39;SRR8800691;Golovinomyces orontii;2;control;single;150;control;fungal biotroph;biotroph
+40;SRR8800755;Golovinomyces orontii;2;infected;single;150;infected;fungal biotroph;biotroph
+41;SRR8800754;Golovinomyces orontii;2;infected;single;150;infected;fungal biotroph;biotroph
+42;SRR8800753;Golovinomyces orontii;2;infected;single;150;infected;fungal biotroph;biotroph
+43;SRR8800752;Golovinomyces orontii;2;infected;single;150;infected;fungal biotroph;biotroph
+44;SRR8800751;Golovinomyces orontii;2;infected;single;150;infected;fungal biotroph;biotroph
+45;SRR8800750;Golovinomyces orontii;2;infected;single;150;infected;fungal biotroph;biotroph
+46;SRR8800749;Golovinomyces orontii;2;infected;single;150;infected;fungal biotroph;biotroph
+47;SRR8800748;Golovinomyces orontii;2;infected;single;150;infected;fungal biotroph;biotroph
+48;SRR8800747;Golovinomyces orontii;2;infected;single;150;infected;fungal biotroph;biotroph
+49;SRR8800746;Golovinomyces orontii;2;infected;single;150;infected;fungal biotroph;biotroph
+50;SRR8800745;Golovinomyces orontii;2;infected;single;150;infected;fungal biotroph;biotroph
+51;SRR8800744;Golovinomyces orontii;2;infected;single;150;infected;fungal biotroph;biotroph
+52;SRR8800743;Golovinomyces orontii;2;infected;single;150;infected;fungal biotroph;biotroph
+53;SRR8800742;Golovinomyces orontii;2;infected;single;150;infected;fungal biotroph;biotroph
+54;SRR8800741;Golovinomyces orontii;2;infected;single;150;infected;fungal biotroph;biotroph
+55;ERR9604272;Heterodera schachtii 2;3;control;single;150;control;nematode;biotroph
+56;ERR9604276;Heterodera schachtii 2;1;control;single;150;control;nematode;biotroph
+57;ERR9604277;Heterodera schachtii 2;1;control;single;150;control;nematode;biotroph
+58;ERR9604278;Heterodera schachtii 2;1;control;single;150;control;nematode;biotroph
+59;ERR9604282;Heterodera schachtii 2;3;infected;single;150;Heterodera schachtii;nematode;biotroph
+60;ERR9604283;Heterodera schachtii 2;3;control;single;150;control;nematode;biotroph
+61;ERR9604284;Heterodera schachtii 2;3;infected;single;150;Heterodera schachtii;nematode;biotroph
+62;ERR9604285;Heterodera schachtii 2;3;infected;single;150;Heterodera schachtii;nematode;biotroph
+63;ERR9604289;Heterodera schachtii 2;2;infected;single;150;Heterodera schachtii;nematode;biotroph
+64;ERR9604290;Heterodera schachtii 2;2;infected;single;150;Heterodera schachtii;nematode;biotroph
+65;ERR9604291;Heterodera schachtii 2;2;infected;single;150;Heterodera schachtii;nematode;biotroph
+66;ERR9604294;Heterodera schachtii 2;3;control;single;150;control;nematode;biotroph
+67;ERR9604296;Heterodera schachtii 2;1;infected;single;150;Heterodera schachtii;nematode;biotroph
+68;ERR9604297;Heterodera schachtii 2;1;infected;single;150;Heterodera schachtii;nematode;biotroph
+69;ERR9604298;Heterodera schachtii 2;1;infected;single;150;Heterodera schachtii;nematode;biotroph
+70;ERR9604338;Heterodera schachtii 2;2;control;single;150;control;nematode;biotroph
+71;ERR9604342;Heterodera schachtii 2;2;control;single;150;control;nematode;biotroph
+72;ERR9604343;Heterodera schachtii 2;2;control;single;150;control;nematode;biotroph
+73;SRR10030449;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+74;SRR10030450;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+75;SRR10030451;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+76;SRR10030452;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+77;SRR10030453;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+78;SRR10030454;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+79;SRR10030455;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+80;SRR10030456;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+81;SRR10030457;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+82;SRR10030458;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+83;SRR10030459;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+84;SRR10030460;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+85;SRR10030461;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+86;SRR10030462;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+87;SRR10030463;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+88;SRR10030464;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+89;SRR10030465;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+90;SRR10030466;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+91;SRR10030467;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+92;SRR10030468;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+93;SRR10030469;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+94;SRR10030470;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+95;SRR10030471;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+96;SRR10030472;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+97;SRR10030473;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+98;SRR10030474;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+99;SRR10030475;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+100;SRR10030476;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+101;SRR10030477;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+102;SRR10030478;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+103;SRR10030479;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+104;SRR10030480;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+105;SRR10030481;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+106;SRR10030482;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
+107;SRR10030483;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+108;SRR10030484;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+109;SRR10030485;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+110;SRR10030486;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+111;SRR10030487;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+112;SRR10030488;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+113;SRR10030489;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+114;SRR10030490;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+115;SRR10030491;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+116;SRR10030492;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+117;SRR10030493;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+118;SRR10030494;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+119;SRR10030495;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+120;SRR10030496;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+121;SRR10030497;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+122;SRR10030498;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+123;SRR10030499;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+124;SRR10030500;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+125;SRR10030501;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+126;SRR10030502;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+127;SRR10030503;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+128;SRR10030504;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+129;SRR10030505;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+130;SRR12330763;Meloidogyne javanica;3;infected;paired;300;infected;nematode;biotroph
+131;SRR12330764;Meloidogyne javanica;3;infected;paired;300;infected;nematode;biotroph
+132;SRR12330765;Meloidogyne javanica;3;infected;paired;300;infected;nematode;biotroph
+133;SRR12330766;Meloidogyne javanica;3;control;paired;300;control;nematode;biotroph
+134;SRR12330767;Meloidogyne javanica;3;control;paired;300;control;nematode;biotroph
+135;SRR12330768;Meloidogyne javanica;3;control;paired;300;control;nematode;biotroph
+136;SRR7811358;Plasmodiophora brassicae;24;infected;paired;202;infected;protist biotroph;biotroph
+137;SRR7811359;Plasmodiophora brassicae;20;infected;paired;202;infected;protist biotroph;biotroph
+138;SRR7811360;Plasmodiophora brassicae;20;infected;paired;202;infected;protist biotroph;biotroph
+139;SRR7811361;Plasmodiophora brassicae;24;infected;paired;202;infected;protist biotroph;biotroph
+140;SRR7811362;Plasmodiophora brassicae;24;infected;paired;202;infected;protist biotroph;biotroph
+141;SRR7811363;Plasmodiophora brassicae;17;infected;paired;202;infected;protist biotroph;biotroph
+142;SRR7811364;Plasmodiophora brassicae;17;infected;paired;202;infected;protist biotroph;biotroph
+143;SRR7811365;Plasmodiophora brassicae;17;infected;paired;202;infected;protist biotroph;biotroph
+144;SRR7811366;Plasmodiophora brassicae;20;infected;paired;202;infected;protist biotroph;biotroph
+145;SRR3124722;Plasmodiophora brassicae 2;17;infected;paired;202;infected - leaf;protist biotroph;biotroph
+146;SRR3124724;Plasmodiophora brassicae 2;24;infected;paired;202;infected - leaf;protist biotroph;biotroph
+147;SRR3124726;Plasmodiophora brassicae 2;17;infected;paired;202;infected - leaf;protist biotroph;biotroph
+148;SRR3124729;Plasmodiophora brassicae 2;20;infected;paired;202;infected - leaf;protist biotroph;biotroph
+149;SRR3124731;Plasmodiophora brassicae 2;24;infected;paired;202;infected - leaf;protist biotroph;biotroph
+150;SRR3124735;Plasmodiophora brassicae 2;17;infected;paired;202;infected - root;protist biotroph;biotroph
+151;SRR3124737;Plasmodiophora brassicae 2;20;infected;paired;202;infected - root;protist biotroph;biotroph
+152;SRR3124740;Plasmodiophora brassicae 2;24;infected;paired;202;infected - root;protist biotroph;biotroph
+153;SRR3124742;Plasmodiophora brassicae 2;17;infected;paired;202;infected - root;protist biotroph;biotroph
+154;SRR3124743;Plasmodiophora brassicae 2;20;infected;paired;202;infected - root;protist biotroph;biotroph
+155;SRR3124745;Plasmodiophora brassicae 2;24;infected;paired;202;infected - root;protist biotroph;biotroph
+156;SRR3124747;Plasmodiophora brassicae 2;20;infected;paired;202;infected - leaf;protist biotroph;biotroph
+157;SRR3124748;Plasmodiophora brassicae 2;17;infected;paired;202;infected - root;protist biotroph;biotroph
+158;SRR3124750;Plasmodiophora brassicae 2;20;infected;paired;202;infected - root;protist biotroph;biotroph
+159;SRR3124752;Plasmodiophora brassicae 2;24;infected;paired;202;infected - root;protist biotroph;biotroph
+160;SRR3124754;Plasmodiophora brassicae 2;17;control;paired;202;control - leaf;protist biotroph;biotroph
+161;SRR3124756;Plasmodiophora brassicae 2;20;control;paired;202;control - leaf;protist biotroph;biotroph
+162;SRR3124759;Plasmodiophora brassicae 2;24;control;paired;202;control - leaf;protist biotroph;biotroph
+163;SRR3124761;Plasmodiophora brassicae 2;17;control;paired;202;control - leaf;protist biotroph;biotroph
+164;SRR3124764;Plasmodiophora brassicae 2;20;control;paired;202;control - leaf;protist biotroph;biotroph
+165;SRR3124766;Plasmodiophora brassicae 2;24;control;paired;202;control - leaf;protist biotroph;biotroph
+166;SRR3124767;Plasmodiophora brassicae 2;17;control;paired;202;control - leaf;protist biotroph;biotroph
+167;SRR3124769;Plasmodiophora brassicae 2;24;infected;paired;202;infected - leaf;protist biotroph;biotroph
+168;SRR3124770;Plasmodiophora brassicae 2;20;control;paired;202;control - leaf;protist biotroph;biotroph
+169;SRR3124772;Plasmodiophora brassicae 2;24;control;paired;202;control - leaf;protist biotroph;biotroph
+170;SRR3124775;Plasmodiophora brassicae 2;17;control;paired;202;control - root;protist biotroph;biotroph
+171;SRR3124986;Plasmodiophora brassicae 2;20;control;paired;202;control - root;protist biotroph;biotroph
+172;SRR3124987;Plasmodiophora brassicae 2;24;control;paired;202;control - root;protist biotroph;biotroph
+173;SRR3124990;Plasmodiophora brassicae 2;17;control;paired;202;control - root;protist biotroph;biotroph
+174;SRR3124992;Plasmodiophora brassicae 2;20;control;paired;202;control - root;protist biotroph;biotroph
+175;SRR3124994;Plasmodiophora brassicae 2;24;control;paired;202;control - root;protist biotroph;biotroph
+176;SRR3124997;Plasmodiophora brassicae 2;17;control;paired;202;control - root;protist biotroph;biotroph
+177;SRR3124998;Plasmodiophora brassicae 2;20;control;paired;202;control - root;protist biotroph;biotroph
+178;SRR3125002;Plasmodiophora brassicae 2;17;infected;paired;202;infected - leaf;protist biotroph;biotroph
+179;SRR3125004;Plasmodiophora brassicae 2;24;control;paired;202;control - root;protist biotroph;biotroph
+180;SRR3125005;Plasmodiophora brassicae 2;20;infected;paired;202;infected - leaf;protist biotroph;biotroph
+181;SRR30310344;Turnip mosaic virus (TuMV);14;infected;paired;300;TuMV-AS;viral biotroph;biotroph
+182;SRR30310345;Turnip mosaic virus (TuMV);14;control;paired;300;control;viral biotroph;biotroph
+183;SRR30310346;Turnip mosaic virus (TuMV);14;control;paired;300;control;viral biotroph;biotroph
+184;SRR30310347;Turnip mosaic virus (TuMV);14;control;paired;300;control;viral biotroph;biotroph
+185;SRR30310348;Turnip mosaic virus (TuMV);14;control;paired;300;control;viral biotroph;biotroph
+186;SRR30310349;Turnip mosaic virus (TuMV);14;control;paired;300;control;viral biotroph;biotroph
+187;SRR30310350;Turnip mosaic virus (TuMV);14;control;paired;300;control;viral biotroph;biotroph
+188;SRR30310351;Turnip mosaic virus (TuMV);14;infected;paired;300;TuMV-DV;viral biotroph;biotroph
+189;SRR30310352;Turnip mosaic virus (TuMV);14;infected;paired;300;TuMV-DV;viral biotroph;biotroph
+190;SRR30310353;Turnip mosaic virus (TuMV);14;infected;paired;300;TuMV-DV;viral biotroph;biotroph
+191;SRR30310354;Turnip mosaic virus (TuMV);14;infected;paired;300;TuMV-DV;viral biotroph;biotroph
+192;SRR30310355;Turnip mosaic virus (TuMV);14;infected;paired;300;TuMV-DV;viral biotroph;biotroph
+193;SRR30310356;Turnip mosaic virus (TuMV);14;infected;paired;300;TuMV-DV;viral biotroph;biotroph
+194;SRR30310357;Turnip mosaic virus (TuMV);14;infected;paired;300;TuMV-DV;viral biotroph;biotroph
+195;SRR30310358;Turnip mosaic virus (TuMV);14;control;paired;300;control;viral biotroph;biotroph
+196;SRR30310359;Turnip mosaic virus (TuMV);14;infected;paired;300;TuMV-DV;viral biotroph;biotroph
+197;SRR30310360;Turnip mosaic virus (TuMV);14;infected;paired;300;TuMV-DV;viral biotroph;biotroph
+198;SRR30310361;Turnip mosaic virus (TuMV);14;infected;paired;300;TuMV-AS;viral biotroph;biotroph
+199;SRR30310362;Turnip mosaic virus (TuMV);14;infected;paired;300;TuMV-AS;viral biotroph;biotroph
+200;SRR30310363;Turnip mosaic virus (TuMV);14;infected;paired;300;TuMV-AS;viral biotroph;biotroph
+201;SRR30310364;Turnip mosaic virus (TuMV);14;infected;paired;300;TuMV-AS;viral biotroph;biotroph
+202;SRR30310365;Turnip mosaic virus (TuMV);14;infected;paired;300;TuMV-AS;viral biotroph;biotroph
+203;SRR30310366;Turnip mosaic virus (TuMV);14;infected;paired;300;TuMV-AS;viral biotroph;biotroph
+204;SRR30310367;Turnip mosaic virus (TuMV);14;infected;paired;300;TuMV-AS;viral biotroph;biotroph
+205;SRR30310368;Turnip mosaic virus (TuMV);14;infected;paired;300;TuMV-AS;viral biotroph;biotroph
+206;SRR30310369;Turnip mosaic virus (TuMV);14;control;paired;300;control;viral biotroph;biotroph
+207;SRR30310370;Turnip mosaic virus (TuMV);14;control;paired;300;control;viral biotroph;biotroph
+208;SRR24657655;Turnip mosaic virus (TuMV) 3;14;infected;paired;300;Evolved TuMV infected passage 12;viral biotroph;biotroph
+209;SRR24657656;Turnip mosaic virus (TuMV) 3;14;infected;paired;300;Evolved TuMV infected passage 12;viral biotroph;biotroph
+210;SRR24657657;Turnip mosaic virus (TuMV) 3;14;infected;paired;300;Evolved TuMV infected passage 12;viral biotroph;biotroph
+211;SRR24657658;Turnip mosaic virus (TuMV) 3;14;infected;paired;300;Evolved TuMV infected passage 12;viral biotroph;biotroph
+212;SRR24657659;Turnip mosaic virus (TuMV) 3;14;infected;paired;300;Evolved TuMV infected passage 12;viral biotroph;biotroph
+213;SRR24657669;Turnip mosaic virus (TuMV) 3;14;infected;paired;300;Naïve TuMV infected\, passage 1;viral biotroph;biotroph
+214;SRR24657680;Turnip mosaic virus (TuMV) 3;14;infected;paired;300;Naïve TuMV infected\, passage 1;viral biotroph;biotroph
+215;SRR24657691;Turnip mosaic virus (TuMV) 3;14;infected;paired;300;Naïve TuMV infected\, passage 1;viral biotroph;biotroph
+216;SRR24657702;Turnip mosaic virus (TuMV) 3;14;infected;paired;300;Naïve TuMV infected\, passage 1;viral biotroph;biotroph
+217;SRR24657703;Turnip mosaic virus (TuMV) 3;14;infected;paired;300;Naïve TuMV infected\, passage 1;viral biotroph;biotroph
+218;ERR7738942;Turnip yellows virus (TuYV);14;infected;paired;150;infected;viral biotroph;biotroph
+219;ERR7738943;Turnip yellows virus (TuYV);14;infected;paired;150;infected;viral biotroph;biotroph
+220;ERR7738944;Turnip yellows virus (TuYV);14;infected;paired;150;infected;viral biotroph;biotroph
+221;SRR30606508;Botrytis cinerea;0,5;infected;paired;300;infected;necrotoph;necrotroph
+222;SRR30606509;Botrytis cinerea;0,25;infected;paired;300;infected;necrotoph;necrotroph
+223;SRR30606510;Botrytis cinerea;0,25;infected;paired;300;infected;necrotoph;necrotroph
+224;SRR30606511;Botrytis cinerea;0,25;infected;paired;300;infected;necrotoph;necrotroph
+225;SRR30606517;Botrytis cinerea;4;infected;paired;300;infected;necrotoph;necrotroph
+226;SRR30606518;Botrytis cinerea;4;infected;paired;300;infected;necrotoph;necrotroph
+227;SRR30606519;Botrytis cinerea;4;infected;paired;300;infected;necrotoph;necrotroph
+228;SRR30606520;Botrytis cinerea;3;infected;paired;300;infected;necrotoph;necrotroph
+229;SRR30606521;Botrytis cinerea;0;control;paired;300;control;necrotoph;necrotroph
+230;SRR30606522;Botrytis cinerea;3;infected;paired;300;infected;necrotoph;necrotroph
+231;SRR30606523;Botrytis cinerea;3;infected;paired;300;infected;necrotoph;necrotroph
+232;SRR30606524;Botrytis cinerea;2;infected;paired;300;infected;necrotoph;necrotroph
+233;SRR30606525;Botrytis cinerea;2;infected;paired;300;infected;necrotoph;necrotroph
+234;SRR30606526;Botrytis cinerea;2;infected;paired;300;infected;necrotoph;necrotroph
+235;SRR30606527;Botrytis cinerea;1;infected;paired;300;infected;necrotoph;necrotroph
+236;SRR30606528;Botrytis cinerea;1;infected;paired;300;infected;necrotoph;necrotroph
+237;SRR30606529;Botrytis cinerea;1;infected;paired;300;infected;necrotoph;necrotroph
+238;SRR30606530;Botrytis cinerea;0,5;infected;paired;300;infected;necrotoph;necrotroph
+239;SRR30606531;Botrytis cinerea;0,5;infected;paired;300;infected;necrotoph;necrotroph
+240;SRR30606532;Botrytis cinerea;0;control;paired;300;control;necrotoph;necrotroph
+241;SRR30606533;Botrytis cinerea;0;control;paired;300;control;necrotoph;necrotroph
+242;SRR18568313;Alternaria brassicae;10;control;single;100;control;necrotoph;necrotroph
+243;SRR18568314;Alternaria brassicae;10;control;single;100;control;necrotoph;necrotroph
+244;SRR18568315;Alternaria brassicae;10;control;single;100;control;necrotoph;necrotroph
+245;SRR18568316;Alternaria brassicae;6;control;single;100;control;necrotoph;necrotroph
+246;SRR18568317;Alternaria brassicae;6;control;single;100;control;necrotoph;necrotroph
+247;SRR18568318;Alternaria brassicae;6;control;single;100;control;necrotoph;necrotroph
+248;SRR18568319;Alternaria brassicae;3;control;single;100;control;necrotoph;necrotroph
+249;SRR18568320;Alternaria brassicae;3;control;single;100;control;necrotoph;necrotroph
+250;SRR18568321;Alternaria brassicae;3;control;single;100;control;necrotoph;necrotroph
+251;SRR18568322;Alternaria brassicae;10;infected;single;100;Abra43;necrotoph;necrotroph
+252;SRR18568323;Alternaria brassicae;10;infected;single;100;Abra43;necrotoph;necrotroph
+253;SRR18568324;Alternaria brassicae;10;infected;single;100;Abra43;necrotoph;necrotroph
+254;SRR18568325;Alternaria brassicae;6;infected;single;100;Abra43;necrotoph;necrotroph
+255;SRR18568326;Alternaria brassicae;6;infected;single;100;Abra43;necrotoph;necrotroph
+256;SRR18568327;Alternaria brassicae;6;infected;single;100;Abra43;necrotoph;necrotroph
+257;SRR18568328;Alternaria brassicae;3;infected;single;100;Abra43;necrotoph;necrotroph
+258;SRR18568329;Alternaria brassicae;3;infected;single;100;Abra43;necrotoph;necrotroph
+259;SRR18568330;Alternaria brassicae;3;infected;single;100;Abra43;necrotoph;necrotroph
+260;SRR24107301;Drought;0;infected;paired;202;salinity (mannitol);drought;drought
+261;SRR24107302;Drought;0;infected;paired;202;salinity (mannitol);drought;drought
+262;SRR24107303;Drought;0;infected;paired;202;drought (NaCl);drought;drought
+263;SRR24107304;Drought;0;infected;paired;202;drought (NaCl);drought;drought
+264;SRR24107305;Drought;0;control;paired;202;control;drought;drought
+265;SRR24107306;Drought;0;control;paired;202;control;drought;drought
+266;1_5_S4;Erisyphe cruciferarum;1;infected;single;;powdery mildew;fungal biotroph;biotroph
+267;1_9_S8;Erisyphe cruciferarum;4;control;single;;control;fungal biotroph;biotroph
+268;2_9_S21;Erisyphe cruciferarum;4;control;single;;control;fungal biotroph;biotroph
+269;2_13_S25;Erisyphe cruciferarum;4;infected;single;;powdery mildew;fungal biotroph;biotroph
+270;3_1_S29;Erisyphe cruciferarum;1;control;single;;control;fungal biotroph;biotroph
+271;3_9_S30;Erisyphe cruciferarum;4;control;single;;control;fungal biotroph;biotroph
+272;4_1_S31;Erisyphe cruciferarum;1;control;single;;control;fungal biotroph;biotroph
+273;4_5_S35;Erisyphe cruciferarum;1;infected;single;;powdery mildew;fungal biotroph;biotroph
+274;4_9_S39;Erisyphe cruciferarum;4;control;single;;control;fungal biotroph;biotroph
+275;4_13_S43;Erisyphe cruciferarum;4;infected;single;;powdery mildew;fungal biotroph;biotroph
+276;5_1_S47;Erisyphe cruciferarum;1;control;single;;control;fungal biotroph;biotroph
+277;5_5_S51;Erisyphe cruciferarum;1;infected;single;;powdery mildew;fungal biotroph;biotroph
+278;5_9_S55;Erisyphe cruciferarum;4;control;single;;control;fungal biotroph;biotroph
+279;5_13_S59;Erisyphe cruciferarum;4;infected;single;;powdery mildew;fungal biotroph;biotroph
+280;6_1_S63;Erisyphe cruciferarum;1;infected;single;;powdery mildew;fungal biotroph;biotroph
+281;6_5_S67;Erisyphe cruciferarum;1;infected;single;;powdery mildew;fungal biotroph;biotroph
+282;6_13_S74;Erisyphe cruciferarum;4;infected;single;;powdery mildew;fungal biotroph;biotroph

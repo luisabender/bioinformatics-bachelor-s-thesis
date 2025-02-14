@@ -30,10 +30,13 @@ library(caret)
 ```{r}
 # load expression data
 options(stringsAsFactors = FALSE)
-expr_data <- read.csv("~/Studium/bachelor-thesis-luisa/count_tables/vst_expression_data.csv", row.names = 1)
+#expr_data <- read.csv("~/Studium/bachelor-thesis-luisa/count_tables/vst_expression_data.csv", row.names = 1)
+# transposed expression data for WGCNA
+input_mat <- read.csv(~"/Studium/bachelor-thesis-luisa/count_tables/expr_data_transposed", row.names = 1)
 
-# transpose it for WGCNA
-input_mat <- t(expr_data)
+# load meta data
+metaData <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData_modified")
+metaData_bin <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData_bin")
 ```
 
 ```{r}
@@ -168,6 +171,8 @@ plotDendroAndColors(geneTree_pow4_signed,
 
 eigengene = summary profile for each module
 --> correlate eigengenes with external traits and look for the most significant associations
+
+skip this part:
 
 ```{r}
 # loading meta data

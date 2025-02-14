@@ -126,8 +126,13 @@ dds_genelev_filtered <- DESeqDataSetFromMatrix(countData = round(counts_genelev_
                               colData = metaData,
                               design = ~Experiment + infected.control)
 
+dds_genelev_filtered <- estimateSizeFactors(dds_genelev_filtered)
+summary(sizeFactors(dds_genelev_filtered))
+
+dds_genelev_filtered <- estimateDispersions(dds_genelev_filtered)
+plotDispEsts(dds)
 #dds_genelev_filtered <- DESeq(dds_genelev_filtered)
-#dds_filtered <- estimateDispersions(dds_filtered)
+
 vsd_genelev_filtered <- varianceStabilizingTransformation(dds_genelev_filtered, blind = FALSE)
 #vsd_genelev_filtered_data <- getVarianceStabilizedData(dds_genelev_filtered)
 ```
