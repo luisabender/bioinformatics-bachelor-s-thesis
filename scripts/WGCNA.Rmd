@@ -65,7 +65,7 @@ allowWGCNAThreads()
 
 # set of soft-thresholding powers
 powers = c(c(1:10), seq(from = 12, to = 20, by = 2))
-sft <- pickSoftThreshold(input_mat, powerVector = powers, verbose = 5)
+sft <- pickSoftThreshold(input_mat, powerVector = powers, verbose = 5, networkType = "signed hybrid")
 ```
 
 ```{r}
@@ -130,12 +130,30 @@ load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow8.RDa
 moduleColors_pow8 <- mergedColors
 MEs_pow8 <- mergedMEs
 geneTree_pow8 <- geneTree
+
+# network construction with soft power 6 - signed hybrid network
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow6_signed.RData')
+moduleColors_pow6_signed <- mergedColors
+MEs_pow6_signed <- mergedMEs
+geneTree_pow6_signed <- geneTree
+
+# network construction with soft power 5 - signed hybrid network
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow5_signed.RData')
+moduleColors_pow5_signed <- mergedColors
+MEs_pow5_signed <- mergedMEs
+geneTree_pow5_signed <- geneTree
+
+# network construction with soft power 4 - signed hybrid network
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow4_signed.RData')
+moduleColors_pow4_signed <- mergedColors
+MEs_pow4_signed <- mergedMEs
+geneTree_pow4_signed <- geneTree
 ```
 
 ```{r}
 # plots the gene dendrogram with the module colors
-plotDendroAndColors(geneTree_pow6, 
-                    moduleColors_pow6,
+plotDendroAndColors(geneTree_pow4_signed, 
+                    moduleColors_pow4_signed,
                     "Module",
                     dendroLabels = FALSE, 
                     hang = 0.03,
@@ -202,7 +220,7 @@ metaData_bin <- metaData_bin[,-35]
 # Define numbers of genes and samples
 nGenes = ncol(input_mat);
 nSamples = nrow(input_mat);
-picked_module_colors = moduleColors_pow6
+picked_module_colors = moduleColors_pow4_signed
 
 # Recalculate MEs with color labels
 MEs0 = moduleEigengenes(input_mat, picked_module_colors)$eigengenes
@@ -221,7 +239,7 @@ colnames(inf_path_df) <- gsub("inf_path.", "", colnames(inf_path_df))
 # pathogen categories
 cat_df <- metaData_bin[, grep("Category_trophs", colnames(metaData_bin))]
 colnames(cat_df) <- gsub("Category_trophs.", "", colnames(cat_df))
-
+cat_df <- cat_df[,-1]
 # pathogen subcategories
 sub_cat_df <- metaData_bin[, grep("Category\\.", colnames(metaData_bin))]
 colnames(sub_cat_df) <- gsub("Category\\.", "", colnames(sub_cat_df))
@@ -286,7 +304,7 @@ Connectivity: how connected a speficic node is in the network (how many nodes ha
 
 ```{r}
 ### Module Membership ###
-picked_MEs <- MEs_pow6
+picked_MEs <- MEs_pow4_signed
 modNames = substring(names(picked_MEs), 3) #extract module names
 
 #Calculate the module membership and the associated p-values for every gene and module
@@ -333,11 +351,11 @@ meanGS_per_module_sub_cat <- aggregate(. ~ Module, data = geneTraitSignificance_
 
 ```{r}
 barplot(
-    height = meanGS_per_module_sub_cat$`fungal biotroph`, 
+    height = meanGS_per_module_inf_path$`Hpa`, 
     names.arg = meanGS_per_module_sub_cat$Module, 
     col = meanGS_per_module_sub_cat$Module,  # module name as colors
     las = 2,  
-    main = "Mean Gene Significance across Modules for fungal biotrophs",
+    main = "Mean Gene Significance across Modules for Hpa",
     ylab = "Mean Gene Significance"
 )
 ```
@@ -366,7 +384,7 @@ plot_meanGS <- function(moduleColors, GS, trait){
 ```{r}
 # look at specific module that has high significance with choosen trait
 module = "darkgrey"
-category = "fungal biotroph"
+category = "Hpa"
 column = match(module, modNames)
 moduleGenes = picked_module_colors==module
 
@@ -374,7 +392,7 @@ moduleGenes = picked_module_colors==module
 
 #pdf("~/Studium/bachelor-thesis-luisa/plots/GS_vs_MM_TuMV_magenta.pdf")
 verboseScatterplot(abs(geneModuleMembership[moduleGenes,column]),
-abs(geneTraitSignificance_sub_cat[moduleGenes,category]),
+abs(geneTraitSignificance_inf_path[moduleGenes,category]),
 xlab = paste("Module Membership in", module, "module"),
 ylab = paste("Gene significance for ", category),
 main = paste("Module membership vs. gene significance\n"),
@@ -429,7 +447,7 @@ module_genes <- list()
 
 # get genes from each module
 for (module in modNames) {
-  module_genes[[module]] <- colnames(input_mat)[moduleColors_pow6 == module] %>% gsub("\\.1$", "", .)
+  module_genes[[module]] <- colnames(input_mat)[moduleColors_pow4_signed == module] %>% gsub("\\.1$", "", .)
 }
 
 # get all GO enrichment results for each module
@@ -497,13 +515,13 @@ for (module in module_names) {
   enrichment_table$KEGG[enrichment_table$Module == module] <- extract_top_term(kegg_results[[module]])
 }
 print(enrichment_table)
-#write.csv(enrichment_table, "~/Studium/bachelor-thesis-luisa/wgcna_results/module_enrichment.csv")
+write.csv(enrichment_table, "~/Studium/bachelor-thesis-luisa/wgcna_results/module_enrichment.csv")
 ```
 
 
 ```{r}
 # plotting of enrichment results of specific module
-module = "purple"
+module = "darkgrey"
 
 # simplify enrichGO output by removing redundancy of enriched GO terms
 # plot with gene ratio
