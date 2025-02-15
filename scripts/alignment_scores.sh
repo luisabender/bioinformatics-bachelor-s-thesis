@@ -4,7 +4,7 @@
 ROOT_DIR="/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/kallisto_paired"
 
 # Output file
-OUTPUT_FILE="kallisto_alignment_summary.csv"
+OUTPUT_FILE="kallisto_alignment_sum_w_added_dataset.csv"
 
 # Write the header to the output file
 echo "sample_ID,p_pseudoaligned,n_pseudoaligned, n_processed" > "$OUTPUT_FILE"

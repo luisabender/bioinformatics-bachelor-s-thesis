@@ -26,7 +26,7 @@ base_dir="/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa"
 echo "Beginning adapter trimming"
 
 source /dss/dsshome1/0A/ge58rom2/miniconda3/bin/activate bio_env
-outputdir_trimmed="$base_dir/trimmed_files"
+outputdir_trimmed="$base_dir/trimmed_files/added_dataset"
 
 # create file for trimmed samples if not already provided
 if [ ! -d "$outputdir_trimmed" ]; then
@@ -34,8 +34,10 @@ if [ ! -d "$outputdir_trimmed" ]; then
 fi
 
 
-for sample_dir in $base_dir/"raw_files"/*; do
-    # Check if it's a directory
+for sample in $base_dir/"raw_files/Stegmann_RNAseq/RNAseq_WT"/*; do
+    
+    : '
+    # Check if its a directory
     if [ -d "$sample_dir/fastq" ]; then
         # Get the sample name (folder name)
         sample_name=$(basename "$sample_dir")
@@ -65,11 +67,26 @@ for sample_dir in $base_dir/"raw_files"/*; do
         else
             echo "No fastq files found for sample: $sample_name"
         fi
-    fi
+    fi'
+    sample_name=$(basename "$sample")
+    echo "Processing single-end sample: $sample_name"
+    fastp \
+        -i "$sample" \
+        -o "$outputdir_trimmed/${sample_name}_trimmed.fastq" \
+        --adapter_sequence AGATCGGAAGAGC \
+        --trim_poly_x \
+        --cut_right\
+         --cut_right_window_size 4 \
+         --cut_right_mean_quality 20 \
+         --length_required 50 \
+         --dedup \
+         --poly_x_min_len 4 \
+         --qualified_quality_phred 30
+        
 done
 
 #### fastqc after trimming ####
-output_fastqc_trimmed="/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/fastqc_trimmed"
+output_fastqc_trimmed="/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/fastqc_trimmed/added_dataset"
 
 if [ ! -d "$output_fastqc_trimmed" ]; then
     mkdir "$output_fastqc_trimmed"
