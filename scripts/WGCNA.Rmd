@@ -32,7 +32,7 @@ library(caret)
 options(stringsAsFactors = FALSE)
 #expr_data <- read.csv("~/Studium/bachelor-thesis-luisa/count_tables/vst_expression_data.csv", row.names = 1)
 # transposed expression data for WGCNA
-input_mat <- read.csv(~"/Studium/bachelor-thesis-luisa/count_tables/expr_data_transposed", row.names = 1)
+input_mat <- read.csv("~/Studium/bachelor-thesis-luisa/count_tables/expr_data_transposed", row.names = 1)
 
 # load meta data
 metaData <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData_modified")
@@ -293,12 +293,6 @@ moduleTraitCorrelation(MEs, libsize_df, "Library Size")
 We quantify associations of individual genes with our trait of interest (weight) by defining Gene Significance GS as (the absolute value of) the correlation between the gene and the trait. For each module, we also define a quantitative measure of module membership MM as the correlation of the module eigengene and the gene expression profile. This allows us to quantify the similarity of all genes on the array to every module.
 
 
-```{r}
-# identify hub genes
-hubGenes = chooseTopHubInEachModule(input_mat, picked_module_colors)
-print(hubGenes)
-```
-
 
 ### Target Gene Identification
 1. use gene significance along with the genes intramodular connectivity to identify potential target genes associated with a particular trait of interest
@@ -364,7 +358,45 @@ barplot(
     ylab = "Mean Gene Significance"
 )
 ```
+```{r}
+# identify top hub gene per module
+hubGenes = chooseTopHubInEachModule(input_mat, picked_module_colors)
+print(hubGenes)
 
+# kME: maximum module membership score
+# kWithin: Intramodular connectivity, measures how connected a gene is within its module.
+kWithin = softConnectivity(input_mat, type = "signed hybrid")
+
+# identify more hub genes per module based on gene significance
+gene_info_GS <- data.frame(
+  Gene = colnames(input_mat),
+  Module = picked_module_colors,  
+  kME = apply(geneModuleMembership, 1, max),
+  GS = abs(geneTraitSignificance_inf_path[,-14]), # gene trait significance for trait of interest (without module column)
+  kWithin = kWithin
+)
+
+# Select top hub genes per module based on kME and kWithin
+hub_genes_GS <- gene_info_GS %>%
+  group_by(Module) %>%
+  arrange(desc(kWithin), desc(kME)) %>%
+  slice_head(n = 5)  # Select top 5 hub genes per module
+
+
+# not based on gene significance
+gene_info <- data.frame(
+  Gene = colnames(input_mat),
+  Module = picked_module_colors,  # Module assignment from WGCNA
+  kME = apply(geneModuleMembership, 1, max),  # Max module membership per gene
+  kWithin = kWithin  # Intramodular connectivity
+)
+
+# Select top hub genes per module based on kWithin and kME
+hub_genes <- gene_info %>%
+  group_by(Module) %>%
+  arrange(desc(kWithin), desc(kME)) %>%
+  slice_head(n = 10)  # Select top 5 hub genes per module
+```
 
 ```{r}
 plot_meanGS <- function(moduleColors, GS, trait){
@@ -547,4 +579,81 @@ ggplot(showCategory = 20,
 goplot(simple_enriched_go, showCategory = 5)
 cnetplot(simple_enriched_go)
 ```
+```{r}
+# functional enrichment on hub genes per module
+module_hub_genes <- list()
+rownames(hub_genes) <- hub_genes$Gene
+# get genes from each module
+for (module in modNames) {
+  module_hub_genes[[module]] <- rownames(hub_genes)[hub_genes$Module == module] %>% gsub("\\.1$", "", .)
+}
 
+# get all GO enrichment results for each module
+go_results_hub_genes <- list(BP = list(), CC = list(), MF = list())
+
+for (module in names(module_hub_genes)) {
+  go_results_hub_genes$BP[[module]] <- enrichGO(
+    gene = module_hub_genes[[module]],
+    OrgDb = org.At.tair.db,  
+    keyType = "TAIR",
+    ont = "BP",  
+    pAdjustMethod = "BH",
+    pvalueCutoff = 0.05
+  )
+  
+  go_results_hub_genes$CC[[module]] <- enrichGO(
+    gene = module_hub_genes[[module]],
+    OrgDb = org.At.tair.db,
+    keyType = "TAIR",
+    ont = "CC",  
+    pAdjustMethod = "BH",
+    pvalueCutoff = 0.05
+  )
+  
+  go_results_hub_genes$MF[[module]] <- enrichGO(
+    gene = module_hub_genes[[module]],
+    OrgDb = org.At.tair.db,
+    keyType = "TAIR",
+    ont = "MF", 
+    pAdjustMethod = "BH",
+    pvalueCutoff = 0.05
+  )
+}
+
+
+# Get KEGG pathway enrichment results
+kegg_hub_results <- list()
+
+for (module in names(module_hub_genes)) {
+  kegg_hub_results[[module]] <- enrichKEGG(
+    gene = module_hub_genes[[module]],
+    organism = "ath", 
+    pAdjustMethod = "BH",
+    pvalueCutoff = 0.05
+  )
+}
+```
+
+```{r}
+# plotting of enrichment results of specific module
+module = "darkgrey"
+
+# simplify enrichGO output by removing redundancy of enriched GO terms
+# plot with gene ratio
+simple_enriched_go <- simplify(go_results_hub_genes$BP[[module]])
+
+simple_enriched_go %>% filter(p.adjust < 0.05) %>%
+ggplot(showCategory = 20,
+  aes(GeneRatio, forcats::fct_reorder(Description, GeneRatio))) + 
+  geom_segment(aes(xend=0, yend = Description)) +
+  geom_point(aes(color=p.adjust, size = Count)) +
+  scale_color_viridis_c(guide=guide_colorbar(reverse=TRUE)) +
+  scale_size_continuous(range=c(1, 7)) +
+  theme_minimal() + 
+  xlab("Gene Ratio") +
+  ylab(NULL) + 
+  ggtitle(paste("GO Enrichment of", module, "module"))
+
+goplot(simple_enriched_go, showCategory = 5)
+cnetplot(simple_enriched_go)
+```

@@ -14,7 +14,7 @@ library(tidyr)
 Kallisto alignment result: 
 
 ```{r}
-kallisto_alignment_summary <- read.csv('~/Studium/bachelor-thesis-luisa/scripts/kallisto_alignment_summary.csv')
+kallisto_alignment_summary <- read.csv('~/Studium/bachelor-thesis-luisa/multiqc/kallisto_alignment_summary.csv')
 #poor_alignment_threshold <- 2500000
 #kallisto_alignment_summary$alignment_status <- ifelse(kallisto_alignment_summary$n_pseudoaligned < poor_alignment_threshold, "Poor", "Good")
 
@@ -31,11 +31,10 @@ ggplot(data_long, aes(x=Sample, y=Count, fill = AlignmentStatus)) +
   scale_fill_manual(values = c("Pseudoaligned" = "steelblue", "NotAligned" = "darkred")) +
   theme_minimal() +
   scale_y_continuous(labels = scales::comma) +
-  scale_x_discrete(breaks = data_long$Sample[seq(1, nrow(data_long), by = 10)]) +  # Show every 10th sample
-  
+  #scale_x_discrete(breaks = data_long$Sample[seq(1, nrow(data_long), by = 10)]) +  # Show every 10th sample
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 7)) +
-  labs(title = "Kallisto: Alignment Scores for 283 samples",
-       x = "",
+  labs(title = "Kallisto: Alignment Scores for added dataset (Ecr)",
+       x = data_long$Sample,
        y = "Number of aligned Reads",
        fill = "Alignment Status")
 
@@ -53,18 +52,59 @@ counts_genelev_tpm <- read.csv('~/Studium/bachelor-thesis-luisa/count_tables/cou
 counts_genelev_tpm <- counts_genelev_tpm[,!names(counts_genelev_tpm) %in% duplicates] # genelevel tpm
 
 counts_lengthscaledTPM <- read.csv('~/Studium/bachelor-thesis-luisa/count_tables/counts_lengthscaledTPM.csv', row.names = 1) # counts scaled with lenghtscaledTPM
+
+gene_counts_stegmann <- read.csv('~/Studium/bachelor-thesis-luisa/count_tables/RNAseq.gene.counts.kallisto.txt',sep="\t", row.names = 1)
+tpm_counts_stegmann <- read.csv('~/Studium/bachelor-thesis-luisa/count_tables/RNAseq.gene.abundance.kallisto.txt',sep="\t", row.names = 1)
+```
+
+```{r}
+# keep only Col0 samples of dataset
+stegmann_samples_to_keep <- c("1_5_S4","1_9_S8","2_9_S21","2_13_S25","3_1_S29","3_9_S30","4_1_S31","4_5_S35","4_9_S39","4_13_S43","5_1_S47","5_5_S51","5_9_S55","5_13_S59","6_1_S63","6_5_S67","6_13_S74")
+
+# remove X at the beginning of the sample names
+colnames(gene_counts_stegmann) <- gsub('X','',colnames(gene_counts_stegmann))
+colnames(tpm_counts_stegmann) <- gsub('X','',colnames(tpm_counts_stegmann))
+
+gene_counts_stegmann <- gene_counts_stegmann[, names(gene_counts_stegmann) %in% stegmann_samples_to_keep]
+tpm_counts_stegmann <- tpm_counts_stegmann[, names(tpm_counts_stegmann) %in% stegmann_samples_to_keep]
+```
+
+
+```{r}
+# set gene ids as separate column
+gene_counts_stegmann <- gene_counts_stegmann %>% tibble::rownames_to_column(var = "gene_id")
+counts_geneID <- counts_geneID %>% tibble::rownames_to_column(var = "gene_id")
+
+tpm_counts_stegmann <- tpm_counts_stegmann %>% tibble::rownames_to_column(var = "gene_id")
+counts_genelev_tpm <- counts_genelev_tpm %>% tibble::rownames_to_column(var = "gene_id")
+
+counts_geneID$gene_id <- gsub("\\.1$", "", counts_geneID$gene_id)
+counts_genelev_tpm$gene_id <- gsub("\\.1$", "", counts_genelev_tpm$gene_id)
+
+# combine to count tables
+gene_counts <- full_join(counts_geneID,gene_counts_stegmann, by="gene_id")
+tpm_counts <-  full_join(counts_genelev_tpm,tpm_counts_stegmann, by="gene_id")
+
+# Replace NA values with 0 (since missing genes should be treated as 0 counts)
+gene_counts[is.na(gene_counts)] <- 0
+tpm_counts[is.na(tpm_counts)] <- 0
+
+# set genes back as rownames
+gene_counts <- gene_counts %>% tibble::column_to_rownames(var = "gene_id")
+tpm_counts <- tpm_counts %>% tibble::column_to_rownames(var = "gene_id")
 ```
 
 
 Loading meta data:
 
 ```{r}
-metaData <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData.csv", sep=";")
+metaData <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData_2.0.csv", sep=";")
 metaData$Timepoint_dpi <- metaData$Timepoint..dpi.
 
 # create pathogen column
 metaData$pathogen <- ifelse(metaData$Experiment == "Heterodera schachtii 2", "Heterodera schachtii", metaData$Experiment)
 metaData$pathogen <- ifelse(metaData$Experiment == "Hyaloperonospora arabidopsidis 3", "Hyaloperonospora arabidopsidis", metaData$pathogen)
+metaData$pathogen <- ifelse(metaData$Experiment == "Hyaloperonospora arabidopsidis 2", "Hyaloperonospora arabidopsidis", metaData$pathogen)
 metaData$pathogen <- ifelse(metaData$Experiment == "Plasmodiophora brassicae 2", "Plasmodiophora brassicae", metaData$pathogen)
 metaData$pathogen <- ifelse(metaData$Experiment == "Turnip mosaic virus (TuMV) 3", "Turnip mosaic virus (TuMV)", metaData$pathogen)
 
@@ -104,57 +144,76 @@ colnames(metaData_bin) <- gsub(".vs.all", "", colnames(metaData_bin))
 metaData_bin <- metaData_bin[,-35]
 ```
 
-
-```{r meta info}
-# removing samples with bad alignment rate
-#experiment_to_drop <- 'Hyaloperonospora arabidopsidis 2'
-#to_drop <- meta_info[meta_info$Experiment == experiment_to_drop, ]$Run
-hpa2 <- c("SRR22565219","SRR22565220","SRR22565221","SRR22565222","SRR22565223","SRR22565224","SRR22565225","SRR22565226","SRR22565227","SRR22565228","SRR22565229","SRR22565230","SRR22565231","SRR22565232","SRR22565233","SRR22565234","SRR22565235","SRR22565236")
-
-#meta_info <- meta_info[!meta_info$Run %in% to_drop,]
-#meta_info_general <- meta_info_general[!meta_info_general$Run %in% to_drop,]
-counts_geneID <- counts_geneID[, !names(counts_geneID) %in% hpa2]
-counts_genelev_tpm <- counts_genelev_tpm[, !names(counts_genelev_tpm) %in% hpa2]
-```
-
 Filter low expressed genes (with tpm values (genelevel tpm)): 
 
 Result: 
-- before filtering: 27321 genes
-- after filtering: 24991 genes
+- before filtering: 27598 genes
+- after filtering: 25175 genes
 
-if tiniest dataset with contrast, is 3 samples, then
+if tiniest dataset with contrast is 3 samples, then
 --> keep genes that have at least 0.5 TPM per sample in at least 3 samples.
 
 ```{r}
 smallest_tpm <- 0.5
 percentage <- 0.51
-num_samples <- ncol(counts_genelev_tpm)
+num_samples <- ncol(tpm_counts)
 # genes to keep
-keep <- rowSums(counts_genelev_tpm >= smallest_tpm) >= 3
+keep <- rowSums(tpm_counts >= smallest_tpm) >= 3
 
-counts_genelev_filtered <- counts_geneID[keep,]
+gene_counts_filtered <- gene_counts[keep,]
 ```
 
 
 VST on filtered gene count table:
 
 ```{r}
-#counts_genelev_filtered <- counts_genelev_filtered[, !names(counts_genelev_filtered) %in% hpa2]
-dds_genelev_filtered <- DESeqDataSetFromMatrix(countData = round(counts_genelev_filtered),
+dds <- DESeqDataSetFromMatrix(countData = round(gene_counts_filtered),
                               colData = metaData,
-                              design = ~Experiment + infected.control)
+                              design = ~Experiment + infected_control)
 
-dds_genelev_filtered <- estimateSizeFactors(dds_genelev_filtered)
-summary(sizeFactors(dds_genelev_filtered))
+dds <- estimateSizeFactors(dds)
+#summary(sizeFactors(dds))
 
-dds_genelev_filtered <- estimateDispersions(dds_genelev_filtered)
+dds <- estimateDispersions(dds)
 plotDispEsts(dds)
 #dds_genelev_filtered <- DESeq(dds_genelev_filtered)
 
-vsd_genelev_filtered <- varianceStabilizingTransformation(dds_genelev_filtered, blind = FALSE)
+vsd <- varianceStabilizingTransformation(dds, blind = FALSE)
 #vsd_genelev_filtered_data <- getVarianceStabilizedData(dds_genelev_filtered)
 ```
+Filter datasets if there are outliers:
+
+```{r}
+# removing samples with bad alignment rate
+#experiment_to_drop <- 'Hyaloperonospora arabidopsidis 2'
+#to_drop <- meta_info[meta_info$Experiment == experiment_to_drop, ]$Run
+hpa2 <- c("SRR22565219","SRR22565220","SRR22565221","SRR22565222","SRR22565223","SRR22565224","SRR22565225","SRR22565226","SRR22565227","SRR22565228","SRR22565229","SRR22565230","SRR22565231","SRR22565232","SRR22565233","SRR22565234","SRR22565235","SRR22565236")
+
+
+gene_counts <- gene_counts[, !names(gene_counts) %in% hpa2]
+tpm_counts <- tpm_counts[, !names(tpm_counts) %in% hpa2]
+
+metaData <- metaData[!metaData$Run %in% hpa2,]
+metaData_bin <- metaData_bin[!metaData_bin$Run %in% hpa2,]
+```
+
+Re-Do VST:
+```{r}
+dds <- DESeqDataSetFromMatrix(countData = round(gene_counts_filtered),
+                              colData = metaData,
+                              design = ~Experiment + infected_control)
+
+dds <- estimateSizeFactors(dds)
+#summary(sizeFactors(dds))
+
+dds <- estimateDispersions(dds)
+plotDispEsts(dds)
+#dds_genelev_filtered <- DESeq(dds_genelev_filtered)
+
+vsd <- varianceStabilizingTransformation(dds, blind = FALSE)
+#vsd_genelev_filtered_data <- getVarianceStabilizedData(dds_genelev_filtered)
+```
+
 
 
 PCA function:
@@ -214,12 +273,14 @@ PCA on raw (and filtered) vst counts:
   
 ```{r pca}
 # vst counts filtered with tpm value
-pca_filtered <- perform_pca(assay(vsd_genelev_filtered))
-pca_data_filtered <- data.frame(Sample = rownames(pca_filtered$x),
-                       PC1 = pca_filtered$x[, 1], 
-                       PC2 = pca_filtered$x[, 2], 
-                       PC3 = pca_filtered$x[, 3], 
-                       PC4 = pca_filtered$x[, 4]) %>% merge(metaData, by.x = "Sample", by.y = "Run")
+pca <- perform_pca(assay(vsd))
+pca_data <- data.frame(Sample = rownames(pca$x),
+                       PC1 = pca$x[, 1], 
+                       PC2 = pca$x[, 2], 
+                       PC3 = pca$x[, 3], 
+                       PC4 = pca$x[, 4]) %>% merge(metaData, by.x = "Sample", by.y = "Run")
+
+pca_data$infected_control <- as.character(pca_data$infected_control)
 ```
 
 
@@ -227,17 +288,25 @@ PCA on unfiltered vs filtered counts
 
 ```{r pca}
 # PC1 and PC2
-visualize_standard_pca(pca_data_filtered,pca_filtered, FALSE,"PCA of filtered vst counts", FALSE)
+visualize_standard_pca(pca_data,pca, FALSE,"PCA of filtered vst counts", FALSE)
+ggplot(pca_data, aes(x = PC1, y = PC2, color = inf_path)) +
+        geom_point() +
+        #stat_ellipse(aes(color = Category), type = "norm")+
+        xlab(paste0("PC1: ", round(100 * summary(pca)$importance[2, 1], 2), "% variance")) +
+        ylab(paste0("PC2: ", round(100 * summary(pca)$importance[2, 2], 2), "% variance")) +
+        ggtitle("PCA of filtered vst counts") +
+        theme_minimal()
+      
 
 # PC3 and PC4
-visualize_standard_pca(pca_data_filtered,pca_filtered, FALSE,"PCA of filtered vst counts", TRUE)
+visualize_standard_pca(pca_data,pca, FALSE,"PCA of filtered vst counts", TRUE)
 ```
 
 PCA on further information:
 
 ```{r pca}
 # number of aligned reads per sample (absolute counts) to include in the PCA
-ggplot(pca_data_filtered, aes(x = PC1, y = PC2, color = n_pseudoaligned, size = n_pseudoaligned)) +
+ggplot(pca_data_filtered, aes(x = PC1, y = PC2, color = LibrarySize, size = LibrarySize)) +
   geom_point(alpha = 0.8) +
   scale_color_viridis_c(option = "plasma") +
   #stat_ellipse(aes(color = Experiment), type = "norm") +# Color gradient for aligned reads
@@ -257,7 +326,7 @@ ggplot(pca_data_filtered, aes(x = PC1, y = PC2, color = n_pseudoaligned, size = 
 
 
 #PC3 and PC4
-ggplot(pca_data_filtered, aes(x = PC3, y = PC4, color = n_pseudoaligned, size = n_pseudoaligned)) +
+ggplot(pca_data_filtered, aes(x = PC3, y = PC4, color = LibrarySize, size = LibrarySize)) +
   geom_point(alpha = 0.8) +
   scale_color_viridis_c(option = "plasma") +
   #stat_ellipse(aes(color = Experiment), type = "norm") +# Color gradient for aligned reads
@@ -276,7 +345,7 @@ ggplot(pca_data_filtered, aes(x = PC3, y = PC4, color = n_pseudoaligned, size = 
   )
 
 # include single and paired in the PCA
-ggplot(pca_data_filtered, aes(x = PC1, y = PC2, color = single.paired)) +
+ggplot(pca_data_filtered, aes(x = PC1, y = PC2, color = Library)) +
   geom_point(alpha = 0.8) +
   theme_minimal() +
   labs(
@@ -290,7 +359,7 @@ ggplot(pca_data_filtered, aes(x = PC1, y = PC2, color = single.paired)) +
     plot.title = element_text(hjust = 0.5, size = 16)
   )
 
-ggplot(pca_data_filtered, aes(x = PC3, y = PC4, color = single.paired)) +
+ggplot(pca_data_filtered, aes(x = PC3, y = PC4, color = Library)) +
   geom_point(alpha = 0.8) +
   theme_minimal() +
   labs(
@@ -312,8 +381,8 @@ options(stringsAsFactors = FALSE)
 #expr_data <- read.csv("~/Studium/bachelor-thesis-luisa/count_tables/vst_expression_data.csv", row.names = 1)
 
 # transpose expression data for WGCNA
-expr_data <- vsd_genelev_filtered
-input_mat <- t(expr_data)
+expr_data <- assay(vsd)
+input_mat0 <- t(expr_data)
 ```
 
 ```{r}
@@ -323,6 +392,38 @@ summary(gsg)
 ```
 
 ```{r}
+# Identifying outlier samples
+sampleTree <- hclust(dist(input_mat0), method = "average") #Clustering samples based on distance 
+
+
+#Plotting the cluster dendrogram
+options(repr.plot.width = 20, repr.plot.height = 10)
+#Setting the graphical parameters
+par(cex = 0.6);
+par(mar = c(0,4,2,0))
+plot(sampleTree, main = "Sample clustering to detect outliers", sub="", xlab="", cex.lab = 1.5,
+cex.axis = 1.5, cex.main = 2)
+abline(h=250, col ="red")
+```
+
+Three outliers were found that should be removed --> choose a cut height of 300 to keep the rest of the samples
+
+```{r}
+clust = cutreeStatic(sampleTree, cutHeight = 300, minSize = 10)
+table(clust)
+
+# clust 1 contains the samples we want to keep.
+keepSamples = (clust==1)
+input_mat = input_mat0[keepSamples, ]
+nGenes = ncol(input_mat)
+nSamples = nrow(input_mat)
+
+# adjust meta data to filtered input matrix
+metaSamples = rownames(input_mat)
+traitRows = match(metaSamples, metaData$Run)
+metaData = metaData[traitRows, ]
+metaData_bin = metaData_bin[traitRows, ]
+
 # Identifying outlier samples
 sampleTree <- hclust(dist(input_mat), method = "average") #Clustering samples based on distance 
 

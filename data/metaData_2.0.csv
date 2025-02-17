@@ -71,63 +71,63 @@ ID;Run;Experiment;Timepoint (dpi);infected_control;Library;avgSpotLen;infection_
 70;ERR9604338;Heterodera schachtii 2;2;control;single;150;control;nematode;biotroph
 71;ERR9604342;Heterodera schachtii 2;2;control;single;150;control;nematode;biotroph
 72;ERR9604343;Heterodera schachtii 2;2;control;single;150;control;nematode;biotroph
-73;SRR10030449;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-74;SRR10030450;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-75;SRR10030451;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-76;SRR10030452;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-77;SRR10030453;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-78;SRR10030454;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-79;SRR10030455;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-80;SRR10030456;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-81;SRR10030457;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-82;SRR10030458;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-83;SRR10030459;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-84;SRR10030460;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-85;SRR10030461;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-86;SRR10030462;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-87;SRR10030463;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-88;SRR10030464;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-89;SRR10030465;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-90;SRR10030466;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-91;SRR10030467;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-92;SRR10030468;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-93;SRR10030469;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-94;SRR10030470;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-95;SRR10030471;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-96;SRR10030472;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-97;SRR10030473;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-98;SRR10030474;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-99;SRR10030475;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-100;SRR10030476;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-101;SRR10030477;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-102;SRR10030478;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-103;SRR10030479;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-104;SRR10030480;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-105;SRR10030481;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-106;SRR10030482;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycte biotroph;biotroph
-107;SRR10030483;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-108;SRR10030484;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-109;SRR10030485;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-110;SRR10030486;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-111;SRR10030487;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-112;SRR10030488;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-113;SRR10030489;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-114;SRR10030490;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-115;SRR10030491;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-116;SRR10030492;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-117;SRR10030493;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-118;SRR10030494;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-119;SRR10030495;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-120;SRR10030496;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-121;SRR10030497;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-122;SRR10030498;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-123;SRR10030499;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-124;SRR10030500;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-125;SRR10030501;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-126;SRR10030502;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-127;SRR10030503;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-128;SRR10030504;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
-129;SRR10030505;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycte biotroph;biotroph
+73;SRR10030449;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+74;SRR10030450;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+75;SRR10030451;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+76;SRR10030452;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+77;SRR10030453;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+78;SRR10030454;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+79;SRR10030455;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+80;SRR10030456;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+81;SRR10030457;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+82;SRR10030458;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+83;SRR10030459;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+84;SRR10030460;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+85;SRR10030461;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+86;SRR10030462;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+87;SRR10030463;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+88;SRR10030464;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+89;SRR10030465;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+90;SRR10030466;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+91;SRR10030467;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+92;SRR10030468;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+93;SRR10030469;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+94;SRR10030470;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+95;SRR10030471;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+96;SRR10030472;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+97;SRR10030473;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+98;SRR10030474;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+99;SRR10030475;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+100;SRR10030476;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+101;SRR10030477;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+102;SRR10030478;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+103;SRR10030479;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+104;SRR10030480;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+105;SRR10030481;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+106;SRR10030482;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - D-tagatose;oomycete biotroph;biotroph
+107;SRR10030483;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+108;SRR10030484;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+109;SRR10030485;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+110;SRR10030486;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+111;SRR10030487;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+112;SRR10030488;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+113;SRR10030489;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+114;SRR10030490;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+115;SRR10030491;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+116;SRR10030492;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+117;SRR10030493;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+118;SRR10030494;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+119;SRR10030495;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+120;SRR10030496;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+121;SRR10030497;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+122;SRR10030498;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+123;SRR10030499;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+124;SRR10030500;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+125;SRR10030501;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+126;SRR10030502;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+127;SRR10030503;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+128;SRR10030504;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
+129;SRR10030505;Hyaloperonospora arabidopsidis 3;17;infected;single;101;infected - mock solution;oomycete biotroph;biotroph
 130;SRR12330763;Meloidogyne javanica;3;infected;paired;300;infected;nematode;biotroph
 131;SRR12330764;Meloidogyne javanica;3;infected;paired;300;infected;nematode;biotroph
 132;SRR12330765;Meloidogyne javanica;3;infected;paired;300;infected;nematode;biotroph
@@ -281,3 +281,21 @@ ID;Run;Experiment;Timepoint (dpi);infected_control;Library;avgSpotLen;infection_
 280;6_1_S63;Erisyphe cruciferarum;1;infected;single;;powdery mildew;fungal biotroph;biotroph
 281;6_5_S67;Erisyphe cruciferarum;1;infected;single;;powdery mildew;fungal biotroph;biotroph
 282;6_13_S74;Erisyphe cruciferarum;4;infected;single;;powdery mildew;fungal biotroph;biotroph
+283;SRR22565219;Hyaloperonospora arabidopsidis 2;0;infected;single;86;Hpa;oomycete biotroph;biotroph
+284;SRR22565220;Hyaloperonospora arabidopsidis 2;0;infected;single;87;Hpa;oomycete biotroph;biotroph
+285;SRR22565221;Hyaloperonospora arabidopsidis 2;0;infected;single;88;Hpa;oomycete biotroph;biotroph
+286;SRR22565222;Hyaloperonospora arabidopsidis 2;0;infected;single;86;Hpa;oomycete biotroph;biotroph
+287;SRR22565223;Hyaloperonospora arabidopsidis 2;0;infected;single;87;Hpa;oomycete biotroph;biotroph
+288;SRR22565224;Hyaloperonospora arabidopsidis 2;0;infected;single;88;Hpa;oomycete biotroph;biotroph
+289;SRR22565225;Hyaloperonospora arabidopsidis 2;0;infected;single;87;Hpa;oomycete biotroph;biotroph
+290;SRR22565226;Hyaloperonospora arabidopsidis 2;0;infected;single;87;Hpa;oomycete biotroph;biotroph
+291;SRR22565227;Hyaloperonospora arabidopsidis 2;0;infected;single;88;Hpa;oomycete biotroph;biotroph
+292;SRR22565228;Hyaloperonospora arabidopsidis 2;0;infected;single;86;Hpa;oomycete biotroph;biotroph
+293;SRR22565229;Hyaloperonospora arabidopsidis 2;0;infected;single;86;Hpa;oomycete biotroph;biotroph
+294;SRR22565230;Hyaloperonospora arabidopsidis 2;0;infected;single;88;Hpa;oomycete biotroph;biotroph
+295;SRR22565231;Hyaloperonospora arabidopsidis 2;0;infected;single;85;Hpa;oomycete biotroph;biotroph
+296;SRR22565232;Hyaloperonospora arabidopsidis 2;0;infected;single;86;Hpa;oomycete biotroph;biotroph
+297;SRR22565233;Hyaloperonospora arabidopsidis 2;0;infected;single;88;Hpa;oomycete biotroph;biotroph
+298;SRR22565234;Hyaloperonospora arabidopsidis 2;0;infected;single;86;Hpa;oomycete biotroph;biotroph
+299;SRR22565235;Hyaloperonospora arabidopsidis 2;0;infected;single;87;Hpa;oomycete biotroph;biotroph
+300;SRR22565236;Hyaloperonospora arabidopsidis 2;0;infected;single;88;Hpa;oomycete biotroph;biotroph
