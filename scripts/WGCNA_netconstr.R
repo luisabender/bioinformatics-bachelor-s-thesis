@@ -5,10 +5,7 @@ base_dir <- "/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/lui
 options(stringsAsFactors = FALSE)
 enableWGCNAThreads()
 
-expr_data <- read.csv(file.path(base_dir,"count_tables/expr_data.csv"), row.names = 1)
-
-# transpose it for WGCNA
-input_mat <- t(expr_data)
+input_mat <- read.csv(file.path(base_dir,"count_tables/expr_data_transposed.csv"), row.names = 1)
 
 powers = c(4,5,6)
 
@@ -78,5 +75,5 @@ dev.off()
 save(mergedMEs, mergedColors, geneTree, file = file.path(base_dir, "wgcna_results", "new",paste0("networkConstruction-pow",power,"_signed.RData")))
 
 
-'+print(paste("Finished succesfully with power", power))
+print(paste("Finished succesfully with power", power))
 }
