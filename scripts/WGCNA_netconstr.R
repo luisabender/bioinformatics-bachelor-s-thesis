@@ -7,7 +7,7 @@ enableWGCNAThreads()
 
 input_mat <- read.csv(file.path(base_dir,"count_tables/expr_data_transposed.csv"), row.names = 1)
 
-powers = c(4,5,6)
+powers = c(4)
 
 # change the adjacancy into signed hybrid
 for (power in powers){
@@ -19,7 +19,7 @@ adjacency <- adjacency(input_mat, power = softPower, type = "signed hybrid")
 
 # Topological Overlap Matrix
 print("Calculating TOM...")
-TOM.dissimilarity <- 1-TOMsimilarity(adjacency)
+TOM.dissimilarity <- 1-TOMsimilarity(adjacency, TOMType = "signed")
 
 
 ### Hierarchical Clustering Analysis
@@ -45,7 +45,7 @@ METree = hclust(as.dist(ME.dissimilarity), method = "average") #Clustering eigen
 par(mar = c(0,4,2,0)) #seting margin sizes
 par(cex = 0.6);#scaling the graphic
 
-pdf(file.path(base_dir, "wgcna_results", "new", paste0("METree_sp", power, "_signed.pdf")))
+pdf(file.path(base_dir, "wgcna_results", "new", paste0("METree_sp", power, "_TOMsigned.pdf")))
 
 plot(METree)
 abline(h=.25, col = "red") #a height of .25 corresponds to correlation of .75
@@ -60,7 +60,7 @@ mergedColors <- merge$colors
 mergedMEs <- merge$newMEs
 
 # plot dendrogram of original and merged module colors
-pdf(file.path(base_dir, "wgcna_results", "new",paste0("dendro_merged_sp",power,"_signed.pdf")))
+pdf(file.path(base_dir, "wgcna_results", "new",paste0("dendro_merged_sp",power,"_TOMsigned.pdf")))
 dendro_merged <- plotDendroAndColors(geneTree, 
                     cbind(ModuleColors, mergedColors),
                     c("original Module", "merged Module"),
@@ -72,7 +72,7 @@ dendro_merged <- plotDendroAndColors(geneTree,
 dev.off()
 
 
-save(mergedMEs, mergedColors, geneTree, file = file.path(base_dir, "wgcna_results", "new",paste0("networkConstruction-pow",power,"_signed.RData")))
+save(mergedMEs, mergedColors, geneTree, file = file.path(base_dir, "wgcna_results", "new",paste0("networkConstruction-pow",power,"_TOMsigned.RData")))
 
 
 print(paste("Finished succesfully with power", power))
