@@ -32,11 +32,11 @@ library(caret)
 options(stringsAsFactors = FALSE)
 #expr_data <- read.csv("~/Studium/bachelor-thesis-luisa/count_tables/vst_expression_data.csv", row.names = 1)
 # transposed expression data for WGCNA
-input_mat <- read.csv("~/Studium/bachelor-thesis-luisa/count_tables/expr_data_transposed", row.names = 1)
+input_mat <- read.csv("~/Studium/bachelor-thesis-luisa/count_tables/expr_data_transposed.csv", row.names = 1)
 
 # load meta data
-metaData <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData_modified")
-metaData_bin <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData_bin")
+metaData <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData_modified.csv")
+metaData_bin <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData_bin.csv")
 ```
 
 ```{r}
@@ -113,41 +113,20 @@ Run WGCNA_netconstr.R or WGCNA_auto_netconstr.R on the cluster.
 Results for different soft powers:
 
 ```{r}
-# network construction with soft power 6
-load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow6.RData')
-moduleColors_pow6 <- mergedColors
-MEs_pow6 <- mergedMEs
-geneTree_pow6 <- geneTree
-
-load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow7.RData')
-moduleColors_pow7 <- mergedColors
-MEs_pow7 <- mergedMEs
-geneTree_pow7 <- geneTree
-
-load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow5.RData')
-moduleColors_pow5 <- mergedColors
-MEs_pow5 <- mergedMEs
-geneTree_pow5 <- geneTree
-
-load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow8.RData')
-moduleColors_pow8 <- mergedColors
-MEs_pow8 <- mergedMEs
-geneTree_pow8 <- geneTree
-
 # network construction with soft power 6 - signed hybrid network
-load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow6_signed.RData')
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/new/networkConstruction-pow6_signed.RData')
 moduleColors_pow6_signed <- mergedColors
 MEs_pow6_signed <- mergedMEs
 geneTree_pow6_signed <- geneTree
 
 # network construction with soft power 5 - signed hybrid network
-load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow5_signed.RData')
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/new/networkConstruction-pow5_signed.RData')
 moduleColors_pow5_signed <- mergedColors
 MEs_pow5_signed <- mergedMEs
 geneTree_pow5_signed <- geneTree
 
 # network construction with soft power 4 - signed hybrid network
-load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow4_signed.RData')
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/new/networkConstruction-pow4_signed.RData')
 moduleColors_pow4_signed <- mergedColors
 MEs_pow4_signed <- mergedMEs
 geneTree_pow4_signed <- geneTree
@@ -163,6 +142,7 @@ plotDendroAndColors(geneTree_pow4_signed,
                     addGuide = TRUE, 
                     guideHang = 0.05,
                     main = "Gene dendrogram and module colors")
+table(moduleColors_pow4_signed)
 ```
 
 ### External Trait Matching
@@ -171,54 +151,6 @@ plotDendroAndColors(geneTree_pow4_signed,
 
 eigengene = summary profile for each module
 --> correlate eigengenes with external traits and look for the most significant associations
-
-skip this part:
-
-```{r}
-# loading meta data
-metaData <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData.csv", sep=";")
-metaData$Timepoint_dpi <- metaData$Timepoint..dpi.
-
-# create pathogen column
-metaData$pathogen <- ifelse(metaData$Experiment == "Heterodera schachtii 2", "Heterodera schachtii", metaData$Experiment)
-metaData$pathogen <- ifelse(metaData$Experiment == "Hyaloperonospora arabidopsidis 3", "Hyaloperonospora arabidopsidis", metaData$pathogen)
-metaData$pathogen <- ifelse(metaData$Experiment == "Plasmodiophora brassicae 2", "Plasmodiophora brassicae", metaData$pathogen)
-metaData$pathogen <- ifelse(metaData$Experiment == "Turnip mosaic virus (TuMV) 3", "Turnip mosaic virus (TuMV)", metaData$pathogen)
-
-# get pathogen abbreviations
-metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Heterodera schachtii", "H. schachtii", metaData$pathogen)
-metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Alternaria brassicae", "A. brassicae", metaData$pathogen_abbr)
-metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Botrytis cinerea", "B. cinerea", metaData$pathogen_abbr)
-metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Cauliflower mosaic virus (CaMV)", "CaMV", metaData$pathogen_abbr)
-metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Turnip mosaic virus (TuMV)", "TuMV", metaData$pathogen_abbr)
-metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Turnip yellows virus (TuYV)", "TuYV", metaData$pathogen_abbr)
-metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Turnip yellows virus (TuYV)", "TuYV", metaData$pathogen_abbr)
-metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Golovinomyces orontii", "G. orontii", metaData$pathogen_abbr)
-metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Erysiphe cichoracearum ", "E. cichoracearum", metaData$pathogen_abbr) 	
-metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Hyaloperonospora arabidopsidis", "Hpa", metaData$pathogen_abbr)
-metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Meloidogyne javanica", "M. javanica", metaData$pathogen_abbr)
-metaData$pathogen_abbr <- ifelse(metaData$pathogen == "Plasmodiophora brassicae", "P. brassicae", metaData$pathogen_abbr)
-
-# column with infected pathogens (take all control samples together)
-metaData$inf_path <- ifelse(metaData$infected_control == "infected", metaData$pathogen_abbr, "control")
-
-# coumn with infected pathogens in category
-metaData$Category <- ifelse(metaData$infected_control == "infected", metaData$Category, "control")
-metaData$Category_trophs <- ifelse(metaData$infected_control == "infected", metaData$Category_trophs, "control")
-
-# get library size in the metadata
-kallisto_alignment_results <- read.csv('~/Studium/bachelor-thesis-luisa/multiqc/kallisto_alignment_summary.csv')
-metaData <- merge(metaData, kallisto_alignment_results, by.x = "Run", by.y = "sample_ID", all.x = TRUE)
-colnames(metaData) <- ifelse(colnames(metaData) == "n_pseudoaligned", "LibrarySize", colnames(metaData))
-metaData <- metaData[order(metaData$ID),]
-
-# create binary meta data for correlation calculations
-metaData_bin <- binarizeCategoricalColumns(metaData, convertColumns = c("inf_path", "infected_control", "Timepoint_dpi", "Library", "Category", "Category_trophs"), includePairwise = FALSE, includeLevelVsAll = TRUE, minCount = 1, dropFirstLevelVsAll = FALSE)
-colnames(metaData_bin) <- gsub(".vs.all", "", colnames(metaData_bin))
-
-# remove CaMV category (unsure)
-metaData_bin <- metaData_bin[,-35]
-```
 
 
 ```{r}
@@ -289,6 +221,24 @@ moduleTraitCorrelation(MEs, cat_df, "Pathogens (categories)")
 moduleTraitCorrelation(MEs, libsize_df, "Library Size")
 ```
 
+Look for weak correlations and sum up the absoulte correlation value:
+
+```{r}
+# Load correlation matrix
+biotrophs <- c("E..cichoracearum", "E..cruciferarum", "G..orontii", "H..schachtii", "Hpa", "M..javanica", "P..brassicae", "TuMV", "TuYV")
+grep("")
+module_trait_inf_path <- cor(MEs, inf_path_df, use = "p")
+
+# Sum absolute correlations per module across biotrophic pathogens
+biotrophic_modules <- rowSums(abs(module_trait_inf_path[, biotrophs]))
+
+# Rank modules
+ranked_modules <- sort(biotrophic_modules, decreasing = TRUE)
+
+# Display top modules
+head(ranked_modules)
+```
+
 
 We quantify associations of individual genes with our trait of interest (weight) by defining Gene Significance GS as (the absolute value of) the correlation between the gene and the trait. For each module, we also define a quantitative measure of module membership MM as the correlation of the module eigengene and the gene expression profile. This allows us to quantify the similarity of all genes on the array to every module.
 
@@ -303,11 +253,11 @@ Connectivity: how connected a speficic node is in the network (how many nodes ha
 
 ```{r}
 ### Module Membership ###
-picked_MEs <- MEs_pow4_signed
-modNames = substring(names(picked_MEs), 3) #extract module names
+#picked_MEs <- MEs_pow4_signed
+modNames = substring(names(MEs), 3) #extract module names
 
 #Calculate the module membership and the associated p-values for every gene and module
-geneModuleMembership = as.data.frame(cor(input_mat, picked_MEs, use = "p"))
+geneModuleMembership = as.data.frame(cor(input_mat, MEs, use = "p"))
 MMPvalue = as.data.frame(corPvalueStudent(as.matrix(geneModuleMembership), nSamples)) # calculate student p-value for given correlations
 names(geneModuleMembership) = paste("MM", modNames, sep="")
 names(MMPvalue) = paste("p.MM", modNames, sep="")
@@ -349,15 +299,17 @@ meanGS_per_module_sub_cat <- aggregate(. ~ Module, data = geneTraitSignificance_
 
 
 ```{r}
+par(mar = c(7, 6, 2.5, 2.2))
 barplot(
-    height = meanGS_per_module_inf_path$`Hpa`, 
+    height = meanGS_per_module_sub_cat$`oomycete.biotroph`, 
     names.arg = meanGS_per_module_sub_cat$Module, 
     col = meanGS_per_module_sub_cat$Module,  # module name as colors
     las = 2,  
-    main = "Mean Gene Significance across Modules for Hpa",
+    main = "Mean Gene Significance across Modules for oomycete biotroph",
     ylab = "Mean Gene Significance"
 )
 ```
+
 ```{r}
 # identify top hub gene per module
 hubGenes = chooseTopHubInEachModule(input_mat, picked_module_colors)
@@ -372,7 +324,7 @@ gene_info_GS <- data.frame(
   Gene = colnames(input_mat),
   Module = picked_module_colors,  
   kME = apply(geneModuleMembership, 1, max),
-  GS = abs(geneTraitSignificance_inf_path[,-14]), # gene trait significance for trait of interest (without module column)
+  GS = abs(geneTraitSignificance_inf_path[,-15]), # gene trait significance for trait of interest (without module column)
   kWithin = kWithin
 )
 
@@ -396,6 +348,22 @@ hub_genes <- gene_info %>%
   group_by(Module) %>%
   arrange(desc(kWithin), desc(kME)) %>%
   slice_head(n = 10)  # Select top 5 hub genes per module
+
+
+kMEtable <- signedKME(input_mat, MEs, outputColumnName = "kME")
+# absolute value because of signed hybrid network construction -> there are still negative correlations
+numeric_kME <- kMEtable[, grep("^kME", colnames(kMEtable))]
+abs_kMEtable <- abs(numeric_kME)
+
+top_hub_genes <- lapply(colnames(numeric_kME), function(module) {
+  module_genes <- kMEtable[order(-abs_kMEtable[, module]), ]  # Sort by absolute kME
+  head(rownames(module_genes), 10)  # Select top 10 genes
+})
+names(top_hub_genes) <- colnames(numeric_kME)  # Assign module names
+
+hub_genes_df <- do.call(rbind, lapply(names(top_hub_genes), function(module) {
+  data.frame(Module = module, Gene = top_hub_genes[[module]])
+}))
 ```
 
 ```{r}
@@ -420,8 +388,8 @@ plot_meanGS <- function(moduleColors, GS, trait){
 
 ```{r}
 # look at specific module that has high significance with choosen trait
-module = "darkgrey"
-category = "Hpa"
+module = "darkorange"
+category = "G..orontii"
 column = match(module, modNames)
 moduleGenes = picked_module_colors==module
 
@@ -434,29 +402,38 @@ xlab = paste("Module Membership in", module, "module"),
 ylab = paste("Gene significance for ", category),
 main = paste("Module membership vs. gene significance\n"),
 cex.main = 1.2, cex.lab = 1.2, cex.axis = 1.2, col = module)
+#abline(h=0.7, v=0.8, col="red")
 #dev.off()
 ```
 
 
 ```{r}
-MET = orderMEs(cbind(picked_MEs, inf_path_df))
+MET = orderMEs(cbind(MEs, inf_path_df))
 # Plot the relationships among the eigengenes and the trait
 par(cex = 0.9)
 #bottom, left, top, right
 plotEigengeneNetworks(MET, "Eigengene dendrogram and adjacency heatmap - including pathogens", marDendro = c(1,5,2,2), marHeatmap = c(7,7,2,2), cex.lab = 0.8, xLabelsAngle = 90)
 
-MET_cat <- orderMEs(cbind(picked_MEs, cat_df))
+MET_cat <- orderMEs(cbind(MEs, cat_df))
 # Plot the relationships among the eigengenes and the trait
 par(cex = 0.9)
 #bottom, left, top, right
 plotEigengeneNetworks(MET_cat, "Eigengene dendrogram and adjacency heatmap - categories", marDendro = c(1,5,2,2), marHeatmap = c(7,7,2,2), cex.lab = 0.8, xLabelsAngle = 90)
 
-MET_sub_cat <- orderMEs(cbind(picked_MEs, sub_cat_df))
+
+MET_sub_cat <- orderMEs(cbind(MEs, sub_cat_df))
 # Plot the relationships among the eigengenes and the trait
 par(cex = 0.9)
 #bottom, left, top, right
 plotEigengeneNetworks(MET_sub_cat, "Eigengene dendrogram and adjacency heatmap - subcategories", marDendro = c(1,5,2,2), marHeatmap = c(7,7,2,2), cex.lab = 0.8, xLabelsAngle = 90)
 
+dist_matrix <- dist(t(MEs))
+
+# Perform hierarchical clustering
+hclust_modules <- hclust(dist_matrix, method = "average")
+
+# Plot dendrogram
+plot(hclust_modules, main = "Hierarchical Clustering of Module Eigengenes", labels = names(MEs), cex = 0.7)
 ```
 
 
@@ -484,7 +461,7 @@ module_genes <- list()
 
 # get genes from each module
 for (module in modNames) {
-  module_genes[[module]] <- colnames(input_mat)[moduleColors_pow4_signed == module] %>% gsub("\\.1$", "", .)
+  module_genes[[module]] <- colnames(input_mat)[moduleColors_pow4_signed == module]
 }
 
 # get all GO enrichment results for each module
@@ -558,7 +535,7 @@ write.csv(enrichment_table, "~/Studium/bachelor-thesis-luisa/wgcna_results/modul
 
 ```{r}
 # plotting of enrichment results of specific module
-module = "darkgrey"
+module = "darkred"
 
 # simplify enrichGO output by removing redundancy of enriched GO terms
 # plot with gene ratio
@@ -580,20 +557,49 @@ goplot(simple_enriched_go, showCategory = 5)
 cnetplot(simple_enriched_go)
 ```
 ```{r}
-# functional enrichment on hub genes per module
-module_hub_genes <- list()
-rownames(hub_genes) <- hub_genes$Gene
-# get genes from each module
-for (module in modNames) {
-  module_hub_genes[[module]] <- rownames(hub_genes)[hub_genes$Module == module] %>% gsub("\\.1$", "", .)
+hub_genes_per_module <- list()
+
+for (mod in modNames) {
+  hub_genes_per_module[[mod]] <- rownames(abs_kMEtable)[which(abs_kMEtable[, paste0("kME", mod)] > 0.8)] 
 }
 
-# get all GO enrichment results for each module
+# compareCluster to automatically calculate enriched functional profiles of each gene clusters and aggregate the results into a single object. Comparing functional profiles can reveal functional consensus and differences among different experiments and helps in identifying differential functional modules in omics datasets.
+
+go_results_hub_compared <- compareCluster(geneCluster = hub_genes_per_module,
+                             fun = "enrichGO",
+                             OrgDb = org.At.tair.db,
+                             keyType = "TAIR",
+                             ont = "BP",
+                             pAdjustMethod = "BH")
+
+
+go_result_hub_simplified <- simplify(go_results_hub_compared)
+
+go_result_hub_simplified %>% 
+  filter(p.adjust < 0.05) %>%
+  ggplot(aes(x = Cluster, y = forcats::fct_reorder(Description, GeneRatio))) + 
+  geom_segment(aes(xend = Cluster, yend = Description)) +
+  geom_point(aes(color = p.adjust, size = Count)) +
+  scale_color_viridis_c(guide = guide_colorbar(reverse = TRUE)) +
+  scale_size_continuous(range = c(1, 7)) +
+  theme_minimal() + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+        axis.text.y = element_text(size = 8)) + 
+  xlab("Module") +
+  ylab(NULL) + 
+  ggtitle("GO Enrichment of Module Hub Genes")
+```
+
+
+
+```{r}
+# get all GO enrichment results for hub genes of each module
 go_results_hub_genes <- list(BP = list(), CC = list(), MF = list())
 
-for (module in names(module_hub_genes)) {
+
+for (module in names(hub_genes_per_module)) {
   go_results_hub_genes$BP[[module]] <- enrichGO(
-    gene = module_hub_genes[[module]],
+    gene = hub_genes_per_module[[module]],
     OrgDb = org.At.tair.db,  
     keyType = "TAIR",
     ont = "BP",  
@@ -602,7 +608,7 @@ for (module in names(module_hub_genes)) {
   )
   
   go_results_hub_genes$CC[[module]] <- enrichGO(
-    gene = module_hub_genes[[module]],
+    gene = hub_genes_per_module[[module]],
     OrgDb = org.At.tair.db,
     keyType = "TAIR",
     ont = "CC",  
@@ -611,7 +617,7 @@ for (module in names(module_hub_genes)) {
   )
   
   go_results_hub_genes$MF[[module]] <- enrichGO(
-    gene = module_hub_genes[[module]],
+    gene = hub_genes_per_module[[module]],
     OrgDb = org.At.tair.db,
     keyType = "TAIR",
     ont = "MF", 
@@ -624,9 +630,9 @@ for (module in names(module_hub_genes)) {
 # Get KEGG pathway enrichment results
 kegg_hub_results <- list()
 
-for (module in names(module_hub_genes)) {
+for (module in names(hub_genes_per_module)) {
   kegg_hub_results[[module]] <- enrichKEGG(
-    gene = module_hub_genes[[module]],
+    gene = hub_genes_per_module[[module]],
     organism = "ath", 
     pAdjustMethod = "BH",
     pvalueCutoff = 0.05
@@ -636,7 +642,7 @@ for (module in names(module_hub_genes)) {
 
 ```{r}
 # plotting of enrichment results of specific module
-module = "darkgrey"
+module = "darkorange"
 
 # simplify enrichGO output by removing redundancy of enriched GO terms
 # plot with gene ratio

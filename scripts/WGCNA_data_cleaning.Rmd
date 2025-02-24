@@ -288,8 +288,8 @@ PCA on unfiltered vs filtered counts
 
 ```{r pca}
 # PC1 and PC2
-visualize_standard_pca(pca_data,pca, FALSE,"PCA of filtered vst counts", FALSE)
-ggplot(pca_data, aes(x = PC1, y = PC2, color = inf_path)) +
+visualize_standard_pca(pca_data,pca, TRUE,"PCA of filtered vst counts", FALSE)
+ggplot(pca_data, aes(x = PC1, y = PC2, color = Experiment, shape=infected_control)) +
         geom_point() +
         #stat_ellipse(aes(color = Category), type = "norm")+
         xlab(paste0("PC1: ", round(100 * summary(pca)$importance[2, 1], 2), "% variance")) +
@@ -300,6 +300,7 @@ ggplot(pca_data, aes(x = PC1, y = PC2, color = inf_path)) +
 
 # PC3 and PC4
 visualize_standard_pca(pca_data,pca, FALSE,"PCA of filtered vst counts", TRUE)
+
 ```
 
 PCA on further information:
@@ -393,7 +394,7 @@ summary(gsg)
 
 ```{r}
 # Identifying outlier samples
-sampleTree <- hclust(dist(input_mat0), method = "average") #Clustering samples based on distance 
+sampleTree0 <- hclust(dist(input_mat0), method = "average") #Clustering samples based on distance 
 
 
 #Plotting the cluster dendrogram
@@ -401,9 +402,9 @@ options(repr.plot.width = 20, repr.plot.height = 10)
 #Setting the graphical parameters
 par(cex = 0.6);
 par(mar = c(0,4,2,0))
-plot(sampleTree, main = "Sample clustering to detect outliers", sub="", xlab="", cex.lab = 1.5,
+plot(sampleTree0, main = "Sample clustering to detect outliers", sub="", xlab="", cex.lab = 1.5,
 cex.axis = 1.5, cex.main = 2)
-abline(h=250, col ="red")
+abline(h=300, col ="red")
 ```
 
 Three outliers were found that should be removed --> choose a cut height of 300 to keep the rest of the samples
@@ -444,7 +445,7 @@ metData <- metaData_bin[, -c(1,2,3)]
 
 sampleTree2 <- hclust(dist(input_mat), method = "average")
 
-metaColors <- numbers2colors(metaData_bin[, grep("inf_path", colnames(metaData_bin))], signed = FALSE)
+metaColors <- numbers2colors(metaData_bin[, grep("inf_path", colnames(metaData_bin))], signed = TRUE)
 options(repr.plot.width = 20, repr.plot.height = 20,repr.res = 200)
 plotDendroAndColors(sampleTree2, metaColors, groupLabels = names(metaData_bin[, grep("inf_path", colnames(metaData_bin))])%>% gsub("inf_path.", "", .), main = "Sample dendrogram and metadata heatmap")
 
@@ -456,10 +457,10 @@ plotDendroAndColors(sampleTree2, metaColors_sub_cat, groupLabels = names(metaDat
 
 ```{r}
 # save expression and meta data
-write.csv(input_mat, "~/Studium/bachelor-thesis-luisa/count_tables/expr_data_transposed")
-write.csv(expr_data, "~/Studium/bachelor-thesis-luisa/count_tables/expr_data")
-write.csv(metaData, "~/Studium/bachelor-thesis-luisa/data/metaData_modified")
-write.csv(metaData_bin, "~/Studium/bachelor-thesis-luisa/data/metaData_bin")
+write.csv(input_mat, "~/Studium/bachelor-thesis-luisa/count_tables/expr_data_transposed.csv")
+write.csv(expr_data, "~/Studium/bachelor-thesis-luisa/count_tables/expr_data.csv")
+write.csv(metaData, "~/Studium/bachelor-thesis-luisa/data/metaData_modified.csv")
+write.csv(metaData_bin, "~/Studium/bachelor-thesis-luisa/data/metaData_bin.csv")
 ```
 
 
