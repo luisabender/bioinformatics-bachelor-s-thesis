@@ -17,6 +17,7 @@ library(tidyr)
 library(clusterProfiler)
 library(org.At.tair.db)
 library(caret)
+library(tibble)
 ```
 
 
@@ -85,7 +86,7 @@ text(sft$fitIndices[, 1],
      -sign(sft$fitIndices[, 3]) * sft$fitIndices[, 2],
      labels = powers, cex = cex1, col = "red");
 
-abline(h = 0.9, col = "red")
+abline(h = 0.85, col = "red")
 plot(sft$fitIndices[, 1],
      sft$fitIndices[, 5],
      xlab = "Soft Threshold (power)",
@@ -130,19 +131,26 @@ load('~/Studium/bachelor-thesis-luisa/wgcna_results/new/networkConstruction-pow4
 moduleColors_pow4_signed <- mergedColors
 MEs_pow4_signed <- mergedMEs
 geneTree_pow4_signed <- geneTree
+
+# network construction with soft power 4 - signed hybrid network with TOMType signed
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/new/networkConstruction-pow4_TOMsigned.RData')
+moduleColors_pow4_tomsigned <- mergedColors
+MEs_pow4_tomsigned <- mergedMEs
+geneTree_pow4_tomsigned <- geneTree
+
 ```
 
 ```{r}
 # plots the gene dendrogram with the module colors
-plotDendroAndColors(geneTree_pow4_signed, 
-                    moduleColors_pow4_signed,
+plotDendroAndColors(geneTree_pow4_tomsigned, 
+                    moduleColors_pow4_tomsigned,
                     "Module",
                     dendroLabels = FALSE, 
                     hang = 0.03,
                     addGuide = TRUE, 
                     guideHang = 0.05,
                     main = "Gene dendrogram and module colors")
-table(moduleColors_pow4_signed)
+table(moduleColors_pow4_tomsigned)
 ```
 
 ### External Trait Matching
@@ -157,12 +165,21 @@ eigengene = summary profile for each module
 # Define numbers of genes and samples
 nGenes = ncol(input_mat);
 nSamples = nrow(input_mat);
-picked_module_colors = moduleColors_pow4_signed
+picked_module_colors = moduleColors_pow4_tomsigned
 
 # Recalculate MEs with color labels
 MEs0 = moduleEigengenes(input_mat, picked_module_colors)$eigengenes
 MEs = orderMEs(MEs0)
 ```
+
+```{r}
+# load modified metadata
+metaData_bin <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData_bin.csv", sep = ";",row.names = 1)
+metaData_bin <- binarizeCategoricalColumns(metaData_bin, convertColumns = "latest_infection_timepoint", includePairwise = FALSE, includeLevelVsAll = TRUE, minCount = 1, dropFirstLevelVsAll = FALSE)
+colnames(metaData_bin) <- gsub(".vs.all", "", colnames(metaData_bin))
+
+```
+
 
 Discover Module trait relationships:
 
@@ -182,7 +199,11 @@ sub_cat_df <- metaData_bin[, grep("Category\\.", colnames(metaData_bin))]
 colnames(sub_cat_df) <- gsub("Category\\.", "", colnames(sub_cat_df))
 
 # librarySize
-libsize_df <- data.frame(LibrarySize = metaData[, 16])
+libsize_df <- data.frame(LibrarySize = metaData[, 17])
+
+latest_df <- metaData_bin[, grep("latest_infection_timepoint.", colnames(metaData_bin))]
+colnames(latest_df) <- gsub("latest_infection_timepoint.", "", colnames(latest_df))
+latest_df <- latest_df[,-1]
 ```
 
 
@@ -219,14 +240,15 @@ moduleTraitCorrelation(MEs, inf_path_df, "Pathogens")
 moduleTraitCorrelation(MEs, sub_cat_df, "Pathogens (subcategories)")
 moduleTraitCorrelation(MEs, cat_df, "Pathogens (categories)")
 moduleTraitCorrelation(MEs, libsize_df, "Library Size")
+moduleTraitCorrelation(MEs, latest_df, "Comparing latest infection timepoints")
 ```
 
-Look for weak correlations and sum up the absoulte correlation value:
+Look for weak correlations and sum up the absolute correlation value:
 
 ```{r}
 # Load correlation matrix
 biotrophs <- c("E..cichoracearum", "E..cruciferarum", "G..orontii", "H..schachtii", "Hpa", "M..javanica", "P..brassicae", "TuMV", "TuYV")
-grep("")
+
 module_trait_inf_path <- cor(MEs, inf_path_df, use = "p")
 
 # Sum absolute correlations per module across biotrophic pathogens
@@ -310,6 +332,12 @@ barplot(
 )
 ```
 
+Different ways on calculating hub genes:
+
+intramodular connectivity (kIM): measures how connected a gene is within its module (intramodularConnectivity)
+kME: module membership (simpler to calculate, has an associated p-value and can be compared across modules)
+signedKME: Calculation of (signed) eigengene-based connectivity, also known as module membership, correlation of the gene with the corresponding module eigengene.
+
 ```{r}
 # identify top hub gene per module
 hubGenes = chooseTopHubInEachModule(input_mat, picked_module_colors)
@@ -346,11 +374,13 @@ gene_info <- data.frame(
 # Select top hub genes per module based on kWithin and kME
 hub_genes <- gene_info %>%
   group_by(Module) %>%
-  arrange(desc(kWithin), desc(kME)) %>%
-  slice_head(n = 10)  # Select top 5 hub genes per module
+  arrange(desc(kWithin), desc(kME)) #%>%
+  #slice_head(n = 10)  # Select top 5 hub genes per module
 
 
-kMEtable <- signedKME(input_mat, MEs, outputColumnName = "kME")
+# choose hub genes based on module membership (signedKME)
+kMEtable <- signedKME(input_mat, MEs)
+
 # absolute value because of signed hybrid network construction -> there are still negative correlations
 numeric_kME <- kMEtable[, grep("^kME", colnames(kMEtable))]
 abs_kMEtable <- abs(numeric_kME)
@@ -359,37 +389,21 @@ top_hub_genes <- lapply(colnames(numeric_kME), function(module) {
   module_genes <- kMEtable[order(-abs_kMEtable[, module]), ]  # Sort by absolute kME
   head(rownames(module_genes), 10)  # Select top 10 genes
 })
+
 names(top_hub_genes) <- colnames(numeric_kME)  # Assign module names
 
 hub_genes_df <- do.call(rbind, lapply(names(top_hub_genes), function(module) {
   data.frame(Module = module, Gene = top_hub_genes[[module]])
 }))
-```
 
-```{r}
-plot_meanGS <- function(moduleColors, GS, trait){
-  # mean GS across modules for specific trait
-  GS$Module <- moduleColors
-  meanGS_per_module <- aggregate(. ~ Module, data = GS, mean)
-  
-  barplot(
-    height = meanGS_per_module$TuMV, 
-    names.arg = meanGS_per_module$Module, 
-    col = meanGS_per_module$Module,  # module name as colors
-    las = 2,  
-    main = paste("Mean Gene Significance across Modules for", trait),
-    ylab = "Mean Gene Significance"
-  )
-}
 ```
-
 
 
 
 ```{r}
 # look at specific module that has high significance with choosen trait
-module = "darkorange"
-category = "G..orontii"
+module = "darkgreen"
+category = "nematode"
 column = match(module, modNames)
 moduleGenes = picked_module_colors==module
 
@@ -397,13 +411,34 @@ moduleGenes = picked_module_colors==module
 
 #pdf("~/Studium/bachelor-thesis-luisa/plots/GS_vs_MM_TuMV_magenta.pdf")
 verboseScatterplot(abs(geneModuleMembership[moduleGenes,column]),
-abs(geneTraitSignificance_inf_path[moduleGenes,category]),
+abs(geneTraitSignificance_sub_cat[moduleGenes,category]),
 xlab = paste("Module Membership in", module, "module"),
 ylab = paste("Gene significance for ", category),
 main = paste("Module membership vs. gene significance\n"),
 cex.main = 1.2, cex.lab = 1.2, cex.axis = 1.2, col = module)
-#abline(h=0.7, v=0.8, col="red")
+abline(h=0.5, v=0.8, col="red")
 #dev.off()
+```
+```{r}
+# calculate hub genes based on a MM and a GS cutoff
+hub_genes_GS_MM <- function(MM, GS, module, trait, MM_cutoff, GS_cutoff){
+  
+  MM_table <- MM %>% rownames_to_column(var = "GeneID")
+  GS_table <- GS %>% rownames_to_column(var = "GeneID")
+  
+  hub_data <- merge(data.frame(MM = MM_table[, module],GeneID = MM_table[, "GeneID"]),data.frame(GS = GS_table[,trait], GeneID = GS_table[, "GeneID"]), by = "GeneID")
+  
+  hub_genes <- hub_data %>% filter(MM > MM_cutoff & GS > GS_cutoff)
+  
+  return(hub_genes)
+}
+
+hub_genes_biotroph_darkred <- hub_genes_GS_MM(geneModuleMembership, geneTraitSignificance_cat, "MMdarkred", "biotroph", 0.8, 0.5)
+hub_genes_biotroph_royalblue <- hub_genes_GS_MM(geneModuleMembership, geneTraitSignificance_cat, "MMroyalblue", "biotroph", 0.8, 0.5)
+hub_genes_oomycete_royalblue <- hub_genes_GS_MM(geneModuleMembership, geneTraitSignificance_sub_cat, "MMroyalblue", "oomycete.biotroph", 0.8, 0.5)
+hub_genes_nematode_brown <- hub_genes_GS_MM(geneModuleMembership, geneTraitSignificance_sub_cat, "MMbrown", "nematode", 0.8, 0.5)
+hub_genes_nematode_darkgreen <- hub_genes_GS_MM(geneModuleMembership, geneTraitSignificance_sub_cat, "MMdarkgreen", "nematode", 0.8, 0.3)
+
 ```
 
 
@@ -431,9 +466,10 @@ dist_matrix <- dist(t(MEs))
 
 # Perform hierarchical clustering
 hclust_modules <- hclust(dist_matrix, method = "average")
-
 # Plot dendrogram
 plot(hclust_modules, main = "Hierarchical Clustering of Module Eigengenes", labels = names(MEs), cex = 0.7)
+plotEigengeneNetworks(orderMEs(MEs), "Eigengene dendrogram and adjacency heatmap", marDendro = c(1,5,2,2), marHeatmap = c(7,7,2,2), cex.lab = 0.8, xLabelsAngle = 90)
+
 ```
 
 
@@ -452,6 +488,9 @@ Enrichment analysis directly within R:
 -> organism-specific package: Genome wide annotation for Arabidopsis: org.At.tair.db
 
 
+Functional enrichment for all genes per module:
+
+
 ```{r}
 # BP = biological processes
 # CC = Cellular components
@@ -461,7 +500,7 @@ module_genes <- list()
 
 # get genes from each module
 for (module in modNames) {
-  module_genes[[module]] <- colnames(input_mat)[moduleColors_pow4_signed == module]
+  module_genes[[module]] <- colnames(input_mat)[moduleColors_pow4_tomsigned == module]
 }
 
 # get all GO enrichment results for each module
@@ -535,7 +574,7 @@ write.csv(enrichment_table, "~/Studium/bachelor-thesis-luisa/wgcna_results/modul
 
 ```{r}
 # plotting of enrichment results of specific module
-module = "darkred"
+module = "brown"
 
 # simplify enrichGO output by removing redundancy of enriched GO terms
 # plot with gene ratio
@@ -556,6 +595,9 @@ ggplot(showCategory = 20,
 goplot(simple_enriched_go, showCategory = 5)
 cnetplot(simple_enriched_go)
 ```
+
+Functional enrichment for hub genes based on signedkME > 0.8:
+
 ```{r}
 hub_genes_per_module <- list()
 
@@ -638,11 +680,13 @@ for (module in names(hub_genes_per_module)) {
     pvalueCutoff = 0.05
   )
 }
+
+#browseKEGG()
 ```
 
 ```{r}
 # plotting of enrichment results of specific module
-module = "darkorange"
+module = "black"
 
 # simplify enrichGO output by removing redundancy of enriched GO terms
 # plot with gene ratio
@@ -662,4 +706,62 @@ ggplot(showCategory = 20,
 
 goplot(simple_enriched_go, showCategory = 5)
 cnetplot(simple_enriched_go)
+
+kegg_module <- kegg_hub_results[[module]]
+head(kegg_module, n = 20)
 ```
+KEGG enriched pathways (for hub genes)
+royalblue: Plant-pathogen interaction - Arabidopsis thaliana (thale cress)
+darkred: Plant-pathogen interaction - Arabidopsis thaliana (thale cress),MAPK signaling pathway - plant - Arabidopsis thaliana (thale cress),Glycerolipid metabolism - Arabidopsis thaliana (thale cress)
+black: Plant-pathogen interaction - Arabidopsis thaliana (thale cress)
+yellow: Pentose and glucuronate interconversions - Arabidopsis thaliana (thale cress)
+darkgrey: Oxidative phosphorylation - Arabidopsis thaliana (thale cress)
+greenyellow: Starch and sucrose metabolism - Arabidopsis thaliana (thale cress)
+
+
+Functional enrichment based on hub genes defined with a MM and GS cutoff:
+
+
+```{r}
+ego <- enrichGO(gene = hub_genes_nematode_brown$GeneID,
+    OrgDb = org.At.tair.db,
+    keyType = "TAIR",
+    ont = "BP", 
+    pAdjustMethod = "BH",
+    pvalueCutoff = 0.05)
+
+simple_ego <- simplify(ego)
+simple_ego %>% filter(p.adjust < 0.05) %>%
+  ggplot(showCategory = 20,
+  aes(GeneRatio, forcats::fct_reorder(Description, GeneRatio))) + 
+  geom_segment(aes(xend=0, yend = Description)) +
+  geom_point(aes(color=p.adjust, size = Count)) +
+  scale_color_viridis_c(guide=guide_colorbar(reverse=TRUE)) +
+  scale_size_continuous(range=c(1, 7)) +
+  theme_minimal() + 
+  xlab("Gene Ratio") +
+  ylab(NULL) + 
+  ggtitle(paste("GO Enrichment of hub genes of royalblue module"))
+
+goplot(simple_ego, showCategory = 5)
+cnetplot(simple_ego)
+```
+
+
+```{r}
+#bitr(hub_genes_oomycete_royalblue$GeneID, fromType="TAIR", toType="ENTREZID", OrgDb="org.At.tair.db")
+kegg <- enrichKEGG(gene = hub_genes_nematode_brown$GeneID,
+    organism = "ath", 
+    pAdjustMethod = "BH",
+    pvalueCutoff = 0.05)
+
+head(kegg)
+
+#browseKEGG(kegg, 'ath01230')
+
+#library("pathview")
+#ath01230 <- pathview(gene.data  = hub_data_biotroph_darkred$GeneID,
+ #                    pathway.id = "ath01230",
+  #                   species    = "ath")
+```
+

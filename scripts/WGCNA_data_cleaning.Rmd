@@ -135,6 +135,8 @@ kallisto_alignment_results <- read.csv('~/Studium/bachelor-thesis-luisa/multiqc/
 metaData <- merge(metaData, kallisto_alignment_results, by.x = "Run", by.y = "sample_ID", all.x = TRUE)
 colnames(metaData) <- ifelse(colnames(metaData) == "n_pseudoaligned", "LibrarySize", colnames(metaData))
 metaData <- metaData[order(metaData$ID),]
+metaData$LibrarySize_kallisto <- metaData$LibrarySize
+
 
 # create binary meta data for correlation calculations
 metaData_bin <- binarizeCategoricalColumns(metaData, convertColumns = c("inf_path", "infected_control", "Timepoint_dpi", "Library", "Category", "Category_trophs"), includePairwise = FALSE, includeLevelVsAll = TRUE, minCount = 1, dropFirstLevelVsAll = FALSE)
@@ -213,6 +215,12 @@ plotDispEsts(dds)
 vsd <- varianceStabilizingTransformation(dds, blind = FALSE)
 #vsd_genelev_filtered_data <- getVarianceStabilizedData(dds_genelev_filtered)
 ```
+```{r}
+# include librarysize in the meta Data
+# librarySize (total number of mapped reads per sample) as summed up counts of all genes for each sample
+library_sizes <- colSums(gene_counts_filtered)
+metaData$LibrarySize <- library_sizes[match(metaData$Run, names(library_sizes))]
+```
 
 
 
@@ -284,41 +292,40 @@ pca_data$infected_control <- as.character(pca_data$infected_control)
 ```
 
 
-PCA on unfiltered vs filtered counts
+PCA on filtered counts
 
 ```{r pca}
 # PC1 and PC2
-visualize_standard_pca(pca_data,pca, TRUE,"PCA of filtered vst counts", FALSE)
+visualize_standard_pca(pca_data,pca, TRUE,"PCA on filtered vst counts", FALSE)
 ggplot(pca_data, aes(x = PC1, y = PC2, color = Experiment, shape=infected_control)) +
         geom_point() +
         #stat_ellipse(aes(color = Category), type = "norm")+
         xlab(paste0("PC1: ", round(100 * summary(pca)$importance[2, 1], 2), "% variance")) +
         ylab(paste0("PC2: ", round(100 * summary(pca)$importance[2, 2], 2), "% variance")) +
-        ggtitle("PCA of filtered vst counts") +
+        ggtitle("PCA on filtered vst counts") +
         theme_minimal()
       
 
 # PC3 and PC4
-visualize_standard_pca(pca_data,pca, FALSE,"PCA of filtered vst counts", TRUE)
-
+visualize_standard_pca(pca_data,pca, FALSE,"PCA on filtered vst counts", TRUE)
 ```
 
 PCA on further information:
 
 ```{r pca}
 # number of aligned reads per sample (absolute counts) to include in the PCA
-ggplot(pca_data_filtered, aes(x = PC1, y = PC2, color = LibrarySize, size = LibrarySize)) +
+ggplot(pca_data, aes(x = PC1, y = PC2, color = LibrarySize, size = LibrarySize)) +
   geom_point(alpha = 0.8) +
   scale_color_viridis_c(option = "plasma") +
   #stat_ellipse(aes(color = Experiment), type = "norm") +# Color gradient for aligned reads
   theme_minimal() +
   scale_y_continuous(labels = scales::comma)+
   labs(
-    title = "Filtered PCA Plot with Aligned Reads",
-    x = "PC 1",
-    y = "PC 2",
-    size = "Aligned Reads",
-    color = "Aligned Reads"
+    title = "PCA with Library Size",
+    x = paste0("PC1: ", round(100 * summary(pca)$importance[2, 1], 2), "% variance"),
+    y = paste0("PC2: ", round(100 * summary(pca)$importance[2, 2], 2), "% variance"), 
+    size = "Library Size",
+    color = "Library Size"
   ) +
   theme(
     legend.position = "right",
@@ -327,18 +334,18 @@ ggplot(pca_data_filtered, aes(x = PC1, y = PC2, color = LibrarySize, size = Libr
 
 
 #PC3 and PC4
-ggplot(pca_data_filtered, aes(x = PC3, y = PC4, color = LibrarySize, size = LibrarySize)) +
+ggplot(pca_data, aes(x = PC3, y = PC4, color = LibrarySize, size = LibrarySize)) +
   geom_point(alpha = 0.8) +
   scale_color_viridis_c(option = "plasma") +
   #stat_ellipse(aes(color = Experiment), type = "norm") +# Color gradient for aligned reads
   theme_minimal() +
   scale_y_continuous(labels = scales::comma)+
   labs(
-    title = "Filtered PCA Plot with Aligned Reads",
-    x = "PC 3",
-    y = "PC 4",
-    size = "Aligned Reads",
-    color = "Aligned Reads"
+    title = "PCA with Library Size",
+    x = paste0("PC3: ", round(100 * summary(pca)$importance[2, 3], 2), "% variance"),
+    y = paste0("PC4: ", round(100 * summary(pca)$importance[2, 4], 2), "% variance"), 
+    size = "Library Size",
+    color = "Library Size"
   ) +
   theme(
     legend.position = "right",
@@ -346,13 +353,13 @@ ggplot(pca_data_filtered, aes(x = PC3, y = PC4, color = LibrarySize, size = Libr
   )
 
 # include single and paired in the PCA
-ggplot(pca_data_filtered, aes(x = PC1, y = PC2, color = Library)) +
+ggplot(pca_data, aes(x = PC1, y = PC2, color = Library)) +
   geom_point(alpha = 0.8) +
   theme_minimal() +
   labs(
-    title = "PCA with filtered vst counts",
-    x = "PC 1",
-    y = "PC 2",
+    title = "PCA with Library",
+    x = paste0("PC1: ", round(100 * summary(pca)$importance[2, 1], 2), "% variance"),
+    y = paste0("PC2: ", round(100 * summary(pca)$importance[2, 2], 2), "% variance"), 
     color = "single-end/paired-end"
   ) +
   theme(
@@ -360,13 +367,13 @@ ggplot(pca_data_filtered, aes(x = PC1, y = PC2, color = Library)) +
     plot.title = element_text(hjust = 0.5, size = 16)
   )
 
-ggplot(pca_data_filtered, aes(x = PC3, y = PC4, color = Library)) +
+ggplot(pca_data, aes(x = PC3, y = PC4, color = Library)) +
   geom_point(alpha = 0.8) +
   theme_minimal() +
   labs(
-    title = "PCA with filtered vst counts",
-    x = "PC 3",
-    y = "PC 4",
+    title = "PCA with Library",
+    x = paste0("PC3: ", round(100 * summary(pca)$importance[2, 3], 2), "% variance"),
+    y = paste0("PC4: ", round(100 * summary(pca)$importance[2, 4], 2), "% variance"), 
     color = "single-end/paired-end"
   ) +
   theme(
@@ -445,14 +452,13 @@ metData <- metaData_bin[, -c(1,2,3)]
 
 sampleTree2 <- hclust(dist(input_mat), method = "average")
 
-metaColors <- numbers2colors(metaData_bin[, grep("inf_path", colnames(metaData_bin))], signed = TRUE)
+metaColors_sub_cat <- numbers2colors(metData[, grep("Category\\.", colnames(metData))], signed = FALSE)
 options(repr.plot.width = 20, repr.plot.height = 20,repr.res = 200)
-plotDendroAndColors(sampleTree2, metaColors, groupLabels = names(metaData_bin[, grep("inf_path", colnames(metaData_bin))])%>% gsub("inf_path.", "", .), main = "Sample dendrogram and metadata heatmap")
+plotDendroAndColors(sampleTree2, metaColors_sub_cat, groupLabels = names(metData[, grep("Category\\.", colnames(metData))])%>% gsub("Category\\.", "", .), main = "Sample dendrogram and metadata heatmap")
 
-metaColors_sub_cat <- numbers2colors(metaData_bin[, grep("Category\\.", colnames(metaData_bin))], signed = FALSE)
+metaColors_timepoint <- numbers2colors(as.numeric(metaData[, "Timepoint..dpi."]), signed = FALSE)
 options(repr.plot.width = 20, repr.plot.height = 20,repr.res = 200)
-plotDendroAndColors(sampleTree2, metaColors_sub_cat, groupLabels = names(metaData_bin[, grep("Category\\.", colnames(metaData_bin))])%>% gsub("Category\\.", "", .), main = "Sample dendrogram and metadata heatmap")
-
+plotDendroAndColors(sampleTree2, metaColors_timepoint, groupLabels = "Timepoints post-infection", main = "Sample dendrogram and metadata heatmap")
 ```
 
 ```{r}
