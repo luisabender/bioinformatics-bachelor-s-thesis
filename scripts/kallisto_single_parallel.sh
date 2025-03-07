@@ -48,7 +48,7 @@ cat "$sample_file" | parallel --jobs $parallel_tasks --linebuffer \
      output_dir="$output_base/$(basename "$reads" .fastq)"; \
      output_dir="${output_dir%.fq}"; \
      mkdir -p "$output_dir"; \
-     kallisto quant -i "$kallisto_idx" -o "$output_dir" --single -l 82 -s 14 -t $threads_per_task "$reads"'
+     kallisto quant -i "$kallisto_idx" -o "$output_dir" --single -l 200 -s 30 -t $threads_per_task "$reads"'
  
 echo "All kallisto jobs completed!"
 
