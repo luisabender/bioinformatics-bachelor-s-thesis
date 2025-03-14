@@ -3,7 +3,7 @@ options(stringsAsFactors = FALSE)
 enableWGCNAThreads()
 
 base_dir <- "/dss/dssfs03/pn57ba/pn57ba-dss-0001/computational-plant-biology/luisa/bachelor-thesis-luisa/"
-expr_data <- read.csv(file.path(base_dir,"count_tables/vst_expression_data.csv"), row.names = 1)
+expr_data <- read.csv(file.path(base_dir,"ccount_tables/expr_data_transposed.csv"), row.names = 1)
 
 # transpose it for WGCNA
 input_mat <- t(expr_data)
@@ -11,7 +11,7 @@ input_mat <- t(expr_data)
 print("Calling blockwiseModules...")
 
 net = blockwiseModules(input_mat, power = 5,
-TOMType = "unsigned", minModuleSize = 30,
+TOMType = "signed hybrid", minModuleSize = 30,
 reassignThreshold = 0, mergeCutHeight = 0.25,
 numericLabels = TRUE, pamRespectsDendro = FALSE,
 saveTOMs = TRUE,

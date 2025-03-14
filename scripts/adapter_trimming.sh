@@ -68,6 +68,8 @@ for sample in $base_dir/"raw_files/Stegmann_RNAseq/RNAseq_WT"/*; do
             echo "No fastq files found for sample: $sample_name"
         fi
     fi'
+
+    #specific adapter trimming for sample with bad quality scores
     sample_name=$(basename "$sample")
     echo "Processing single-end sample: $sample_name"
     fastp \
