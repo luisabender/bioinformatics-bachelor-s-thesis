@@ -292,19 +292,19 @@ print(hubGenes)
 kWithin = softConnectivity(input_mat, type = "signed hybrid")
 
 # identify more hub genes per module based on gene significance
-gene_info_GS <- data.frame(
-  Gene = colnames(input_mat),
-  Module = picked_module_colors,  
-  kME = apply(geneModuleMembership, 1, max),
-  GS = abs(geneTraitSignificance_inf_path[,-15]),
-  kWithin = kWithin
-)
+#gene_info_GS <- data.frame(
+ # Gene = colnames(input_mat),
+  #Module = picked_module_colors,  
+  #kME = apply(geneModuleMembership, 1, max),
+  #GS = abs(geneTraitSignificance_inf_path[,-15]),
+  #kWithin = kWithin
+#)
 
 # select top hub genes per module based on kME and kWithin
-hub_genes_GS <- gene_info_GS %>%
-  group_by(Module) %>%
-  arrange(desc(kWithin), desc(kME)) %>%
-  slice_head(n = 5) 
+#hub_genes_GS <- gene_info_GS %>%
+ # group_by(Module) %>%
+  #arrange(desc(kWithin), desc(kME)) %>%
+  #slice_head(n = 5) 
 
 # not based on gene significance
 gene_info <- data.frame(
