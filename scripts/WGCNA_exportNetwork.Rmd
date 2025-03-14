@@ -1,0 +1,77 @@
+---
+title: "WGCNA_exportNetwork"
+author: "Luisa Bender"
+date: "2025-03-05"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+for (i in 1:length(merge$newMEs)){
+  modules = c(substring(names(merge$newMEs)[i], 3));
+  genes = colnames(datExpr)
+  inModule = is.finite(match(dynamicColors,modules))
+  modGenes = genes[inModule]
+  modTOM=TOM[inModule,inModule]
+  dimnames(modTOM)=list(modGenes,modGenes)
+  cyt = exportNetworkToCytoscape(modTOM,
+                                 edgeFile = paste("output_for_cytoscape/merge_CytoscapeInput-edges-", paste(modules, collapse="-"), ".txt", sep=""),
+                                 nodeFile = paste("output_for_cytoscape/merge_CytoscapeInput-nodes-", paste(modules, collapse="-"), ".txt", sep=""),
+                                 weighted = TRUE, threshold = -1, nodeNames = modGenes, nodeAttr = dynamicColors[inModule]);
+}
+```
+ 
+```{r}
+#=====================================================================================
+#
+#   Cytoscape
+#
+#=====================================================================================
+
+
+#if(!"RCy3" %in% installed.packages()){
+#  install.packages("BiocManager")
+#  BiocManager::install("RCy3")
+#}
+
+# https://cytoscape.org/cytoscape-automation/for-scripters/R/notebooks/
+library(RCy3)
+
+cytoscapePing () # make sure cytoscape is open
+cytoscapeVersionInfo ()
+
+###### for yellow module of the merged data (newMEs) #################################
+edge <- read.delim("output_for_cytoscape/merge_CytoscapeInput-edges-lightgreen.txt")
+colnames(edge)
+colnames(edge) <- c("source", "target","weight","direction","fromAltName","toAltName")
+
+node <- read.delim("output_for_cytoscape/merge_CytoscapeInput-nodes-lightgreen.txt")
+colnames(node)  
+colnames(node) <- c("id","altName","node_attributes") 
+
+createNetworkFromDataFrames(node,edge[1:50,], title="my first network", collection="DataFrame Example")
+
+################ customise the network visualization ##################################
+# use other pre-set visual style
+setVisualStyle('Marquee')
+
+# set up my own style
+style.name = "myStyle"
+defaults <- list(NODE_SHAPE="diamond",
+                 NODE_SIZE=30,
+                 EDGE_TRANSPARENCY=120,
+                 NODE_LABEL_POSITION="W,E,c,0.00,0.00")
+nodeLabels <- mapVisualProperty('node label','id','p')
+nodeFills <- mapVisualProperty('node fill color','node_attributes','d',c("A","B"), c("#FF9900","#66AAAA"))
+arrowShapes <- mapVisualProperty('Edge Target Arrow Shape','interaction','d',c("activates","inhibits","interacts"),c("Arrow","T","None"))
+edgeWidth <- mapVisualProperty('edge width','weight','p')
+
+createVisualStyle(style.name, defaults, list(nodeLabels,nodeFills,arrowShapes,edgeWidth))
+setVisualStyle(style.name)
+```
+ 
+ 

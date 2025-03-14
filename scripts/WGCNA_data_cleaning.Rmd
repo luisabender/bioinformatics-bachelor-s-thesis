@@ -11,14 +11,10 @@ library(dplyr)
 library(tidyr)
 ```
 
-Kallisto alignment result: 
+### Kallisto alignment result: 
 
 ```{r}
 kallisto_alignment_summary <- read.csv('~/Studium/bachelor-thesis-luisa/multiqc/kallisto_alignment_summary.csv')
-#poor_alignment_threshold <- 2500000
-#kallisto_alignment_summary$alignment_status <- ifelse(kallisto_alignment_summary$n_pseudoaligned < poor_alignment_threshold, "Poor", "Good")
-
-#bad_alignment <- kallisto_alignment_summary[kallisto_alignment_summary$alignment_status =="Poor",]
 
 kallisto_alignment_summary$n_not_aligned <- kallisto_alignment_summary$n_processed - kallisto_alignment_summary$n_pseudoaligned
 
@@ -55,6 +51,16 @@ counts_lengthscaledTPM <- read.csv('~/Studium/bachelor-thesis-luisa/count_tables
 
 gene_counts_stegmann <- read.csv('~/Studium/bachelor-thesis-luisa/count_tables/RNAseq.gene.counts.kallisto.txt',sep="\t", row.names = 1)
 tpm_counts_stegmann <- read.csv('~/Studium/bachelor-thesis-luisa/count_tables/RNAseq.gene.abundance.kallisto.txt',sep="\t", row.names = 1)
+
+gene_counts_all <- read.csv('~/Studium/bachelor-thesis-luisa/scripts/gene_counts_w_added_dataset.csv', row.names = 1)
+gene_counts_all <- gene_counts_all[, !names(gene_counts_all) %in% duplicates]
+abundance_counts_all <- read.csv('~/Studium/bachelor-thesis-luisa/scripts/abundance_counts_w_added_dataset.csv', row.names = 1)
+abundance_counts_all <- abundance_counts_all[, !names(abundance_counts_all) %in% duplicates]
+
+rownames(gene_counts_all) <- gsub("\\.1$", "", rownames(gene_counts_all)) 
+rownames(abundance_counts_all) <- gsub("\\.1$", "", rownames(abundance_counts_all))
+colnames(gene_counts_all) <- gsub('X','',colnames(gene_counts_all)) %>% gsub("_R1_001", "", .)
+colnames(abundance_counts_all) <- gsub('X','',colnames(abundance_counts_all)) %>% gsub("_R1_001", "", .)
 ```
 
 ```{r}
@@ -85,7 +91,6 @@ counts_genelev_tpm$gene_id <- gsub("\\.1$", "", counts_genelev_tpm$gene_id)
 gene_counts <- full_join(counts_geneID,gene_counts_stegmann, by="gene_id")
 tpm_counts <-  full_join(counts_genelev_tpm,tpm_counts_stegmann, by="gene_id")
 
-# Replace NA values with 0 (since missing genes should be treated as 0 counts)
 gene_counts[is.na(gene_counts)] <- 0
 tpm_counts[is.na(tpm_counts)] <- 0
 
@@ -158,18 +163,18 @@ if tiniest dataset with contrast is 3 samples, then
 ```{r}
 smallest_tpm <- 0.5
 percentage <- 0.51
-num_samples <- ncol(tpm_counts)
+num_samples <- ncol(abundance_counts_all)
 # genes to keep
-keep <- rowSums(tpm_counts >= smallest_tpm) >= 3
+keep <- rowSums(abundance_counts_all >= smallest_tpm) >= 3
 
-gene_counts_filtered <- gene_counts[keep,]
+all_gene_counts_filtered <- gene_counts_all[keep,]
 ```
 
 
 VST on filtered gene count table:
 
 ```{r}
-dds <- DESeqDataSetFromMatrix(countData = round(gene_counts_filtered),
+dds <- DESeqDataSetFromMatrix(countData = round(all_gene_counts_filtered),
                               colData = metaData,
                               design = ~Experiment + infected_control)
 
@@ -191,9 +196,11 @@ Filter datasets if there are outliers:
 #to_drop <- meta_info[meta_info$Experiment == experiment_to_drop, ]$Run
 hpa2 <- c("SRR22565219","SRR22565220","SRR22565221","SRR22565222","SRR22565223","SRR22565224","SRR22565225","SRR22565226","SRR22565227","SRR22565228","SRR22565229","SRR22565230","SRR22565231","SRR22565232","SRR22565233","SRR22565234","SRR22565235","SRR22565236")
 
+# remove samples with library size < 1.000.000 (four hpa samples)
+remove <- metaData$Run[metaData$LibrarySize < 1000000]
 
-gene_counts <- gene_counts[, !names(gene_counts) %in% hpa2]
-tpm_counts <- tpm_counts[, !names(tpm_counts) %in% hpa2]
+gene_counts_all <- gene_counts_all[, !names(gene_counts_all) %in% hpa2]
+abundance_counts_all <- abundance_counts_all[, !names(abundance_counts_all) %in% hpa2]
 
 metaData <- metaData[!metaData$Run %in% hpa2,]
 metaData_bin <- metaData_bin[!metaData_bin$Run %in% hpa2,]
@@ -201,7 +208,7 @@ metaData_bin <- metaData_bin[!metaData_bin$Run %in% hpa2,]
 
 Re-Do VST:
 ```{r}
-dds <- DESeqDataSetFromMatrix(countData = round(gene_counts_filtered),
+dds <- DESeqDataSetFromMatrix(countData = round(all_gene_counts_filtered),
                               colData = metaData,
                               design = ~Experiment + infected_control)
 
@@ -218,7 +225,7 @@ vsd <- varianceStabilizingTransformation(dds, blind = FALSE)
 ```{r}
 # include librarysize in the meta Data
 # librarySize (total number of mapped reads per sample) as summed up counts of all genes for each sample
-library_sizes <- colSums(gene_counts_filtered)
+library_sizes <- colSums(all_gene_counts_filtered)
 metaData$LibrarySize <- library_sizes[match(metaData$Run, names(library_sizes))]
 ```
 
@@ -394,7 +401,7 @@ input_mat0 <- t(expr_data)
 ```
 
 ```{r}
-gsg = goodSamplesGenes(input_mat, verbose = 3)
+gsg = goodSamplesGenes(input_mat0, verbose = 3)
 gsg$allOK # TRUE
 summary(gsg)
 ```
