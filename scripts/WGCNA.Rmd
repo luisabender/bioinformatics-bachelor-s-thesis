@@ -36,7 +36,7 @@ options(stringsAsFactors = FALSE)
 input_mat <- read.csv("~/Studium/bachelor-thesis-luisa/count_tables/expr_data_transposed.csv", row.names = 1)
 
 # load meta data
-metaData <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData_modified.csv")
+metaData <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData_modified.csv", sep=";")
 metaData_bin <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData_bin.csv", sep =";")
 ```
 
@@ -116,10 +116,11 @@ MEs_pow5_signed <- mergedMEs
 geneTree_pow5_signed <- geneTree
 
 # network construction with soft power 4 - signed hybrid network
-load('~/Studium/bachelor-thesis-luisa/wgcna_results/new/networkConstruction-pow4_signed.RData')
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/new/networkConstruction-pow4_signed_mer.RData')
 moduleColors_pow4_signed <- mergedColors
 MEs_pow4_signed <- mergedMEs
 geneTree_pow4_signed <- geneTree
+moduleColors_org <- ModuleColors
 
 # network construction with soft power 4 - signed hybrid network with TOMType signed
 load('~/Studium/bachelor-thesis-luisa/wgcna_results/new/networkConstruction-pow4_TOMsigned.RData')
@@ -131,14 +132,14 @@ geneTree_pow4_tomsigned <- geneTree
 
 ```{r}
 # plots the gene dendrogram with the module colors
-plotDendroAndColors(geneTree_pow4_signed, 
-                    moduleColors_pow4_signed,
-                    "Module",
+plotDendroAndColors(geneTree_pow4_signed,
+                    cbind(ModuleColors, mergedColors),
+                    c("original Module", "merged Module"),
                     dendroLabels = FALSE, 
                     hang = 0.03,
                     addGuide = TRUE, 
                     guideHang = 0.05,
-                    main = "Gene dendrogram and module colors")
+                    main = "Gene dendrogram and module colors for original and merged modules")
 table(moduleColors_pow4_signed)
 ```
 
@@ -175,9 +176,11 @@ colnames(sub_cat_df) <- gsub("Category\\.", "", colnames(sub_cat_df))
 # librarySize
 libsize_df <- data.frame(LibrarySize = metaData[, 17])
 
-#latest_df <- metaData_bin[, grep("latest_infection_timepoint.", colnames(metaData_bin))]
-#colnames(latest_df) <- gsub("latest_infection_timepoint.", "", colnames(latest_df))
-#latest_df <- latest_df[,-1]
+# P.brassicae leaf vs root
+p_brassicae <- metaData_bin[, grep("P\\.brassicae", colnames(metaData_bin))]
+
+# TuMV AS vs. DS
+tumv <-  metaData_bin[, grep("TuMV_", colnames(metaData_bin))]
 ```
 
 
@@ -214,7 +217,8 @@ moduleTraitCorrelation(MEs, inf_path_df[,-11], "Pathogens")
 moduleTraitCorrelation(MEs, sub_cat_df, "Pathogens (subcategories)")
 moduleTraitCorrelation(MEs, cat_df, "Pathogens (categories)")
 moduleTraitCorrelation(MEs, libsize_df, "Library Size")
-#moduleTraitCorrelation(MEs, latest_df, "Comparing latest infection timepoints")
+moduleTraitCorrelation(MEs, p_brassicae, "P.brassicae")
+moduleTraitCorrelation(MEs, tumv, "TuMV")
 ```
 
 Look for weak correlations and sum up the absolute correlation value:
@@ -330,7 +334,7 @@ kIM <- intramodularConnectivity.fromExpr(input_mat, picked_module_colors, networ
 
 ```{r}
 # look at specific module that has high significance with choosen trait
-module = "darkgreen"
+module = "blue"
 category = "nematode"
 column = match(module, modNames)
 moduleGenes = picked_module_colors==module
@@ -368,6 +372,7 @@ hub_genes_oomycete_royalblue <- hub_genes_GS_MM(geneModuleMembership, geneTraitS
 hub_genes_nematode_brown <- hub_genes_GS_MM(geneModuleMembership, geneTraitSignificance_sub_cat, "MMbrown", "nematode", 0.8, 0.5)
 hub_genes_nematode_darkgreen <- hub_genes_GS_MM(geneModuleMembership, geneTraitSignificance_sub_cat, "MMdarkgreen", "nematode", 0.8, 0.3)
 hub_genes_hpa_darkolivegreen <- hub_genes_GS_MM(geneModuleMembership, geneTraitSignificance_inf_path, "MMdarkolivegreen", "Hpa", 0.8, 0.4)
+hub_genes_nematode_blue <- hub_genes_GS_MM(geneModuleMembership, geneTraitSignificance_sub_cat, "MMblue", "nematode", 0.8, -0.3)
 ```
 
 
@@ -607,7 +612,7 @@ kegg_hub_results <- readRDS("~/Studium/bachelor-thesis-luisa/data/kegg_hub_genes
 
 ```{r}
 # plotting of enrichment results of specific module
-module = "orange"
+module = "steelblue"
 
 # simplify enrichGO output by removing redundancy of enriched GO terms
 # plot with gene ratio

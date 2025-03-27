@@ -144,11 +144,11 @@ metaData$LibrarySize_kallisto <- metaData$LibrarySize
 
 
 # create binary meta data for correlation calculations
-metaData_bin <- binarizeCategoricalColumns(metaData, convertColumns = c("inf_path", "infected_control", "Timepoint_dpi", "Library", "Category", "Category_trophs"), includePairwise = FALSE, includeLevelVsAll = TRUE, minCount = 1, dropFirstLevelVsAll = FALSE)
+metaData_bin <- binarizeCategoricalColumns(metaData, convertColumns = c("inf_path", "infected_control", "Timepoint_dpi", "Library", "Category", "Category_trophs", "Tissue"), includePairwise = FALSE, includeLevelVsAll = TRUE, minCount = 1, dropFirstLevelVsAll = FALSE)
 colnames(metaData_bin) <- gsub(".vs.all", "", colnames(metaData_bin))
 
 # remove CaMV category (unsure)
-metaData_bin <- metaData_bin[,-35]
+metaData_bin <- metaData_bin[,-50]
 ```
 
 Filter low expressed genes (with tpm values (genelevel tpm)): 
@@ -163,18 +163,18 @@ if tiniest dataset with contrast is 3 samples, then
 ```{r}
 smallest_tpm <- 0.5
 percentage <- 0.51
-num_samples <- ncol(abundance_counts_all)
+num_samples <- ncol(tpm_counts)
 # genes to keep
-keep <- rowSums(abundance_counts_all >= smallest_tpm) >= 3
+keep <- rowSums(tpm_counts >= smallest_tpm) >= 3
 
-all_gene_counts_filtered <- gene_counts_all[keep,]
+gene_counts_filtered <- gene_counts[keep,]
 ```
 
 
 VST on filtered gene count table:
 
 ```{r}
-dds <- DESeqDataSetFromMatrix(countData = round(all_gene_counts_filtered),
+dds <- DESeqDataSetFromMatrix(countData = round(gene_counts_filtered),
                               colData = metaData,
                               design = ~Experiment + infected_control)
 
@@ -199,8 +199,8 @@ hpa2 <- c("SRR22565219","SRR22565220","SRR22565221","SRR22565222","SRR22565223",
 # remove samples with library size < 1.000.000 (four hpa samples)
 remove <- metaData$Run[metaData$LibrarySize < 1000000]
 
-gene_counts_all <- gene_counts_all[, !names(gene_counts_all) %in% hpa2]
-abundance_counts_all <- abundance_counts_all[, !names(abundance_counts_all) %in% hpa2]
+gene_counts <- gene_counts[, !names(gene_counts) %in% hpa2]
+tpm_counts <- tpm_counts[, !names(tpm_counts) %in% hpa2]
 
 metaData <- metaData[!metaData$Run %in% hpa2,]
 metaData_bin <- metaData_bin[!metaData_bin$Run %in% hpa2,]
@@ -225,8 +225,9 @@ vsd <- varianceStabilizingTransformation(dds, blind = FALSE)
 ```{r}
 # include librarysize in the meta Data
 # librarySize (total number of mapped reads per sample) as summed up counts of all genes for each sample
-library_sizes <- colSums(all_gene_counts_filtered)
+library_sizes <- colSums(gene_counts_filtered)
 metaData$LibrarySize <- library_sizes[match(metaData$Run, names(library_sizes))]
+metaData_bin$LibrarySize <- metaData$LibrarySize
 ```
 
 
@@ -303,14 +304,24 @@ PCA on filtered counts
 
 ```{r pca}
 # PC1 and PC2
+p_brassicae_root_infected <- metaData[metaData$infection_type == "infected - root",]
 visualize_standard_pca(pca_data,pca, TRUE,"PCA on filtered vst counts", FALSE)
 ggplot(pca_data, aes(x = PC1, y = PC2, color = Experiment, shape=infected_control)) +
         geom_point() +
+        
         #stat_ellipse(aes(color = Category), type = "norm")+
-        xlab(paste0("PC1: ", round(100 * summary(pca)$importance[2, 1], 2), "% variance")) +
-        ylab(paste0("PC2: ", round(100 * summary(pca)$importance[2, 2], 2), "% variance")) +
-        ggtitle("PCA on filtered vst counts") +
-        theme_minimal()
+        theme_minimal() +
+        labs(
+          title = "PCA on filtered vst counts",
+          x = paste0("PC1: ", round(100 * summary(pca)$importance[2, 1], 2), "% variance"),
+          y = paste0("PC2: ", round(100 * summary(pca)$importance[2, 2], 2), "% variance"), 
+          color = "Experiment", 
+          shape = "infected/control"
+        ) +
+        theme(
+          legend.position = "right",
+          plot.title = element_text(hjust = 0.5, size = 16)
+        )
       
 
 # PC3 and PC4
@@ -387,6 +398,21 @@ ggplot(pca_data, aes(x = PC3, y = PC4, color = Library)) +
     legend.position = "right",
     plot.title = element_text(hjust = 0.5, size = 16)
   )
+
+# PCA on tissue samples
+ggplot(pca_data, aes(x = PC1, y = PC2, color = Tissue)) +
+  geom_point(alpha = 0.8) +
+  theme_minimal() +
+  labs(
+    title = "PCA with Tissues",
+    x = paste0("PC1: ", round(100 * summary(pca)$importance[2, 1], 2), "% variance"),
+    y = paste0("PC2: ", round(100 * summary(pca)$importance[2, 2], 2), "% variance"), 
+    color = "single-end/paired-end"
+  ) +
+  theme(
+    legend.position = "right",
+    plot.title = element_text(hjust = 0.5, size = 16)
+  )
 ```
 
 
@@ -424,7 +450,7 @@ abline(h=300, col ="red")
 Three outliers were found that should be removed --> choose a cut height of 300 to keep the rest of the samples
 
 ```{r}
-clust = cutreeStatic(sampleTree, cutHeight = 300, minSize = 10)
+clust = cutreeStatic(sampleTree0, cutHeight = 300, minSize = 10)
 table(clust)
 
 # clust 1 contains the samples we want to keep.
@@ -466,6 +492,20 @@ plotDendroAndColors(sampleTree2, metaColors_sub_cat, groupLabels = names(metData
 metaColors_timepoint <- numbers2colors(as.numeric(metaData[, "Timepoint..dpi."]), signed = FALSE)
 options(repr.plot.width = 20, repr.plot.height = 20,repr.res = 200)
 plotDendroAndColors(sampleTree2, metaColors_timepoint, groupLabels = "Timepoints post-infection", main = "Sample dendrogram and metadata heatmap")
+
+metaColors_tissues <- numbers2colors(metaData_bin[, grep("Tissue", colnames(metaData_bin))], signed = FALSE)
+options(repr.plot.width = 20, repr.plot.height = 20,repr.res = 200)
+plotDendroAndColors(sampleTree2, metaColors_tissues, groupLabels = names(metaData_bin[, grep("Tissue\\.", colnames(metaData_bin))])%>% gsub("Tissue\\.", "", .), main = "Sample dendrogram and metadata heatmap")
+
+metData_all <- metaData_bin[, -c(1,2,3,4,10,11,31:48,62,64:69)]
+metData_all <- metData_all[, -c(2,3,15:19)]
+
+metData_all <- metData_all %>% mutate_all(as.numeric)
+metaColors_all <- numbers2colors(metData_all, signed = FALSE)
+#par(mar = c(0,10,2,0))
+#options(repr.plot.width = 25, repr.plot.height = 20,repr.res = 200)
+plotDendroAndColors(sampleTree2, metaColors_all, groupLabels = names(metData_all) %>% sub("^[^.]*\\.", "", .),main = "Sample dendrogram and metadata heatmap")
+
 ```
 
 ```{r}
