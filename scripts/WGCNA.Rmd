@@ -280,13 +280,13 @@ barplot(
 )
 ```
 
-Different ways on calculating hub genes:
+##### Different ways on calculating hub genes:
 
-intramodular connectivity (kIM): measures how connected a gene is within its module (intramodularConnectivity)
+- intramodular connectivity (kIM): measures how connected a gene is within its module (intramodularConnectivity)
 
-kME: module membership (simpler to calculate, has an associated p-value and can be compared across modules)
+- kME: module membership (simpler to calculate, has an associated p-value and can be compared across modules)
 
-signedKME: Calculation of (signed) eigengene-based connectivity, also known as module membership, correlation of the gene with the corresponding module eigengene.
+- signedKME: Calculation of (signed) eigengene-based connectivity, also known as module membership, correlation of the gene with the corresponding module eigengene.
 
 ```{r}
 # identify top hub gene per module
@@ -405,8 +405,9 @@ plotEigengeneNetworks(orderMEs(MEs), "Eigengene dendrogram and adjacency heatmap
 
 ### Network analysis with functional annotation and gene ontology
 --> export a list of gene identifiers that can be used as input for Mercator
+
 Enrichment analysis directly within R:
--> organism-specific package: Genome wide annotation for Arabidopsis: org.At.tair.db
+-> Genome wide annotation for Arabidopsis: org.At.tair.db
 
 
 ##### Functional enrichment for all genes per module:
@@ -515,7 +516,7 @@ goplot(simple_enriched_go, showCategory = 5)
 cnetplot(simple_enriched_go)
 ```
 
-Functional enrichment for hub genes based on signedkME > 0.8:
+##### Functional enrichment for hub genes based on signedkME > 0.8:
 
 ```{r}
 hub_genes_per_module <- list()
@@ -639,7 +640,7 @@ kegg_module <- kegg_hub_results[[module]]
 head(kegg_module, n = 20)
 ```
 
-Functional enrichment based on hub genes defined with a MM and GS cutoff:
+##### Functional enrichment based on hub genes defined with a MM and GS cutoff:
 
 
 ```{r}

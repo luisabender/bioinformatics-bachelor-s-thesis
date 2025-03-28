@@ -42,7 +42,7 @@ Loading count data (saved via tximport on cluster):
 ```{r count tables}
 counts_geneID <- read.csv('~/Studium/bachelor-thesis-luisa/count_tables/counts_genelev_corrected.csv', row.names = 1)
 duplicates <- c("ERR7738945.1", "ERR7738946.1", "ERR7738947.1")
-counts_geneID <- counts_geneID[,!names(counts_geneID) %in% duplicates] # genelevels
+counts_geneID <- counts_geneID[,!names(counts_geneID) %in% duplicates] # genelevel counts
 
 counts_genelev_tpm <- read.csv('~/Studium/bachelor-thesis-luisa/count_tables/counts_tpm_abundance2.csv', row.names = 1)
 counts_genelev_tpm <- counts_genelev_tpm[,!names(counts_genelev_tpm) %in% duplicates] # genelevel tpm
@@ -151,7 +151,7 @@ colnames(metaData_bin) <- gsub(".vs.all", "", colnames(metaData_bin))
 metaData_bin <- metaData_bin[,-50]
 ```
 
-Filter low expressed genes (with tpm values (genelevel tpm)): 
+### Filter low expressed genes (with tpm values (genelevel tpm)): 
 
 Result: 
 - before filtering: 27598 genes
@@ -170,6 +170,7 @@ keep <- rowSums(tpm_counts >= smallest_tpm) >= 3
 gene_counts_filtered <- gene_counts[keep,]
 ```
 
+### Variance stabilization transformation
 
 VST on filtered gene count table:
 
@@ -207,6 +208,7 @@ metaData_bin <- metaData_bin[!metaData_bin$Run %in% hpa2,]
 ```
 
 Re-Do VST:
+
 ```{r}
 dds <- DESeqDataSetFromMatrix(countData = round(all_gene_counts_filtered),
                               colData = metaData,
@@ -230,7 +232,7 @@ metaData$LibrarySize <- library_sizes[match(metaData$Run, names(library_sizes))]
 metaData_bin$LibrarySize <- metaData$LibrarySize
 ```
 
-
+### Prinicipal Component Analysis (PCA)
 
 PCA function:
 
@@ -328,7 +330,7 @@ ggplot(pca_data, aes(x = PC1, y = PC2, color = Experiment, shape=infected_contro
 visualize_standard_pca(pca_data,pca, FALSE,"PCA on filtered vst counts", TRUE)
 ```
 
-PCA on further information:
+PCA on further information, e.g. Library, Tissues:
 
 ```{r pca}
 # number of aligned reads per sample (absolute counts) to include in the PCA
