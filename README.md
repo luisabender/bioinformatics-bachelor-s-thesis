@@ -20,7 +20,7 @@ Table S1: [RNA-Seq data on Arabidopsis thaliana](data/arabidopsis_datasets_info.
 
 Table S2: [Metadata](data/metaData_modified.csv) - This table shows the metadata of each sample.
 
-Figure S3: [MultiQC-Report](quality_control/multiqc_after_trim.html) - MultiQC HTML Report of all samples after quality trimming.
+Figure S3: [MultiQC-Report](multiqc_after_trim.html) - MultiQC HTML Report of all samples after quality trimming.
 
 Figure S4: ![Sample dendrogram with metadata](plots/dendro_metadata_all.png) Sample dendrogram with metadata - This plot shows a dendrogram of all samples after removing outliers. On each branch, the sample ID is displayed. The height on the y-axis describes the distance between each sample. Below the dendrogram, all available metadata of the samples are defined. Red coloring means that the samples on the dendrogram branches belong to the metadata category.
 
