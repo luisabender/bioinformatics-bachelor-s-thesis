@@ -1,11 +1,11 @@
 # Bachelor's thesis in Bioinformatics
 ##### Author: Luisa Bender
 
+**Unveiling Commonalities and Divergences in Biotrophic Plant-Microbe Interactions using Gene Co-Expression Networks in Arabidopsis thaliana.**
+
 This Github repository contains the code, plots and files for the bachelor's thesis on Weighted Gene Co-Expression Network Analysis (WGCNA).
 
-Topic:
 
-**Unveiling Commonalities and Divergences in Biotrophic Plant-Microbe Interactions using Gene Co-Expression Networks in Arabidopsis thaliana.**
 
 ## Objectives of the thesis
 This thesis focuses on the comparative analysis across various infection experiments involving different biotrophic plant-microbe interactions, with the aim of identifying genes or pathways that are co-expressed during these infections. In order to achieve that, we would use publicly available datasets from the Sequence Read Archive (SRA), hosted by the National Center for Biotechnology Information ([NCBI](https://www.ncbi.nlm.nih.gov/sra)). The data will have to go through several preprocessing steps, such as quality control, adapter trimming, sequence alignment, and data transformation, in order to prepare it for the weighted gene co-expression network analysis (WGCNA). This analysis would reveal the underlying correlation and similarities among the genes. 
