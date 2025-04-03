@@ -1,17 +1,17 @@
 # Bachelor's thesis in Bioinformatics
-##### Author: Luisa Bender
+Author: Luisa Bender
 
-**Unveiling Commonalities and Divergences in Biotrophic Plant-Microbe Interactions using Gene Co-Expression Networks in Arabidopsis thaliana.**
+## Unveiling Commonalities and Divergences in Biotrophic Plant-Microbe Interactions using Gene Co-Expression Networks in Arabidopsis thaliana
 
 This Github repository contains the code, plots and files for the bachelor's thesis on Weighted Gene Co-Expression Network Analysis (WGCNA).
 
 
-
-## Objectives of the thesis
+### Objectives of the thesis
 This thesis focuses on the comparative analysis across various infection experiments involving different biotrophic plant-microbe interactions, with the aim of identifying genes or pathways that are co-expressed during these infections. In order to achieve that, we would use publicly available datasets from the Sequence Read Archive (SRA), hosted by the National Center for Biotechnology Information ([NCBI](https://www.ncbi.nlm.nih.gov/sra)). The data will have to go through several preprocessing steps, such as quality control, adapter trimming, sequence alignment, and data transformation, in order to prepare it for the weighted gene co-expression network analysis (WGCNA). This analysis would reveal the underlying correlation and similarities among the genes. 
 To reach our objective, we would then use pathway-level enrichments for functional insights into the genes involved, which might help in understanding how plants respond to different microbes and their infection strategies at a systems level. 
 
 [Workflow](workflow.pdf)
+
 [Final presentation](Final_presentation.pdf)
 
 ### Supplementary
@@ -31,13 +31,10 @@ All Gene Ontology (GO) enrichment figures for specific modules are stored here: 
 #### Count tables
 This folder contains all raw gene, abundance and vst transformed count tables.
 
-[Raw gene counts](count_tables/counts_genelev_corrected.csv)
-
-[Abundance (TPM) counts](count_tables/counts_tpm_abundance2.csv)
-
-[VST transformed gene counts](count_tables/expr_data.csv)
-
-[Transposed count table as input for WGCNA](count_tables/expr_data_transposed.csv)
+- [Raw gene counts](count_tables/counts_genelev_corrected.csv)
+- [Abundance (TPM) counts](count_tables/counts_tpm_abundance2.csv)
+- [VST transformed gene counts](count_tables/expr_data.csv)
+- [Transposed count table as input for WGCNA](count_tables/expr_data_transposed.csv)
 
 #### Scripts
 - [Preprocessing](scripts/preprocessing.sh)
@@ -48,4 +45,4 @@ This folder contains all raw gene, abundance and vst transformed count tables.
 
 
 ### Internship (Praktische Arbeit)
-Code and files, as well as a README of the internship are found here: [praktische-arbeit](praktische-arbeit/).
+All code and files, as well as a README of the internship are found here: [praktische-arbeit](praktische-arbeit/).
