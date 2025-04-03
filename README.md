@@ -12,22 +12,23 @@ This thesis focuses on the comparative analysis across various infection experim
 To reach our objective, we would then use pathway-level enrichments for functional insights into the genes involved, which might help in understanding how plants respond to different microbes and their infection strategies at a systems level. 
 
 [Workflow](workflow.pdf)
+[Final presentation](Final_presentation.pdf)
 
 ### Supplementary
 Following supplementary files and figures are referenced in the thesis.
 
 Table S1: [RNA-Seq data on Arabidopsis thaliana](data/arabidopsis_datasets_info.xlsx) - This file contains information about the datasets used for the study, such as BioProjectID, associated publication and further information. 
 
-Table S2: [Metadata](data/metaData_modified.csv) - This table shows the metadata of each sample.
+Table S2: [Metadata](data/metaData_modified.csv) - This table contains metadata of each sample.
 
-Figure S3: [MultiQC-Report](multiqc_after_trim.html) - MultiQC HTML Report of all samples after quality trimming.
+Figure S3: [MultiQC-Report](quality_control/multiqc_after_trim.html) - MultiQC HTML Report of all samples after quality trimming.
 
 Figure S4: ![Sample dendrogram with metadata](plots/dendro_metadata_all.png) Sample dendrogram with metadata - This plot shows a dendrogram of all samples after removing outliers. On each branch, the sample ID is displayed. The height on the y-axis describes the distance between each sample. Below the dendrogram, all available metadata of the samples are defined. Red coloring means that the samples on the dendrogram branches belong to the metadata category.
 
 All Gene Ontology (GO) enrichment figures for specific modules are stored here: [GO plots](plots/WGCNA/Gene%20Ontology/)
 
 
-### Count tables
+#### Count tables
 This folder contains all raw gene, abundance and vst transformed count tables.
 
 [Raw gene counts](count_tables/counts_genelev_corrected.csv)
@@ -37,6 +38,13 @@ This folder contains all raw gene, abundance and vst transformed count tables.
 [VST transformed gene counts](count_tables/expr_data.csv)
 
 [Transposed count table as input for WGCNA](count_tables/expr_data_transposed.csv)
+
+#### Scripts
+- [Preprocessing](scripts/preprocessing.sh)
+- Kallisto: [index](scripts/index_kallisto.sh), [single alignment](scripts/kallisto_single_parallel.sh), [paired alignment](scripts/kallisto_paired_parallel.sh)
+- [Import gene counts](scripts/tximport.R)
+- [PCA, VST and sample clustering](scripts/WGCNA_data_cleaning.Rmd)
+- [WGCNA](scripts/WGCNA.Rmd), [Markdown](scripts/WGCNA.md)
 
 
 ### Internship (Praktische Arbeit)
