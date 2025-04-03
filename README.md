@@ -1,15 +1,31 @@
-## Bachelor's thesis
+# Bachelor's thesis in Bioinformatics
 ##### Author: Luisa Bender
 
-This Github contains the code, plots and files for the bachelor's thesis on WGCNA.
+This Github repository contains the code, plots and files for the bachelor's thesis on Weighted Gene Co-Expression Network Analysis (WGCNA).
 
-Topic: Unveiling Commonalities and Divergences in Biotrophic Plant-Microbe Interactions using Gene Co-Expression Networks in Arabidopsis thaliana.
+Topic:
 
-### Internship (Praktische Arbeit)
-Code and files, as well as another README of the internship are found here: [praktische-arbeit](praktische-arbeit/).
+** Unveiling Commonalities and Divergences in Biotrophic Plant-Microbe Interactions using Gene Co-Expression Networks in Arabidopsis thaliana.**
 
-### Data
-The data folder contains accession lists, metadata and an Excel file containing information on the downloaded datasets.
+## Objectives of the thesis
+This thesis focuses on the comparative analysis across various infection experiments involving different biotrophic plant-microbe interactions, with the aim of identifying genes or pathways that are co-expressed during these infections. In order to achieve that, we would use publicly available datasets from the Sequence Read Archive (SRA), hosted by the National Center for Biotechnology Information ([NCBI](https://www.ncbi.nlm.nih.gov/sra)). The data will have to go through several preprocessing steps, such as quality control, adapter trimming, sequence alignment, and data transformation, in order to prepare it for the weighted gene co-expression network analysis (WGCNA). This analysis would reveal the underlying correlation and similarities among the genes. 
+To reach our objective, we would then use pathway-level enrichments for functional insights into the genes involved, which might help in understanding how plants respond to different microbes and their infection strategies at a systems level. 
+
+[Workflow](workflow.pdf)
+
+### Supplementary
+Following supplementary files and figures are referenced in the thesis.
+
+Table S1: [RNA-Seq data on Arabidopsis thaliana](data/arabidopsis_datasets_info.xlsx) - This file contains information about the datasets used for the study, such as BioProjectID, associated publication and further information. 
+
+Table S2: [Metadata](data/metaData_modified.csv) - This table shows the metadata of each sample.
+
+Figure S3: [MultiQC-Report](quality_control/multiqc_after_trim.html) - MultiQC HTML Report of all samples after quality trimming.
+
+Figure S4: ![Sample dendrogram with metadata](plots/dendro_metadata_all.png) - This plot shows a dendrogram of all samples after removing outliers. On each branch, the sample ID is displayed. The height on the y-axis describes the distance between each sample. Below the dendrogram, all available metadata of the samples are defined. Red coloring means that the samples on the dendrogram branches belong to the metadata category.
+
+All Gene Ontology (GO) enrichment figures for specific modules are stored here: [GO plots](plots/WGCNA/Gene%20Ontology/)
+
 
 ### Count tables
 This folder contains all raw gene, abundance and vst transformed count tables.
@@ -23,12 +39,5 @@ This folder contains all raw gene, abundance and vst transformed count tables.
 [Transposed count table as input for WGCNA](count_tables/expr_data_transposed.csv)
 
 
-### Supplementary
-Following supplementary files and figures are referenced in the thesis.
-
-File S1: [RNA-Seq data on Arabidopsis thaliana](data/arabidopsis_datasets_info.xlsx)
-File S2: [Metadata](data/metaData_modified.csv)
-Figure S1: [MultiQC-Report](quality_control/multiqc_after_trim.html)
-Figure S2: [Sample dendrogram with metadata](plots/dendro_metadata_all.png)
-
-Figures for Gene Ontology (GO) enrichment for specific modules are stored here: [GO plots](plots/WGCNA/Gene%20Ontology/)
+### Internship (Praktische Arbeit)
+Code and files, as well as another README of the internship are found here: [praktische-arbeit](praktische-arbeit/).
