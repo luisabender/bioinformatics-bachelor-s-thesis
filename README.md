@@ -44,5 +44,5 @@ This folder contains all raw gene, abundance and vst transformed count tables.
 - [WGCNA](scripts/WGCNA.Rmd), [Markdown](scripts/WGCNA.md)
 
 
-### Internship (Praktische Arbeit)
+#### Internship (Praktische Arbeit)
 All code and files, as well as a README of the internship are found here: [praktische-arbeit](praktische-arbeit/).
