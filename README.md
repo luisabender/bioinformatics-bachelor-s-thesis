@@ -19,7 +19,7 @@ Following supplementary files and figures are referenced in the thesis.
 
 Table S1: [RNA-Seq data on Arabidopsis thaliana](data/arabidopsis_datasets_info.xlsx) - This file contains information about the datasets used for the study, such as BioProjectID, associated publication and further information. 
 
-Table S2: [Metadata](data/metaData_modified.csv) - This table contains metadata of each sample.
+Table S2: [Metadata](data/metaData_modified.csv) - This table contains the available metadata of all samples.
 
 Figure S3: [MultiQC-Report](quality_control/multiqc_after_trim.html) - MultiQC HTML Report of all samples after quality trimming.
 
