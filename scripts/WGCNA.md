@@ -185,7 +185,7 @@ options(stringsAsFactors = FALSE)
 input_mat <- read.csv("~/Studium/bachelor-thesis-luisa/count_tables/expr_data_transposed.csv", row.names = 1)
 
 # load meta data
-metaData <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData_modified.csv")
+metaData <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData_modified.csv", sep=",")
 metaData_bin <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData_bin.csv", sep =";")
 ```
 
@@ -307,25 +307,26 @@ Results for different soft powers:
 
 ``` r
 # network construction with soft power 6 - signed hybrid network
-load('~/Studium/bachelor-thesis-luisa/wgcna_results/new/networkConstruction-pow6_signed.RData')
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow6_signed.RData')
 moduleColors_pow6_signed <- mergedColors
 MEs_pow6_signed <- mergedMEs
 geneTree_pow6_signed <- geneTree
 
 # network construction with soft power 5 - signed hybrid network
-load('~/Studium/bachelor-thesis-luisa/wgcna_results/new/networkConstruction-pow5_signed.RData')
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow5_signed.RData')
 moduleColors_pow5_signed <- mergedColors
 MEs_pow5_signed <- mergedMEs
 geneTree_pow5_signed <- geneTree
 
 # network construction with soft power 4 - signed hybrid network
-load('~/Studium/bachelor-thesis-luisa/wgcna_results/new/networkConstruction-pow4_signed.RData')
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow4_signed_mer.RData')
 moduleColors_pow4_signed <- mergedColors
 MEs_pow4_signed <- mergedMEs
 geneTree_pow4_signed <- geneTree
+moduleColors_org <- ModuleColors
 
 # network construction with soft power 4 - signed hybrid network with TOMType signed
-load('~/Studium/bachelor-thesis-luisa/wgcna_results/new/networkConstruction-pow4_TOMsigned.RData')
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow4_TOMsigned.RData')
 moduleColors_pow4_tomsigned <- mergedColors
 MEs_pow4_tomsigned <- mergedMEs
 geneTree_pow4_tomsigned <- geneTree
@@ -333,14 +334,14 @@ geneTree_pow4_tomsigned <- geneTree
 
 ``` r
 # plots the gene dendrogram with the module colors
-plotDendroAndColors(geneTree_pow4_signed, 
-                    moduleColors_pow4_signed,
-                    "Module",
+plotDendroAndColors(geneTree_pow4_signed,
+                    cbind(ModuleColors, mergedColors),
+                    c("original Module", "merged Module"),
                     dendroLabels = FALSE, 
                     hang = 0.03,
                     addGuide = TRUE, 
                     guideHang = 0.05,
-                    main = "Gene dendrogram and module colors")
+                    main = "Gene dendrogram and module colors for original and merged modules")
 ```
 
 ![](WGCNA_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
@@ -391,11 +392,13 @@ sub_cat_df <- metaData_bin[, grep("Category\\.", colnames(metaData_bin))]
 colnames(sub_cat_df) <- gsub("Category\\.", "", colnames(sub_cat_df))
 
 # librarySize
-libsize_df <- data.frame(LibrarySize = metaData[, 17])
+libsize_df <- data.frame(LibrarySize = metaData[, 18])
 
-#latest_df <- metaData_bin[, grep("latest_infection_timepoint.", colnames(metaData_bin))]
-#colnames(latest_df) <- gsub("latest_infection_timepoint.", "", colnames(latest_df))
-#latest_df <- latest_df[,-1]
+# P.brassicae leaf vs root
+p_brassicae <- metaData_bin[, grep("P\\.brassicae", colnames(metaData_bin))]
+
+# TuMV AS vs. DS
+tumv <-  metaData_bin[, grep("TuMV_", colnames(metaData_bin))]
 ```
 
 ``` r
@@ -431,7 +434,8 @@ moduleTraitCorrelation(MEs, inf_path_df[,-11], "Pathogens")
 moduleTraitCorrelation(MEs, sub_cat_df, "Pathogens (subcategories)")
 moduleTraitCorrelation(MEs, cat_df, "Pathogens (categories)")
 moduleTraitCorrelation(MEs, libsize_df, "Library Size")
-#moduleTraitCorrelation(MEs, latest_df, "Comparing latest infection timepoints")
+moduleTraitCorrelation(MEs, p_brassicae, "P.brassicae")
+moduleTraitCorrelation(MEs, tumv, "TuMV")
 ```
 
 Look for weak correlations and sum up the absolute correlation value:
@@ -446,8 +450,8 @@ ranked_modules <- sort(biotrophic_modules, decreasing = TRUE)
 head(ranked_modules)
 ```
 
-    ## MEsteelblue    MEpurple     MEbrown   MEdarkred MEroyalblue  MEskyblue3 
-    ##    1.733268    1.673186    1.642750    1.640792    1.606671    1.604495
+    ##  MEskyblue3    MEpurple MEroyalblue MEsteelblue     MEbrown   MEdarkred 
+    ##    1.916527    1.725647    1.700804    1.692676    1.686188    1.619301
 
 ### Target Gene Identification
 
@@ -494,17 +498,17 @@ barplot(
 
 ![](WGCNA_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
 
-Different ways on calculating hub genes:
+##### Different ways on calculating hub genes:
 
-intramodular connectivity (kIM): measures how connected a gene is within
-its module (intramodularConnectivity)
+- intramodular connectivity (kIM): measures how connected a gene is
+  within its module (intramodularConnectivity)
 
-kME: module membership (simpler to calculate, has an associated p-value
-and can be compared across modules)
+- kME: module membership (simpler to calculate, has an associated
+  p-value and can be compared across modules)
 
-signedKME: Calculation of (signed) eigengene-based connectivity, also
-known as module membership, correlation of the gene with the
-corresponding module eigengene.
+- signedKME: Calculation of (signed) eigengene-based connectivity, also
+  known as module membership, correlation of the gene with the
+  corresponding module eigengene.
 
 ``` r
 # identify top hub gene per module
@@ -577,7 +581,7 @@ kIM <- intramodularConnectivity.fromExpr(input_mat, picked_module_colors, networ
 
 ``` r
 # look at specific module that has high significance with choosen trait
-module = "darkgreen"
+module = "blue"
 category = "nematode"
 column = match(module, modNames)
 moduleGenes = picked_module_colors==module
@@ -620,6 +624,7 @@ hub_genes_oomycete_royalblue <- hub_genes_GS_MM(geneModuleMembership, geneTraitS
 hub_genes_nematode_brown <- hub_genes_GS_MM(geneModuleMembership, geneTraitSignificance_sub_cat, "MMbrown", "nematode", 0.8, 0.5)
 hub_genes_nematode_darkgreen <- hub_genes_GS_MM(geneModuleMembership, geneTraitSignificance_sub_cat, "MMdarkgreen", "nematode", 0.8, 0.3)
 hub_genes_hpa_darkolivegreen <- hub_genes_GS_MM(geneModuleMembership, geneTraitSignificance_inf_path, "MMdarkolivegreen", "Hpa", 0.8, 0.4)
+hub_genes_nematode_blue <- hub_genes_GS_MM(geneModuleMembership, geneTraitSignificance_sub_cat, "MMblue", "nematode", 0.8, -0.3)
 ```
 
 ``` r
@@ -703,8 +708,10 @@ plotEigengeneNetworks(orderMEs(MEs), "Eigengene dendrogram and adjacency heatmap
 ### Network analysis with functional annotation and gene ontology
 
 –\> export a list of gene identifiers that can be used as input for
-Mercator Enrichment analysis directly within R: -\> organism-specific
-package: Genome wide annotation for Arabidopsis: org.At.tair.db
+Mercator
+
+Enrichment analysis directly within R: -\> Genome wide annotation for
+Arabidopsis: org.At.tair.db
 
 ##### Functional enrichment for all genes per module:
 
@@ -938,7 +945,7 @@ cnetplot(simple_enriched_go)
 
 ![](WGCNA_files/figure-gfm/unnamed-chunk-21-3.png)<!-- -->
 
-Functional enrichment for hub genes based on signedkME \> 0.8:
+##### Functional enrichment for hub genes based on signedkME \> 0.8:
 
 ``` r
 hub_genes_per_module <- list()
@@ -1034,7 +1041,7 @@ kegg_hub_results <- readRDS("~/Studium/bachelor-thesis-luisa/data/kegg_hub_genes
 
 ``` r
 # plotting of enrichment results of specific module
-module = "orange"
+module = "steelblue"
 
 # simplify enrichGO output by removing redundancy of enriched GO terms
 # plot with gene ratio
@@ -1061,7 +1068,7 @@ ggplot(showCategory = 20,
 goplot(simple_enriched_go_bp, showCategory = 5)
 ```
 
-    ## Warning: ggrepel: 7 unlabeled data points (too many overlaps). Consider
+    ## Warning: ggrepel: 20 unlabeled data points (too many overlaps). Consider
     ## increasing max.overlaps
 
 ![](WGCNA_files/figure-gfm/unnamed-chunk-25-2.png)<!-- -->
@@ -1077,27 +1084,63 @@ kegg_module <- kegg_hub_results[[module]]
 head(kegg_module, n = 20)
 ```
 
-    ##                                category                      subcategory
-    ## ath03010 Genetic Information Processing                      Translation
-    ## ath03050 Genetic Information Processing Folding, sorting and degradation
-    ##                ID                                     Description GeneRatio
-    ## ath03010 ath03010   Ribosome - Arabidopsis thaliana (thale cress)     37/57
-    ## ath03050 ath03050 Proteasome - Arabidopsis thaliana (thale cress)      5/57
-    ##           BgRatio RichFactor FoldEnrichment   zScore       pvalue     p.adjust
-    ## ath03010 359/5609 0.10306407      10.141866 18.13924 4.228123e-31 9.301871e-30
-    ## ath03050  61/5609 0.08196721       8.065861  5.62184 3.495562e-04 3.845118e-03
-    ##                qvalue
-    ## ath03010 8.011181e-30
-    ## ath03050 3.311585e-03
-    ##                                                                                                                                                                                                                                                                                                                                                                                     geneID
-    ## ath03010 AT1G01100/AT1G07770/AT1G34030/AT1G56045/AT1G69620/AT2G25210/AT2G27710/AT2G27720/AT2G33370/AT2G37600/AT2G40205/AT2G43460/AT3G04400/AT3G08520/AT3G10090/AT3G18740/AT3G22230/AT3G23390/AT3G43980/AT3G44010/AT3G44590/AT3G47370/AT3G48930/AT3G53890/AT3G56020/AT3G59540/AT3G61110/AT4G25890/AT4G29390/AT4G31985/AT4G33865/AT5G02960/AT5G03850/AT5G18380/AT5G27700/AT5G27770/AT5G57290
-    ## ath03050                                                                                                                                                                                                                                                                                                                                 AT1G64750/AT1G67250/AT1G77440/AT5G42790/AT5G45010
-    ##          Count
-    ## ath03010    37
-    ## ath03050     5
+    ##                    category                          subcategory       ID
+    ## ath00061         Metabolism                     Lipid metabolism ath00061
+    ## ath01212         Metabolism             Global and overview maps ath01212
+    ## ath00020         Metabolism              Carbohydrate metabolism ath00020
+    ## ath00780         Metabolism Metabolism of cofactors and vitamins ath00780
+    ## ath00010         Metabolism              Carbohydrate metabolism ath00010
+    ## ath00520         Metabolism              Carbohydrate metabolism ath00520
+    ## ath04814 Cellular Processes                        Cell motility ath04814
+    ## ath01200         Metabolism             Global and overview maps ath01200
+    ## ath00620         Metabolism              Carbohydrate metabolism ath00620
+    ## ath00785         Metabolism Metabolism of cofactors and vitamins ath00785
+    ##                                                                               Description
+    ## ath00061                     Fatty acid biosynthesis - Arabidopsis thaliana (thale cress)
+    ## ath01212                       Fatty acid metabolism - Arabidopsis thaliana (thale cress)
+    ## ath00020                   Citrate cycle (TCA cycle) - Arabidopsis thaliana (thale cress)
+    ## ath00780                           Biotin metabolism - Arabidopsis thaliana (thale cress)
+    ## ath00010                Glycolysis / Gluconeogenesis - Arabidopsis thaliana (thale cress)
+    ## ath00520 Amino sugar and nucleotide sugar metabolism - Arabidopsis thaliana (thale cress)
+    ## ath04814                              Motor proteins - Arabidopsis thaliana (thale cress)
+    ## ath01200                           Carbon metabolism - Arabidopsis thaliana (thale cress)
+    ## ath00620                         Pyruvate metabolism - Arabidopsis thaliana (thale cress)
+    ## ath00785                      Lipoic acid metabolism - Arabidopsis thaliana (thale cress)
+    ##          GeneRatio  BgRatio RichFactor FoldEnrichment    zScore       pvalue
+    ## ath00061      5/30  43/5613 0.11627907      21.755814 10.014564 2.569122e-06
+    ## ath01212      5/30  70/5613 0.07142857      13.364286  7.630118 2.920754e-05
+    ## ath00020      4/30  64/5613 0.06250000      11.693750  6.306644 3.372688e-04
+    ## ath00780      2/30  16/5613 0.12500000      23.387500  6.573151 3.163475e-03
+    ## ath00010      4/30 119/5613 0.03361345       6.289076  4.274591 3.437056e-03
+    ## ath00520      4/30 123/5613 0.03252033       6.084553  4.179312 3.871733e-03
+    ## ath04814      3/30  82/5613 0.03658537       6.845122  3.908268 9.183655e-03
+    ## ath01200      5/30 272/5613 0.01838235       3.439338  3.022949 1.354755e-02
+    ## ath00620      3/30  97/5613 0.03092784       5.786598  3.485671 1.448992e-02
+    ## ath00785      2/30  36/5613 0.05555556      10.394444  4.144839 1.554450e-02
+    ##              p.adjust       qvalue
+    ## ath00061 0.0000822119 5.408678e-05
+    ## ath01212 0.0004673206 3.074477e-04
+    ## ath00020 0.0035975339 2.366799e-03
+    ## ath00780 0.0206492409 1.358503e-02
+    ## ath00010 0.0206492409 1.358503e-02
+    ## ath00520 0.0206492409 1.358503e-02
+    ## ath04814 0.0419824245 2.762002e-02
+    ## ath01200 0.0497424085 3.272527e-02
+    ## ath00620 0.0497424085 3.272527e-02
+    ## ath00785 0.0497424085 3.272527e-02
+    ##                                                     geneID Count
+    ## ath00061 AT1G49430/AT1G62640/AT2G05990/AT2G30200/AT5G35360     5
+    ## ath01212 AT1G49430/AT1G62640/AT2G05990/AT2G30200/AT5G35360     5
+    ## ath00020           AT1G10670/AT1G34430/AT3G06650/AT3G25860     4
+    ## ath00780                               AT2G05990/AT2G43360     2
+    ## ath00010           AT1G20950/AT1G34430/AT3G25860/AT4G24620     4
+    ## ath00520           AT1G08200/AT2G38650/AT3G61130/AT4G24620     4
+    ## ath04814                     AT3G12110/AT3G16060/AT5G66310     3
+    ## ath01200 AT1G34430/AT2G44160/AT3G25860/AT4G24620/AT5G35360     5
+    ## ath00620                     AT1G34430/AT3G25860/AT5G35360     3
+    ## ath00785                               AT1G34430/AT3G25860     2
 
-Functional enrichment based on hub genes defined with a MM and GS
-cutoff:
+##### Functional enrichment based on hub genes defined with a MM and GS cutoff:
 
 ``` r
 ego <- enrichGO(gene = hub_genes_nematode_brown$GeneID,

@@ -36,7 +36,7 @@ options(stringsAsFactors = FALSE)
 input_mat <- read.csv("~/Studium/bachelor-thesis-luisa/count_tables/expr_data_transposed.csv", row.names = 1)
 
 # load meta data
-metaData <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData_modified.csv", sep=";")
+metaData <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData_modified.csv", sep=",")
 metaData_bin <- read.csv("~/Studium/bachelor-thesis-luisa/data/metaData_bin.csv", sep =";")
 ```
 
@@ -104,26 +104,26 @@ Results for different soft powers:
 
 ```{r}
 # network construction with soft power 6 - signed hybrid network
-load('~/Studium/bachelor-thesis-luisa/wgcna_results/new/networkConstruction-pow6_signed.RData')
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow6_signed.RData')
 moduleColors_pow6_signed <- mergedColors
 MEs_pow6_signed <- mergedMEs
 geneTree_pow6_signed <- geneTree
 
 # network construction with soft power 5 - signed hybrid network
-load('~/Studium/bachelor-thesis-luisa/wgcna_results/new/networkConstruction-pow5_signed.RData')
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow5_signed.RData')
 moduleColors_pow5_signed <- mergedColors
 MEs_pow5_signed <- mergedMEs
 geneTree_pow5_signed <- geneTree
 
 # network construction with soft power 4 - signed hybrid network
-load('~/Studium/bachelor-thesis-luisa/wgcna_results/new/networkConstruction-pow4_signed_mer.RData')
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow4_signed_mer.RData')
 moduleColors_pow4_signed <- mergedColors
 MEs_pow4_signed <- mergedMEs
 geneTree_pow4_signed <- geneTree
 moduleColors_org <- ModuleColors
 
 # network construction with soft power 4 - signed hybrid network with TOMType signed
-load('~/Studium/bachelor-thesis-luisa/wgcna_results/new/networkConstruction-pow4_TOMsigned.RData')
+load('~/Studium/bachelor-thesis-luisa/wgcna_results/networkConstruction-pow4_TOMsigned.RData')
 moduleColors_pow4_tomsigned <- mergedColors
 MEs_pow4_tomsigned <- mergedMEs
 geneTree_pow4_tomsigned <- geneTree
@@ -174,7 +174,7 @@ sub_cat_df <- metaData_bin[, grep("Category\\.", colnames(metaData_bin))]
 colnames(sub_cat_df) <- gsub("Category\\.", "", colnames(sub_cat_df))
 
 # librarySize
-libsize_df <- data.frame(LibrarySize = metaData[, 17])
+libsize_df <- data.frame(LibrarySize = metaData[, 18])
 
 # P.brassicae leaf vs root
 p_brassicae <- metaData_bin[, grep("P\\.brassicae", colnames(metaData_bin))]
